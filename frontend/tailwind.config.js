@@ -8,8 +8,13 @@ export default {
   ],
 
   theme: {
-    extend: {},
+    extend: {
+      fontFamily:{
+        italiana: ['Italiana', 'serif'],
+        albert: ['Albert Sans', 'serif'],
+      }
+    },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 }
 

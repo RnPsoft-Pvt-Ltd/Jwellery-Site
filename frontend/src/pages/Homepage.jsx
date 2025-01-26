@@ -9,21 +9,21 @@ import StyledPicks from '../components/StyledPicks'
 import SpecialProducts from '../components/SpecialProducts'
 import Category from '../components/Category'
 import Carousal from '../components/Carousal'
-import ProductSlider from '../components/temp/ProductSlider'
-import JewelryCards from '../components/temp/JewelryCards'
+//import ProductSlider from '../components/temp/ProductSlider'
+//import JewelryCards from '../components/temp/JewelryCards'
 
-import Hero from '../components/temp/Hero'
-import NavBar from '../components/temp/NavBar'
+//import Hero from '../components/temp/Hero'
+//import NavBar from '../components/temp/NavBar'
 
 
 
 export default function Homepage() {
   return (
     <div>
-        <NavBar/>
+        {/* <NavBar/>
         <Hero/>
         <JewelryCards/>
-        <ProductSlider/>
+        <ProductSlider/> */}
 
         <Carousal/>
         <Category/>
@@ -35,7 +35,7 @@ export default function Homepage() {
         <Callback/>
         <Sales/>
         <Testimonials/>
-        <Footer/>
+        <Footer/> 
     </div>
   )
 }

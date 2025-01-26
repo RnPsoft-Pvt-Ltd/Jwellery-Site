@@ -1,0 +1,355 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id                 String           @id @default(uuid())
+  name               String
+  email              String           @unique
+  phone              String?
+  password_hash      String
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
+  is_verified        Boolean          @default(false)
+  role               UserRole         @default(CUSTOMER)
+  date_of_birth      DateTime?
+  addresses          Address[]
+  user_preferences   UserPreference?
+  login_histories    LoginHistory[]
+  wishlists          Wishlist[]
+  product_reviews    ProductReview[]
+  carts              Cart[]
+  orders             Order[]
+}
+
+// Reserved for future use
+model UserPreference {
+  user_id               String  @id
+  language              String?
+  currency              String?
+  notification_settings Json?
+  user                  User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+// Reserved for future use
+model LoginHistory {
+  id           String    @id @default(uuid())
+  user_id      String
+  login_time   DateTime
+  logout_time  DateTime?
+  ip_address   String?
+  device_info  String?
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Address {
+  id             String   @id @default(uuid())
+  user_id        String
+  address_type   String?
+  full_name      String
+  phone          String?
+  address_line1  String
+  address_line2  String?
+  landmark       String?
+  zip_code       String
+  country        String
+  state          String?
+  city           String
+  is_primary     Boolean  @default(false)
+  user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  orders_shipping Order[] @relation("ShippingAddress")
+  orders_billing  Order[] @relation("BillingAddress")
+
+  @@unique([user_id, is_primary], name: "unique_primary_address")
+}
+
+model Product {
+  id                    String             @id @default(uuid())
+  name                  String
+  brand                 String?
+  category_id           String
+  collection_id         String
+  tax_category_id       String
+  base_price            Decimal            @db.Decimal(10,2)
+  description           String?
+  SKU                   String?            @unique
+  category              Category           @relation(fields: [category_id], references: [id])
+  collection            Collection         @relation(fields: [collection_id], references: [id])
+  tax_category          TaxCategory        @relation(fields: [tax_category_id], references: [id])
+  product_metadata      ProductMetadata?
+  variants              ProductVariant[]
+  images                ProductImage[]
+  attributes            ProductAttribute[]
+  wishlists             Wishlist[]
+  product_reviews       ProductReview[]
+  product_tax_mappings  ProductTaxMapping[]
+  sale_products         SaleProductMapping[]
+}
+
+// Reserved for future use
+model ProductMetadata {
+  product_id            String   @id
+  material_type         String?
+  metal_purity          String?
+  gemstone_details      String?
+  additional_attributes Json?
+  product               Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+model ProductVariant {
+  id               String      @id @default(uuid())
+  product_id       String
+  size             String?
+  color            String?
+  weight           Decimal     @db.Decimal(10,2)
+  price_modifier   Decimal     @db.Decimal(10,2)
+  stock_quantity   Int
+  product          Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  inventory        Inventory?
+  order_items      OrderItem[]
+  carts            Cart[]
+}
+
+model Inventory {
+  product_variant_id   String        @id @map("inventory_product_variant_id")
+  total_quantity       Int
+  reserved_quantity    Int
+  minimum_stock_alert  Int?
+  last_restocked       DateTime?
+  product_variant      ProductVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade, map: "inventory_product_variant_fkey")
+}
+
+model ProductImage {
+  id             String   @id @default(uuid())
+  product_id     String
+  image_url      String
+  is_primary     Boolean  @default(false)
+  display_order  Int?
+  product        Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+model ProductAttribute {
+  id           String  @id @default(uuid())
+  product_id   String
+  name         String
+  value        String
+  type         String
+  product      Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id                 String     @id @default(uuid())
+  parent_category_id String?
+  name               String
+  description        String?
+  products           Product[]
+  parent_category    Category?  @relation("CategoryHierarchy", fields: [parent_category_id], references: [id])
+  subcategories      Category[] @relation("CategoryHierarchy")
+}
+
+model Collection {
+  id           String     @id @default(uuid())
+  name         String
+  description  String?
+  created_at   DateTime   @default(now())
+  products     Product[]
+}
+
+
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id                   String            @id @default(uuid())
+  user_id              String
+  shipping_address_id  String?
+  billing_address_id   String?
+  order_number         String            @unique
+  order_date           DateTime          @default(now())
+  status               OrderStatus
+  total_amount         Decimal           @db.Decimal(10,2)
+  user                 User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  shipping_address     Address?          @relation("ShippingAddress", fields: [shipping_address_id], references: [id])
+  billing_address      Address?          @relation("BillingAddress", fields: [billing_address_id], references: [id])
+  order_items          OrderItem[]
+  order_shipments      OrderShipment[]
+  order_taxes          OrderTax[]
+  payment_transactions PaymentTransaction[]
+  order_coupons        OrderCoupon[]
+}
+
+model OrderItem {
+  id                 String         @id @default(uuid())
+  order_id           String
+  product_variant_id String
+  quantity           Int
+  unit_price         Decimal        @db.Decimal(10,2)
+  order              Order          @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product_variant    ProductVariant @relation(fields: [product_variant_id], references: [id])
+}
+
+model OrderShipment {
+  id                  String    @id @default(uuid())
+  order_id            String
+  carrier             String?
+  tracking_number     String?
+  status              OrderStatus
+  shipped_at          DateTime?
+  estimated_delivery  DateTime?
+  order               Order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
+}
+
+model OrderTax {
+  id                  String            @id @default(uuid())
+  order_id            String
+  tax_jurisdiction_id String
+  subtotal            Decimal           @db.Decimal(10,2)
+  tax_rate            Decimal           @db.Decimal(5,4)
+  tax_amount          Decimal           @db.Decimal(10,2)
+  tax_breakdown       Json?
+  order               Order             @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  tax_jurisdiction    TaxJurisdiction   @relation(fields: [tax_jurisdiction_id], references: [id])
+}
+
+model TaxJurisdiction {
+  id                  String      @id @default(uuid())
+  country             String
+  state               String?
+  city                String?
+  base_tax_rate       Decimal     @db.Decimal(5,4)
+  additional_tax_rules Json?
+  order_taxes         OrderTax[]
+}
+
+model TaxCategory {
+  id              String                @id @default(uuid())
+  name            String
+  standard_rate   Decimal               @db.Decimal(5,4)
+  description     String?
+  is_active       Boolean               @default(true)
+  products        Product[]
+  product_tax_mappings ProductTaxMapping[]
+}
+
+// Reserved for future use
+model ProductTaxMapping {
+  product_id        String
+  tax_category_id   String
+  special_rate      Decimal    @db.Decimal(5,4)
+  effective_date    DateTime?
+  product           Product     @relation(fields: [product_id], references: [id])
+  tax_category      TaxCategory @relation(fields: [tax_category_id], references: [id])
+
+  @@id([product_id, tax_category_id])
+}
+
+model Wishlist {
+  id         String   @id @default(uuid())
+  user_id    String
+  product_id String
+  added_at   DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [product_id], references: [id])
+}
+
+model Cart {
+  id                 String         @id @default(uuid())
+  user_id            String
+  product_variant_id String
+  quantity           Int
+  added_at           DateTime       @default(now())
+  user               User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product_variant    ProductVariant @relation(fields: [product_variant_id], references: [id])
+}
+
+model ProductReview {
+  id           String   @id @default(uuid())
+  user_id      String
+  product_id   String
+  rating       Int
+  comment      String?
+  created_at   DateTime @default(now())
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product      Product  @relation(fields: [product_id], references: [id])
+
+  @@unique([user_id, product_id], name: "unique_user_product_review")
+}
+
+model Coupon {
+  id              String          @id @default(uuid())
+  code            String          @unique
+  description     String?
+  start_date      DateTime
+  end_date        DateTime
+  free_shipping   Boolean
+  max_discount    Decimal         @db.Decimal(10,2)
+  usage_limit     Int?
+  discount_type   String
+  order_coupons   OrderCoupon[]
+}
+
+model OrderCoupon {
+  order_id        String
+  coupon_id       String
+  applied_discount Decimal    @db.Decimal(10,2)
+  applied_at      DateTime    @default(now())
+  order           Order       @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  coupon          Coupon      @relation(fields: [coupon_id], references: [id])
+
+  @@id([order_id, coupon_id])
+}
+
+model PaymentTransaction {
+  id                String   @id @default(uuid())
+  order_id          String
+  transaction_id    String
+  amount            Decimal  @db.Decimal(10,2)
+  payment_method    String
+  status            String
+  transaction_date  DateTime @default(now())
+  order             Order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
+}
+
+// Reserved for future use
+model Sale {
+  id              String   @id @default(uuid())
+  name            String
+  description     String?
+  start_date      DateTime
+  end_date        DateTime
+  is_active       Boolean  @default(true)
+  sale_products   SaleProductMapping[]
+}
+// Reserved for future use
+model SaleProductMapping {
+  sale_id         String
+  product_id      String
+  discount_percent Decimal  @db.Decimal(5,4)
+  discount_amount  Decimal? @db.Decimal(10,2)
+  sale            Sale     @relation(fields: [sale_id], references: [id])
+  product         Product  @relation(fields: [product_id], references: [id])
+
+  @@id([sale_id, product_id])
+}

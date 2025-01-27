@@ -12,6 +12,8 @@ Start by forking the original repository to your GitHub account. This will creat
 
 `cd Jwellery-Site`
 
+`cd frontend`
+
 ### 3. Install Dependencies
 
 `npm install`

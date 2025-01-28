@@ -8,6 +8,10 @@ import Collections from '../components/Collections.jsx';
 import CreateProduct from '../components/CreateProduct.jsx';
 import CreateCoupon from '../components/CreateCoupon.jsx';
 
+
+// import Dashboard from '../components/dashboard.jsx';
+import CustomersTable from '../components/CustomersTable.jsx';
+import Orders from '../components/Orders.jsx';
 // Main App Component
 const AdminPage = () => {
   const [activeComponent, setActiveComponent] = useState('products');
@@ -30,6 +34,12 @@ const AdminPage = () => {
       {activeComponent === 'attributes' && <Attributes />}
       {activeComponent === 'products' && <Products />}
       {activeComponent === 'collections' && <Collections />}
+
+
+      {activeComponent === 'collections' && <CustomersTable/>}
+      <CustomersTable/>
+      {activeComponent === 'collections' && <Orders/>}
+      <Orders/>
     </div>
   );
 };

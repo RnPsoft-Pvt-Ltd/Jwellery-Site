@@ -3,7 +3,16 @@ import './App.css';
 import Homepage from './pages/Homepage';
 import AdminPage from './pages/adminpage';  
 import Addtocart from "./pages/Addtocart"; 
-import ShoppingCartPage from "./pages/Shoppedcart"; 
+import ShoppingCartPage from "./pages/Shoppedcart";
+import AccountPage from "./pages/AccountPage";
+import PersonalInfoPage from "./pages/PersonalInfoPage";
+import AddressPage from "./pages/AddressPage";
+import EditAddressPage from "./pages/EditAddressPage"
+import WishlistPage from "./pages/WishlistPage";
+import OrdersPage from "./pages/OrdersPage"; 
+import ShopPage from './components/ShopPage';
+import MenCollection from './components/MenCollection';
+import WomenCollection from './components/WomenCollection';
 
 function App() {
   return (
@@ -13,6 +22,18 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />  
         <Route path="/cart" element={<Addtocart />} />
         <Route path="/shoppedcart" element={<ShoppingCartPage />} />
+
+        <Route path="/account" element={<AccountPage />} />
+            <Route path="/account/personal-info" element={<PersonalInfoPage />} />
+            <Route path="/account/address" element={<AddressPage />} />
+            <Route path="/account/address/edit" element={<EditAddressPage />} />
+            <Route path="/account/wishlist" element={<WishlistPage />} />
+            <Route path="/account/orders" element={<OrdersPage />} />
+
+            <Route path="/kids" element={<ShopPage />} />
+            <Route path="/mencollection" element={<MenCollection />} />
+            <Route path="/womencollection" element={<WomenCollection />} />
+          
       </Routes>
     </BrowserRouter>
   );

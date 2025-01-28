@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import productRoutes from './routes/productRoutes.js';
+import couponRoutes from './routes/couponRoutes.js';
 import { connectDB } from './config/db.js';
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use('/v1/products', productRoutes);
+app.use('/v1/coupons', couponRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,41 +1,39 @@
 import React, { useState, useEffect } from 'react';
 
+const images = [
+  'https://storage.googleapis.com/jwelleryrnpsoft/image.png',
+  'https://storage.googleapis.com/jwelleryrnpsoft/image.png'
+];
+
 const Hero = () => {
-  const [position, setPosition] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [bgImage, setBgImage] = useState(images[0]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPosition((prev) => {
-        if (prev >= 0.5 || prev <= -0.5) setDirection(-direction);
-        return prev + direction * 0.1;
-      });
-    }, 120);
+      setBgImage((prev) => (prev === images[0] ? images[1] : images[0]));
+    }, 2000); // Change image every 2 seconds
+
     return () => clearInterval(interval);
-  }, [direction]);
+  }, []);
 
   return (
-    <div 
-      className="relative bg-gray-100 py-40 px-5 text-center overflow-hidden min-h-screen"
-      style={{
-        backgroundImage: 'url(https://storage.googleapis.com/jwelleryrnpsoft/image.png)',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-      }}
+    <div
+      className="relative w-full h-screen flex items-center justify-between px-16 bg-cover bg-center transition-all duration-1000 ease-in-out"
+      style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <h2 className="text-4xl font-bold text-gray-800 mb-5">Heading</h2>
+      {/* Heading on the Left */}
+      <h2 className="text-5xl font-light text-white absolute left-16 top-1/3">
+        Heading
+      </h2>
 
-      {/* Action Button Section */}
-      <div className="mb-6">
-        <p className="text-lg text-gray-600 mb-4">Always Enhancing What's<br />Already Beautiful</p>
-        <button className="px-6 py-3 bg-blue-600 text-white text-lg rounded-md transition duration-300 hover:bg-blue-800">
+      {/* Text and Button on the Right */}
+      <div className="absolute right-16 bottom-32 text-white text-right">
+        <p className="text-lg font-light mb-4">
+          Always Enhancing What's<br />Already Beautiful
+        </p>
+        <button className="px-6 py-3 border-2 border-white text-white text-lg hover:bg-white hover:text-black transition">
           Explore Now
         </button>
-      </div>
-
-      {/* Drop-down Image (Static) */}
-      <div className="absolute left-1/2 top-[99%] transform -translate-x-1/2 z-50">
-        <img src="https://storage.googleapis.com/jwelleryrnpsoft/image.png" alt="Drop Down" className="w-20 h-auto" />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { IoHeartCircleOutline } from "react-icons/io5"; // Import heart circle outline icon
 
 const ProductSlider = () => {
   const [index, setIndex] = useState(0);
@@ -6,18 +7,22 @@ const ProductSlider = () => {
   const slides = [
     {
       imgSrc: "https://storage.googleapis.com/jwelleryrnpsoft/earring.png.png",
+      name: "Earring",
       price: "Rs. 2000",
     },
     {
       imgSrc: "https://storage.googleapis.com/jwelleryrnpsoft/bangle.jpeg",
+      name: "Bangle",
       price: "Rs. 1600",
     },
     {
       imgSrc: "https://storage.googleapis.com/jwelleryrnpsoft/00481006-01.webp",
+      name: "Necklace",
       price: "Rs. 3000",
     },
     {
       imgSrc: "https://storage.googleapis.com/jwelleryrnpsoft/earring.jpeg",
+      name: "Stud Earring",
       price: "Rs. 5000",
     },
   ];
@@ -37,16 +42,26 @@ const ProductSlider = () => {
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
         {slides.map((slide, idx) => (
-          <div key={idx} className="w-full flex flex-col items-center p-5 bg-white rounded-lg shadow-md">
+          <div key={idx} className="w-full flex flex-col items-center px-3 py-5 bg-white relative">
+            {/* Heart Icon for Wishlist, no outer circle, just the icon */}
+            <button className="absolute top-6 right-5 p-2 bg-transparent">
+              <IoHeartCircleOutline className="text-gray-500 text-3xl" />
+            </button>
+
             <img
               src={slide.imgSrc}
               alt={`Product ${idx + 1}`}
-              className="w-60 h-60 object-cover rounded-lg" /* Ensures equal image size */
+              className="w-60 h-60 object-cover rounded-lg"
             />
-            <p className="mt-2 text-lg font-semibold text-black">{slide.price}</p>
-            <button className="mt-2 px-4 py-2 border border-black text-black uppercase rounded hover:bg-black hover:text-white transition">
-              Add to Cart
-            </button>
+            <div className="flex justify-between w-full mt-2">
+              <p className="text-lg font-semibold text-black">{slide.name}</p>
+              <p className="text-lg font-semibold text-black">{slide.price}</p>
+            </div>
+            <div className="flex justify-end w-full mt-1">
+              <button className="px-2 py-1 bg-black text-white text-xs uppercase hover:bg-gray-800 transition">
+                Add to Cart
+              </button>
+            </div>
           </div>
         ))}
       </div>

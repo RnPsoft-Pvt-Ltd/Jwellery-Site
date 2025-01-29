@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import productRoutes from './routes/productRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { connectDB } from './config/db.js';
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use('/v1/products', productRoutes);
+app.use('/v1/reviews', reviewRoutes);
 app.use('/v1/coupons', couponRoutes);
 app.use('/v1/auth', authRoutes);
 

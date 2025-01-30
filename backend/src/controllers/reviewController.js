@@ -1,5 +1,5 @@
 import reviewService from "../services/reviewService.js";
-import { AppError, errorHandler, catchAsync } from "../utils/errorHandler.js";
+import { errorHandler } from "../utils/errorHandler.js";
 
 class ReviewController {
   async addReview(req, res) {

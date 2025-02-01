@@ -51,6 +51,7 @@ class ProductController {
       const product = await productService.createProduct(req.body);
       res.status(201).json(product);
     } catch (error) {
+      console.error(error);
       errorHandler(error, req, res);
     }
   }

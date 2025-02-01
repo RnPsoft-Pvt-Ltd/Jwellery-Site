@@ -4,8 +4,13 @@ import productRoutes from './routes/productRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import taxJurisdictionRoutes from './routes/taxJurisdictionRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import addressRoutes from './routes/addressRoutes.js';
+import collectionRoutes from './routes/collectionRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 import { connectDB } from './config/db.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +25,10 @@ app.use('/v1/reviews', reviewRoutes);
 app.use('/v1/coupons', couponRoutes);
 app.use('/v1/tax-jurisdictions', taxJurisdictionRoutes);
 app.use('/v1/auth', authRoutes);
+app.use('/v1/cart', cartRoutes);
+app.use('/v1/address', addressRoutes);
+app.use('/v1/collections', collectionRoutes);
+app.use('/v1/categories', categoryRoutes);
 
 
 // Error handling middleware

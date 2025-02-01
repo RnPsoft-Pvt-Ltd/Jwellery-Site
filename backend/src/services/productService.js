@@ -107,52 +107,76 @@ class ProductService {
   }
 
   async createProduct(productData) {
-    const { variants, images, attributes, metadata, ...productDetails } = productData;
-  
-    // Create the base product first
-    const product = await prisma.product.create({
-      data: productDetails,
-    });
-  
-    // Add variants if they exist
-    if (variants) {
-      await prisma.productVariant.createMany({
-        data: variants.map(variant => ({
-          ...variant,
-          product_id: product.id
-        }))
+    const { variants, images, attributes, metadata, ...productDetails } =
+      productData;
+
+    // Start a transaction to ensure all related data is created consistently
+    return prisma.$transaction(async (prismaTransaction) => {
+      // Create the base product first
+      const product = await prismaTransaction.product.create({
+        data: productDetails,
       });
-    }
-  
-    // Add images if they exist
-    if (images) {
-      await prisma.productImage.createMany({
-        data: images.map(image => ({
-          ...image,
-          product_id: product.id
-        }))
-      });
-    }
-  
-    // Add metadata if it exists
-    if (metadata) {
-      await prisma.productMetadata.create({
-        data: {
-          ...metadata,
-          product_id: product.id
+
+      // Add variants with inventory if they exist
+      if (variants) {
+        for (const variant of variants) {
+          const { inventory, ...variantDetails } = variant;
+
+          // Create variant with its inventory
+          await prismaTransaction.productVariant.create({
+            data: {
+              ...variantDetails,
+              product_id: product.id,
+              inventory: inventory
+                ? {
+                    create: {
+                      total_quantity: inventory.total_quantity || 0,
+                      reserved_quantity: inventory.reserved_quantity || 0,
+                      minimum_stock_alert: inventory.minimum_stock_alert || 5,
+                    },
+                  }
+                : undefined,
+            },
+          });
+        }
+      }
+
+      // Add images if they exist
+      if (images) {
+        await prismaTransaction.productImage.createMany({
+          data: images.map((image) => ({
+            ...image,
+            product_id: product.id,
+          })),
+        });
+      }
+
+      // Add metadata if it exists
+      if (metadata) {
+        await prismaTransaction.productMetadata.create({
+          data: {
+            ...metadata,
+            product_id: product.id,
+          },
+        });
+      }
+
+      // Return the complete product with all relations including inventory
+      return prismaTransaction.product.findUnique({
+        where: { id: product.id },
+        include: {
+          variants: {
+            include: {
+              inventory: true
+            }
+          },
+          images: true,
+          product_metadata: true,
+          attributes: true
         }
       });
-    }
-  
-    // Return the complete product with all relations
-    return prisma.product.findUnique({
-      where: { id: product.id },
-      include: {
-        variants: true,
-        images: true,
-        product_metadata: true,
-        attributes: true
-      }
+    }, {
+      timeout: 10000 // Increase timeout to 10 seconds
     });
   }
 
@@ -167,11 +191,49 @@ class ProductService {
           ...productDetails,
           variants: variants
             ? {
-                upsert: variants.map((variant) => ({
-                  where: { id: variant.id || "new" },
-                  create: variant,
-                  update: variant,
-                })),
+                upsert: variants.map((variant) => {
+                  const { inventory, ...variantDetails } = variant;
+                  return {
+                    where: { id: variant.id || "new" },
+                    create: {
+                      ...variantDetails,
+                      inventory: inventory
+                        ? {
+                            create: {
+                              total_quantity: inventory.total_quantity || 0,
+                              reserved_quantity:
+                                inventory.reserved_quantity || 0,
+                              minimum_stock_alert:
+                                inventory.minimum_stock_alert || 5,
+                            },
+                          }
+                        : undefined,
+                    },
+                    update: {
+                      ...variantDetails,
+                      inventory: inventory
+                        ? {
+                            upsert: {
+                              create: {
+                                total_quantity: inventory.total_quantity || 0,
+                                reserved_quantity:
+                                  inventory.reserved_quantity || 0,
+                                minimum_stock_alert:
+                                  inventory.minimum_stock_alert || 5,
+                              },
+                              update: {
+                                total_quantity: inventory.total_quantity || 0,
+                                reserved_quantity:
+                                  inventory.reserved_quantity || 0,
+                                minimum_stock_alert:
+                                  inventory.minimum_stock_alert || 5,
+                              },
+                            },
+                          }
+                        : undefined,
+                    },
+                  };
+                }),
               }
             : undefined,
           images: images
@@ -199,7 +261,11 @@ class ProductService {
             : undefined,
         },
         include: {
-          variants: true,
+          variants: {
+            include: {
+              inventory: true,
+            },
+          },
           images: true,
           attributes: true,
           product_metadata: true,

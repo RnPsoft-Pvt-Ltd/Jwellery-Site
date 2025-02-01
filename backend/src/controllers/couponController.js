@@ -1,4 +1,5 @@
 import couponService from '../services/couponService.js';
+import { errorHandler } from '../utils/errorHandler.js';
 
 class CouponController {
   async getAllCoupons(req, res) {
@@ -9,10 +10,7 @@ class CouponController {
         data: coupons
       });
     } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        message: 'Error fetching coupons'
-      });
+      errorHandler(error,req, res);
     }
   }
 
@@ -24,10 +22,7 @@ class CouponController {
         data: coupon
       });
     } catch (error) {
-      res.status(400).json({
-        status: 'error',
-        message: 'Error creating coupon'
-      });
+      errorHandler(error,req, res);
     }
   }
 
@@ -39,10 +34,7 @@ class CouponController {
         data: coupon
       });
     } catch (error) {
-      res.status(400).json({
-        status: 'error',
-        message: 'Error updating coupon'
-      });
+      errorHandler(error,req, res);
     }
   }
 
@@ -54,10 +46,7 @@ class CouponController {
         message: 'Coupon deleted successfully'
       });
     } catch (error) {
-      res.status(400).json({
-        status: 'error',
-        message: 'Error deleting coupon'
-      });
+      errorHandler(error,req, res);
     }
   }
 }

@@ -41,12 +41,20 @@ async function main() {
     console.log("✅ Created coupons");
 
     // Create orders (now with coupons)
-    await createOrders(users, products, addresses, coupons);
+    const orders=await createOrders(users, products, addresses, coupons);
     console.log("✅ Created orders");
 
     // Create reviews
     await createReviews(users, products);
     console.log("✅ Created reviews");
+
+    // Add tax jurisdiction
+    const taxJurisdictions = await createTaxJurisdictions();
+    console.log("✅ Created tax jurisdictions");
+
+    // Create order shipments
+    await createOrderShipments(orders);
+    console.log("✅ Created order shipments");
 
     console.log("🌱 Seeding completed successfully");
   } catch (error) {
@@ -356,7 +364,48 @@ async function createCoupons() {
   return prisma.coupon.findMany();
 }
 
+async function createTaxJurisdictions() {
+  const taxJurisdictions = await prisma.taxJurisdiction.createMany({
+    data: [
+      {
+        country: "USA",
+        state: "NY",
+        city: "New York",
+        base_tax_rate: 0.0875, // 8.75%
+        additional_tax_rules: {
+          luxury_rate: 0.04,
+          special_categories: ["jewelry", "watches"]
+        }
+      },
+      {
+        country: "USA",
+        state: "CA",
+        city: "Los Angeles",
+        base_tax_rate: 0.0950, // 9.5%
+        additional_tax_rules: {
+          luxury_rate: 0.03,
+          special_categories: ["jewelry", "premium"]
+        }
+      },
+      {
+        country: "USA",
+        state: "FL",
+        city: "Miami",
+        base_tax_rate: 0.0700, // 7%
+        additional_tax_rules: {
+          tourism_tax: 0.02,
+          exempt_categories: ["essential"]
+        }
+      }
+    ]
+  });
+
+  return prisma.taxJurisdiction.findMany();
+}
+
 async function createOrders(users, products, addresses, coupons) {
+  const createdOrders = []; // Array to store created orders
+
   for (const user of users) {
     const userAddress = addresses.find((addr) => addr.user_id === user.id);
     const randomCoupon = coupons[Math.floor(Math.random() * coupons.length)];
@@ -366,7 +415,7 @@ async function createOrders(users, products, addresses, coupons) {
         ? Math.min(orderTotal * 0.25, randomCoupon.max_discount) // 25% discount for percentage types
         : Math.min(50, randomCoupon.max_discount); // Fixed amount for other types
 
-    await prisma.order.create({
+    const order=await prisma.order.create({
       data: {
         user_id: user.id,
         shipping_address_id: userAddress.id,
@@ -389,7 +438,9 @@ async function createOrders(users, products, addresses, coupons) {
         },
       },
     });
+    createdOrders.push(order);
   }
+  return createdOrders; // Return the created orders
 }
 
 async function createReviews(users, products) {
@@ -404,6 +455,37 @@ async function createReviews(users, products) {
         },
       });
     }
+  }
+}
+
+async function createOrderShipments(orders) {
+  const carriers = ["FedEx", "UPS", "DHL", "USPS"];
+  const shipmentStatuses = ["PENDING", "PROCESSING", "SHIPPED", "DELIVERED"];
+
+  for (const order of orders) {
+    const randomCarrier = carriers[Math.floor(Math.random() * carriers.length)];
+    const randomStatus = shipmentStatuses[Math.floor(Math.random() * shipmentStatuses.length)];
+    
+    let shippedAt = null;
+    let estimatedDelivery = null;
+
+    if (randomStatus === "SHIPPED" || randomStatus === "DELIVERED") {
+      shippedAt = new Date(Date.now() - Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000); // Random date within last 7 days
+      estimatedDelivery = new Date(shippedAt.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days after shipped date
+    } else if (randomStatus === "PROCESSING") {
+      estimatedDelivery = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
+    }
+
+    await prisma.orderShipment.create({
+      data: {
+        order_id: order.id,
+        carrier: randomCarrier,
+        tracking_number: `${randomCarrier}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        status: randomStatus,
+        shipped_at: shippedAt,
+        estimated_delivery: estimatedDelivery,
+      },
+    });
   }
 }
 

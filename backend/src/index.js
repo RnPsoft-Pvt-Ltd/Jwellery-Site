@@ -5,6 +5,9 @@ import couponRoutes from './routes/couponRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import taxJurisdictionRoutes from './routes/taxJurisdictionRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import collectionRoutes from './routes/collectionRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import addressRoutes from './routes/addressRoutes.js'
 import { connectDB } from './config/db.js';
 
 const app = express();
@@ -20,6 +23,10 @@ app.use('/v1/reviews', reviewRoutes);
 app.use('/v1/coupons', couponRoutes);
 app.use('/v1/tax-jurisdictions', taxJurisdictionRoutes);
 app.use('/v1/auth', authRoutes);
+app.use('/v1/categories', categoryRoutes);
+app.use('/v1/collections', collectionRoutes);
+app.use('/v1/addresses', addressRoutes);
+
 
 
 // Error handling middleware

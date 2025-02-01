@@ -1,17 +1,41 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import axios from 'axios';
+import { categoryService } from '../services/api';
 
 const CategoryGallery = () => {
   const containerRef = useRef(null);
   const indicatorRef = useRef(null);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const categories = [
-    { image: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%2029.png", text: "Rings" },
-    { image: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%2030.png", text: "Earrings" },
-    { image: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%2031.png", text: "Necklace" },
-    { image: "https://storage.googleapis.com/jwelleryrnpsoft/bracelet-category.png", text: "Bracelets" },
-    { image: "https://storage.googleapis.com/jwelleryrnpsoft/amulet.png", text: "Amulets" },
-    { image: "https://storage.googleapis.com/jwelleryrnpsoft/brooch-category.png", text: "Brooches" }
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await categoryService.getCategories({ limit: 10, page: 1 });
+        
+        // Access the data property of the response
+        const categoryData = response.data;
+        
+        // Transform the backend data to match the frontend structure
+        const transformedCategories = categoryData.map(category => ({
+          image: category.products?.[0]?.images?.[0]?.image_url || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
+          title: category.name
+        }));
+
+        
+        setCategories(transformedCategories);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+        setError('Failed to fetch categories');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -29,32 +53,48 @@ const CategoryGallery = () => {
     }
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[50vh] bg-[#FCF8FC]">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-[50vh] bg-[#FCF8FC]">
+        <div className="text-red-600">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative pb-8 bg-[#FCF8FC]">
       <div 
         ref={containerRef}
-        className="flex flex-row gap-4 h-[50vh] overflow-x-auto scrollbar-hide "
+        className="flex flex-row gap-4 h-[50vh] overflow-x-auto scrollbar-hide"
       >
         {categories.map((category, index) => (
           <div key={index} className="relative flex-none">
             <div className="relative h-full">
               <img 
                 src={category.image} 
-                alt={category.text}
+                alt={category.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.src = 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png';
+                }}
               />
-              {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 z-[1]" />
-              {/* Text overlay */}
               <div className="absolute bottom-[10%] left-0 w-full text-center text-white text-2xl font-normal font-['Arial'] drop-shadow-lg z-[2]">
-                {category.text}
+                {category.title}
               </div>
             </div>
           </div>
         ))}
       </div>
       
-      {/* Scroll indicator */}
       <div className="absolute bottom-5 w-full h-1 bg-gray-200">
         <div 
           ref={indicatorRef}

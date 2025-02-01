@@ -61,7 +61,6 @@ model LoginHistory {
 model Address {
   id             String   @id @default(uuid())
   user_id        String
-  address_type   String?
   full_name      String
   phone          String?
   address_line1  String
@@ -95,7 +94,6 @@ model Product {
   product_metadata      ProductMetadata?
   variants              ProductVariant[]
   images                ProductImage[]
-  attributes            ProductAttribute[]
   wishlists             Wishlist[]
   product_reviews       ProductReview[]
   product_tax_mappings  ProductTaxMapping[]
@@ -119,7 +117,6 @@ model ProductVariant {
   color            String?
   weight           Decimal     @db.Decimal(10,2)
   price_modifier   Decimal     @db.Decimal(10,2)
-  stock_quantity   Int
   product          Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
   inventory        Inventory?
   order_items      OrderItem[]
@@ -144,23 +141,12 @@ model ProductImage {
   product        Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
-model ProductAttribute {
-  id           String  @id @default(uuid())
-  product_id   String
-  name         String
-  value        String
-  type         String
-  product      Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
-}
-
 model Category {
   id                 String     @id @default(uuid())
-  parent_category_id String?
   name               String
   description        String?
+  created_at   DateTime   @default(now())
   products           Product[]
-  parent_category    Category?  @relation("CategoryHierarchy", fields: [parent_category_id], references: [id])
-  subcategories      Category[] @relation("CategoryHierarchy")
 }
 
 model Collection {
@@ -170,7 +156,6 @@ model Collection {
   created_at   DateTime   @default(now())
   products     Product[]
 }
-
 
 
 enum OrderStatus {

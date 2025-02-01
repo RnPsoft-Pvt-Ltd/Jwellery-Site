@@ -1,31 +1,42 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { collectionService } from '../services/api'; 
 
 const CategoryCarousel = () => {
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [collections, setCollections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const slides = [
-    {
-      title: "Platinum\nCollection",
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%201321315013.png",
-      bgColor: "bg-[#E5E4E2]"
-    },
-    {
-      title: "Pearl\nCollection",
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/pearl-carousel.png",
-      bgColor: "bg-[#FBEDE9]"
-    },
-    {
-      title: "Silver\nCollection",
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/silver-carousel.png",
-      bgColor: "bg-[#C0C0C0]"
-    },
-    {
-      title: "Gold\nCollection",
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/gold-carousel.png",
-      bgColor: "bg-[#EFBF04]"
-    }
-  ];
+  // Fetch collections from the backend
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        setLoading(true);
+        const response = await collectionService.getCollections({ limit: 10, page: 1 });
+        
+        // Filter for specific collections
+        const allowedCollections = ['Gold Collection', 'Silver Collection', 'Perl Collection', 'Platinum Collection'];
+        
+        const filteredCollections = response.data
+          .filter(collection => allowedCollections.includes(collection.name))
+          .map(collection => ({
+            title: collection.name,
+            image: collection.products?.[0]?.images?.[0]?.image_url || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
+            bgColor: getBgColorForCollection(collection.name),
+          }));
+        
+        setCollections(filteredCollections);
+      } catch (err) {
+        console.error('Error fetching collections:', err);
+        setError('Failed to fetch collections');
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchCollections();
+  }, []);
 
   const handleScroll = () => {
     if (carouselRef.current) {
@@ -51,6 +62,49 @@ const CategoryCarousel = () => {
     }
   }, []);
 
+  // Helper function to assign background colors based on collection names
+  const getBgColorForCollection = (collectionName) => {
+    const colorMap = {
+      'Platinum': 'bg-[#E5E4E2]',
+      'Perl': 'bg-[#FBEDE9]',
+      'Silver': 'bg-[#C0C0C0]',
+      'Gold': 'bg-[#EFBF04]',
+      'default': 'bg-[#F5F5F5]'
+    };
+    
+    const key = Object.keys(colorMap).find(key => 
+      collectionName.toLowerCase().includes(key.toLowerCase())
+    );
+    
+    return colorMap[key] || colorMap.default;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[400px] flex-col gap-2">
+        <div className="text-red-600">{error}</div>
+        <button 
+          className="px-4 py-2 bg-black text-white rounded"
+          onClick={() => {
+            setError(null);
+            setLoading(true);
+            fetchCollections();
+          }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className='py-10 mt-10'>
       {/* Heading */}
@@ -64,7 +118,9 @@ const CategoryCarousel = () => {
           className="flex overflow-x-scroll scroll-smooth snap-x snap-mandatory scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {slides.map((slide, index) => (
+          {collections.map((collection, index) => (
+            console.log("collection",collection),
+            console.log("index",index),
             <div 
               key={index}
               className="flex-none w-full snap-start h-[400px]"
@@ -73,20 +129,23 @@ const CategoryCarousel = () => {
                 <div className="relative w-full h-full flex">
                   <div className="absolute w-1/2 h-full right-0 flex items-center justify-center z-10 overflow-hidden">
                     <img 
-                      src={slide.image}
-                      alt={slide.title}
+                      src={collection.image}
+                      alt={collection.title}
                       className="w-full h-full object-cover object-center scale-120"
+                      onError={(e) => {
+                        e.target.src = 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png';
+                      }}
                     />
                   </div>
                   <div 
-                    className={`w-[70%] h-full relative flex items-center z-20 ${slide.bgColor}`}
+                    className={`w-[70%] h-full relative flex items-center z-20 ${collection.bgColor}`}
                     style={{
                       clipPath: 'polygon(0 0, 100% 0, 75% 100%, 0 100%)'
                     }}
                   />
                   <div className="absolute top-1/2 left-[5%] transform -translate-y-1/2 z-30">
                     <h3 className="text-5xl font-normal text-black font-['Albert_Sans-Light'] whitespace-pre-line leading-tight">
-                      {slide.title}
+                      {collection.title}
                     </h3>
                   </div>
                 </div>
@@ -96,7 +155,7 @@ const CategoryCarousel = () => {
         </div>
 
         <div className="absolute bottom-5 left-[5%] flex gap-2.5 z-20">
-          {slides.map((_, index) => (
+          {collections.map((_, index) => (
             <button
               key={index}
               onClick={() => scrollToIndex(index)}

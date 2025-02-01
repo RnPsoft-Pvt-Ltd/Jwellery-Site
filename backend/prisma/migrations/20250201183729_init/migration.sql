@@ -95,7 +95,6 @@ CREATE TABLE "ProductVariant" (
     "color" TEXT,
     "weight" DECIMAL(10,2) NOT NULL,
     "price_modifier" DECIMAL(10,2) NOT NULL,
-    "stock_quantity" INTEGER NOT NULL,
 
     CONSTRAINT "ProductVariant_pkey" PRIMARY KEY ("id")
 );

@@ -100,7 +100,7 @@ async function createUsers() {
       user_preferences: {
         create: {
           language: "en",
-          currency: "USD",
+          currency: "INR",
           notification_settings: {
             email: true,
             sms: true,
@@ -141,31 +141,36 @@ async function createUsers() {
 }
 
 async function createCategories() {
-  // Create main categories
-  const jewelry = await prisma.category.create({
-    data: {
-      name: "Jewelry",
-      description: "Fine jewelry collection",
-    },
-  });
 
-  // Create subcategories
-  const categories = await prisma.category.createMany({
+  await prisma.category.createMany({
     data: [
       {
         name: "Rings",
         description: "Beautiful rings collection",
-        parent_category_id: jewelry.id,
       },
       {
         name: "Necklaces",
         description: "Elegant necklaces",
-        parent_category_id: jewelry.id,
+
       },
       {
         name: "Earrings",
         description: "Stunning earrings",
-        parent_category_id: jewelry.id,
+
+      },
+      {
+        name: "Bracelets",
+        description: "Stylish bracelets",
+      },
+      {
+        name: "Amulets",
+        description: "Lucky amulets",
+
+      },
+      {
+        name: "Brooches",
+        description: "Trendy brooches",
+
       },
     ],
   });
@@ -177,12 +182,59 @@ async function createCollections() {
   const collections = await prisma.collection.createMany({
     data: [
       {
-        name: "Summer Collection",
-        description: "Light and bright pieces for summer",
+        name: "Mens Collection",
+        description: "Stylish mens jewelry",
       },
       {
-        name: "Winter Collection",
-        description: "Elegant pieces for winter",
+        name: "Women Collection",
+        description: "Elegant womens jewelry",
+      },
+      {
+        name: "Kids Collection",
+        description: "Cute kids jewelry",
+      },
+      {
+        name: "Gold Collection",
+        description: "Exquisite gold jewelry",
+      },
+      {
+        name: "Silver Collection",
+        description: "Elegant silver jewelry",
+      },
+      {
+        name: "Platinum Collection",
+        description: "Luxurious platinum jewelry",
+      },
+      {
+        name: "Perl Collection",
+        description: "Beautiful perl jewelry",
+      },      {
+        name: "Silver Collection",
+        description: "Elegant silver jewelry",
+      },
+      {
+        name: "Wedding Jwellery",
+        description: "Jwellery for wedding",
+      },
+      {
+        name: "Auspicious Jwellery",
+        description: "Jwellery for auspicious occasions",
+      },
+      {
+        name: "Festive Jwellery",
+        description: "Jwellery for festive occasions",
+      },
+      {
+        name: "Party Jwellery",
+        description: "Jwellery for party wear",
+      },
+      {
+        name: "Casual Jwellery",
+        description: "Jwellery for casual wear",
+      },
+      {
+        name: "Date Night Jwellery",
+        description: "Jwellery for date nights",
       },
     ],
   });
@@ -241,7 +293,6 @@ async function createProducts(categories, collections, taxCategories) {
               color: "Gold",
               weight: 10.5,
               price_modifier: 0,
-              stock_quantity: 100,
               inventory: {
                 create: {
                   total_quantity: 100,
@@ -255,7 +306,6 @@ async function createProducts(categories, collections, taxCategories) {
               color: "Silver",
               weight: 12.5,
               price_modifier: 20,
-              stock_quantity: 75,
               inventory: {
                 create: {
                   total_quantity: 75,
@@ -269,12 +319,12 @@ async function createProducts(categories, collections, taxCategories) {
         images: {
           create: [
             {
-              image_url: `https://example.com/product${i}-1.jpg`,
+              image_url: `https://storage.googleapis.com/jwelleryrnpsoft/3.jpeg`,
               is_primary: true,
               display_order: 1,
             },
             {
-              image_url: `https://example.com/product${i}-2.jpg`,
+              image_url: `https://storage.googleapis.com/jwelleryrnpsoft/3.jpeg`,
               is_primary: false,
               display_order: 2,
             },

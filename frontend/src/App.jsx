@@ -14,6 +14,8 @@ import OrdersPage from "./pages/OrdersPage";
 import MenCollection from './components/MenCollection';
 import WomenCollection from './components/WomenCollection';
 import KidsCollection from './components/KidsCollection';
+import RegisterUser from './components/Register';
+import CresthavenLogin from './components/Login';
 
 function App() {
   return (
@@ -34,6 +36,10 @@ function App() {
             <Route path="/mencollection" element={<MenCollection />} />
             <Route path="/womencollection" element={<WomenCollection />} />
             <Route path="/kidcollection" element={<KidsCollection />} />
+
+
+            <Route path="/register" element={<RegisterUser />} />
+            <Route path="/login" element={<CresthavenLogin />} />
 
 
       </Routes>

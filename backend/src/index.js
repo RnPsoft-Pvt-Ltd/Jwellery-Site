@@ -9,6 +9,8 @@ import authRoutes from './routes/authRoutes.js';
 import addressRoutes from './routes/addressRoutes.js';
 import collectionRoutes from './routes/collectionRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import { connectDB } from './config/db.js';
 
 
@@ -29,7 +31,8 @@ app.use('/v1/cart', cartRoutes);
 app.use('/v1/address', addressRoutes);
 app.use('/v1/collections', collectionRoutes);
 app.use('/v1/categories', categoryRoutes);
-
+app.use('/v1/inventory',inventoryRoutes)
+app.use('v1/users',userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

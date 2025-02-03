@@ -1,77 +1,9 @@
-// src/services/AuthService.js
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { UserRole } from "@prisma/client";
+// src/services/userService.js
+
 import prisma from '../config/db.js';
 
-class authService {
-  async registerUser(userData) {
-    const { name, email, password, phone, role } = userData;
 
-    if (!Object.values(UserRole).includes(role)) {
-      throw new Error("Invalid role. Must be CUSTOMER or ADMIN.");
-    }
-
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      throw new Error("Email already in use");
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password_hash: hashedPassword,
-        phone,
-        role,
-      },
-    });
-
-    return newUser;
-  }
-
-  async loginUser(credentials) {
-    const { email, password } = credentials;
-
-    if (!email || !password) {
-      throw new Error('Email and password are required');
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
-    if (!isPasswordValid) {
-      throw new Error('Invalid password');
-    }
-
-    const token = this.generateToken(user);
-
-    return {
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      },
-      token,
-    };
-  }
-
-  generateToken(user) {
-    return jwt.sign(
-      { id: user.id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-  }
-
+class userService {
 
   async getUserById(userId) {
     return await prisma.user.findUnique({
@@ -148,8 +80,64 @@ class authService {
   }
 
 
+ 
+
+  async getUsersWithOrders() {
+    try{
+      const users = await prisma.user.findMany({
+        where: {
+          orders: {
+            some: {} // Ensures only users with at least one order are fetched
+          }
+        },
+        include: {
+          orders: {
+            include: {
+              order_items: true, // Fetch order items related to each order
+              shipping_address: true, // Include shipping address
+              billing_address: true, // Include billing address
+              payment_transactions: true // Include payment transactions
+            }
+          }
+        }
+      });
+    
+      console.log("Users with orders:", users); // Debugging output
+      return users;
+    }catch(error){
+      res.status(500).json({ message: "Internal server error" });
+    }
+    }
+
+
+    async getUserById(id) {
+        try {
+          const user = await prisma.user.findUnique({
+            where: { id }
+          });
+          return user;
+        } catch (error) {
+          throw new Error('Error fetching user by ID');
+        }
+      }
+    
+      // Fetch all users with optional filters
+      async getAllUsers(filters) {
+        try {
+          return await prisma.user.findMany({
+            where: {
+              email: filters.email ? { contains: filters.email } : undefined,
+              name: filters.name ? { contains: filters.name } : undefined,
+            },
+            include: { orders: true },  // Optional: include orders with the user
+          });
+        } catch (error) {
+          throw new Error('Error fetching users');
+        }
+      }
+      
 
 
 }
 
-export default new authService();
+export default new userService();

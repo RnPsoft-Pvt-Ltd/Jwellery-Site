@@ -4,11 +4,14 @@ import productRoutes from './routes/productRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import taxJurisdictionRoutes from './routes/taxJurisdictionRoutes.js';
+import shipmentRoutes from './routes/shipmentRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import addressRoutes from './routes/addressRoutes.js';
 import collectionRoutes from './routes/collectionRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import { connectDB } from './config/db.js';
 
 
@@ -24,12 +27,14 @@ app.use('/v1/products', productRoutes);
 app.use('/v1/reviews', reviewRoutes);
 app.use('/v1/coupons', couponRoutes);
 app.use('/v1/tax-jurisdictions', taxJurisdictionRoutes);
+app.use('/v1/shipment', shipmentRoutes);
 app.use('/v1/auth', authRoutes);
 app.use('/v1/cart', cartRoutes);
 app.use('/v1/address', addressRoutes);
 app.use('/v1/collections', collectionRoutes);
 app.use('/v1/categories', categoryRoutes);
-
+app.use('/v1/inventory',inventoryRoutes)
+app.use('v1/users',userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

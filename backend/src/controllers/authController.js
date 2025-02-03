@@ -1,4 +1,4 @@
-import authservice from '../services/authService.js';
+import authService from '../services/authService.js';
 import { validateEmail, validatePassword } from '../utils/validation.js';
 
 class AuthController {
@@ -21,7 +21,7 @@ class AuthController {
       });
     }
 
-      const user = await authservice.registerUser(req.body);
+      const user = await authService.registerUser(req.body);
       res.status(201).json({ 
         message: "User registered successfully", 
         user 
@@ -36,7 +36,7 @@ class AuthController {
 
   async login(req, res) {
     try {
-      const result = await authservice.loginUser(req.body);
+      const result = await authService.loginUser(req.body);
       res.status(200).json({
         message: 'Login successful',
         ...result
@@ -53,6 +53,64 @@ class AuthController {
       });
     }
   }
+
+
+  async getUserProfile(req, res) {
+    try {
+      // The user ID is extracted from req.user (set by authentication middleware)
+      const userId = req.user.id;
+
+      // Fetch user details from the database
+      const user = await authService.getUserById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.status(200).json({ user });
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+
+  async updateUserProfile(req, res) {
+    try {
+      const userId = req.user.id; // Extract user ID from token
+      const updatedData = req.body;
+
+      if (Object.keys(updatedData).length === 0) {
+        return res.status(400).json({ message: "No fields provided for update" });
+      }
+
+      const updatedUser = await authService.updateUser(userId, updatedData);
+
+      res.status(200).json({
+        message: "User profile updated successfully",
+        user: updatedUser
+      });
+
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
 
 export default new AuthController();

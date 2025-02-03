@@ -46,7 +46,6 @@ CREATE TABLE "LoginHistory" (
 CREATE TABLE "Address" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "address_type" TEXT,
     "full_name" TEXT NOT NULL,
     "phone" TEXT,
     "address_line1" TEXT NOT NULL,
@@ -122,22 +121,11 @@ CREATE TABLE "ProductImage" (
 );
 
 -- CreateTable
-CREATE TABLE "ProductAttribute" (
-    "id" TEXT NOT NULL,
-    "product_id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
-
-    CONSTRAINT "ProductAttribute_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Category" (
     "id" TEXT NOT NULL,
-    "parent_category_id" TEXT,
     "name" TEXT NOT NULL,
     "description" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
@@ -376,12 +364,6 @@ ALTER TABLE "Inventory" ADD CONSTRAINT "inventory_product_variant_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "ProductImage" ADD CONSTRAINT "ProductImage_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ProductAttribute" ADD CONSTRAINT "ProductAttribute_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Category" ADD CONSTRAINT "Category_parent_category_id_fkey" FOREIGN KEY ("parent_category_id") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

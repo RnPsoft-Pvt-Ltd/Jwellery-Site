@@ -14,7 +14,7 @@ const CategoryCarousel = () => {
       try {
         setLoading(true);
         const response = await collectionService.getCollections({ limit: 10, page: 1 });
-        
+        console.log(response);
         // Filter for specific collections
         const allowedCollections = ['Gold Collection', 'Silver Collection', 'Perl Collection', 'Platinum Collection'];
         

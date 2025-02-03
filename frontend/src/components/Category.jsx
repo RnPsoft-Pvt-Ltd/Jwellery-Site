@@ -20,7 +20,7 @@ const CategoryGallery = () => {
         
         // Transform the backend data to match the frontend structure
         const transformedCategories = categoryData.map(category => ({
-          image: category.products?.[0]?.images?.[0]?.image_url || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
+          image: category.thumbnail || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
           title: category.name
         }));
 

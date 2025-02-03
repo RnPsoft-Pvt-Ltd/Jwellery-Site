@@ -13,35 +13,34 @@ const Sales = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
-
   useEffect(() => {
     const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="relative w-[100%] h-screen overflow-hidden">
+    <div className="relative w-[100%] h-[30rem] md:h-[40rem] lg:h-[45rem] overflow-hidden">
       {/* Slides */}
-      <div className="relative w-[100%] h-full">
+      <div className="relative w-full h-full">
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute w-full h-full transition-opacity duration-500 ${
+            className={`absolute w-full h-full transition-opacity duration-700 ease-in-out ${
               currentSlide === index ? 'opacity-100' : 'opacity-0'
             }`}
           >
             {/* Background Image */}
             <div
-              className="w-[100%] h-[100%] bg-contain bg-no-repeat bg-center"
-              style={{ backgroundImage: `url(${slide})` }}
+              className="w-full h-full bg-cover bg-no-repeat bg-center md:bg-center lg:bg-center"
+              style={{ backgroundImage: `url(${slide})`, backgroundSize: '100% 100%' }}
             />
             
             {/* Offers Title and Buy Now Button */}
-            <div className="absolute inset-0 flex flex-col items-center justify-between py-[2%]">
-              <h2 className="text-4xl md:text-5xl text-white font-albert">
+            <div className="absolute inset-0 flex flex-col items-center justify-between py-[2%] px-4 md:px-8">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl text-white font-bold text-center">
                 Offers
               </h2>
-              <button className="px-8 py-2 font-albert border-2 text-2xl border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-[5px]">
+              <button className="px-2 py-1 md:px-4 md:py-2 text-sm md:text-2xl font-semibold border-2 border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-6 md:mb-6">
                 Buy Now
               </button>
             </div>
@@ -49,14 +48,13 @@ const Sales = () => {
         ))}
       </div>
 
-
       {/* Slide Indicators */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={` w-20 h-2 transition-colors ${
+            className={`w-10 h-2 md:w-20 transition-colors rounded-full ${
               currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'
             }`}
           />

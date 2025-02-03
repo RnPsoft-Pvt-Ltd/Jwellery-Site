@@ -1,49 +1,93 @@
-import React from 'react';
+import React, {useEffect, useState } from 'react';
+import { collectionService } from '../services/api'; 
 
 const SpecialProducts = () => {
-  const products = [
-    {
-      id: 1,
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/1.jpeg",
-      title: "Wedding Jewelry",
-    },
-    {
-      id: 2,
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/2.jpeg",
-      title: "Festive Jewelry",
-    },
-    {
-      id: 3,
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/3.jpeg",
-      title: "Auspicious Jewelry",
-    },
-  ];
+    const [collections, setCollections] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+  
+    // Fetch collections from the backend
+    useEffect(() => {
+      const fetchCollections = async () => {
+        try {
+          setLoading(true);
+          const response = await collectionService.getCollections({ limit: 10, page: 1 });
+          
+          // Filter for specific collections
+          const allowedCollections = ["Wedding Jwellery", "Festive Jwellery", "Auspicious Jwellery"];
+          
+          const filteredCollections = response.data
+            .filter(collection => allowedCollections.includes(collection.name))
+            .map(collection => ({
+              title: collection.name,
+              image: collection.thumbnail || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
+            }));
+          
+          setCollections(filteredCollections);
+        } catch (err) {
+          console.error('Error fetching collections:', err);
+          setError('Failed to fetch collections');
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      fetchCollections();
+    }, []);
+
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
+        </div>
+      );
+    }
+  
+    if (error) {
+      return (
+        <div className="flex justify-center items-center h-[400px] flex-col gap-2">
+          <div className="text-red-600">{error}</div>
+          <button 
+            className="px-4 py-2 bg-black text-white rounded"
+            onClick={() => {
+              setError(null);
+              setLoading(true);
+              fetchCollections();
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      );
+    }
+  
+  
 
   return (
     <section className="text-center py-10 px-5">
       {/* Heading */}
       <div className="flex justify-center items-center h-[125px] text-4xl md:text-5xl font-light leading-[76.8px] font-['Albert_Sans']">
-        Celebs Choice
+        Special Products
       </div>
 
 
       <div className="flex flex-wrap justify-center gap-5">
-        {products.map((product) => (
+        {collections.map((collection, index) => (
           <div
-            key={product.id}
+            key={index}
             className="relative w-[300px] h-[300px] overflow-hidden
                      transition-all duration-300 ease-in-out 
                      hover:transform hover:-translate-y-2.5 hover:shadow-xl"
           >
             <img
-              src={product.image}
-              alt={product.title}
+              src={collection.image}
+              alt={collection.title}
               className="w-full h-full object-cover absolute top-0 left-0"
             />
             
             <div className="absolute inset-0 bg-black/50 text-white flex flex-col justify-between p-2.5">
                   <div className="flex justify-center items-center h-[125px] text-4xl  md:text-5xl font-light leading-[76.8px] font-['Albert_Sans']">
-                    {product.title}
+                    {collection.title}
                   </div>
               
               <button

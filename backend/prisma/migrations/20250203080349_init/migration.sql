@@ -126,6 +126,7 @@ CREATE TABLE "Category" (
     "name" TEXT NOT NULL,
     "description" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "thumbnail" TEXT,
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
@@ -136,6 +137,7 @@ CREATE TABLE "Collection" (
     "name" TEXT NOT NULL,
     "description" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "thumbnail" TEXT,
 
     CONSTRAINT "Collection_pkey" PRIMARY KEY ("id")
 );

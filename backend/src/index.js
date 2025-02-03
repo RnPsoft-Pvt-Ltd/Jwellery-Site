@@ -19,7 +19,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // Allow non-browser clients (e.g., Postman)
+    return callback(null, true); // Allow all browser origins
+  },
+  credentials: true, // ✅ Allow cookies & authentication headers
+  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes

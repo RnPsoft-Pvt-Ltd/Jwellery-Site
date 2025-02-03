@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const testimonials = [
   {
@@ -45,6 +45,11 @@ export default function Testimonials() {
     setCurrentSlide((prev) => (prev + 1) % testimonials.length);
   };
 
+  useEffect(() => {
+      const timer = setInterval(nextSlide, 10000);
+      return () => clearInterval(timer);
+    }, []);
+
   const prevSlide = () => {
     setCurrentSlide(
       (prev) => (prev - 1 + testimonials.length) % testimonials.length
@@ -52,22 +57,21 @@ export default function Testimonials() {
   };
 
   return (
-    <div className="w-full py-12 px-16 md:px-24 bg-cover bg-center bg-[url('https://storage.googleapis.com/jwelleryrnpsoft/testimonials.png')] h-fit">
-      <div className="w-fit mx-auto z-10">
-        <h1 className="text-5xl font-normal text-center font-albert mb-12">
+    <div className="w-[100%] py-12 px-2 md:px-24 bg-cover bg-center bg-[url('https://storage.googleapis.com/jwelleryrnpsoft/testimonials.png')] h-fit">
+      <div className="w-[100%] mx-auto z-10">
+        <h1 className="text-4xl md:text-5xl font-normal text-center font-albert mb-12">
           Testimonials
         </h1>
 
         <div className="relative flex items-center">
           <button
             onClick={prevSlide}
-            className="absolute w-fit left-[25%] -translate-x-12 md:-translate-x-16 text-black hover:text-gray-600 transition-colors"
+            className="absolute w-fit max-[365px]:left-[20%] md:left-[20%] left-[10%] -translate-x-12 md:-translate-x-16 text-black hover:text-gray-600 transition-colors"
             aria-label="Previous testimonial"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="96"
-              height="96"
+              className="md:w-24 md:h-24 sm:w-16 sm:h-16 max-[640px]:w-12 max-[640px]:h-12 max-[365px]:w-8 max-[365px]:h-8"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -79,9 +83,9 @@ export default function Testimonials() {
             </svg>
           </button>
 
-          <div className="w-fit overflow-hidden px-2">
-            <div className="w-fit transition-transform duration-500 ease-in-out">
-              <div className="bg-white rounded-lg p-8 shadow-lg mx-auto w-[45%] min-h-[320px] h-fit">
+          <div className="w-[100%] overflow-hidden px-2">
+            <div className="w-[100%] transition-transform duration-500 ease-in-out">
+              <div className="bg-white rounded-lg p-8 shadow-lg mx-auto md:w-[45%] w-[70%] min-h-[320px] h-fit">
                 <div className="flex justify-center mb-4 gap-1">
                   {[...Array(5)].map((_, index) => (
                     <svg
@@ -108,11 +112,11 @@ export default function Testimonials() {
                   ))}
                 </div>
 
-                <p className="text-gray-700 text-center mb-6 text-lg font-albert">
+                <p className="text-gray-700 text-center mb-6 md:text-lg max-[365px]:text-sm text-base font-albert">
                   "{testimonials[currentSlide].comment}"
                 </p>
 
-                <p className="text-gray-900 font-semibold text-center font-albert text-xl">
+                <p className="text-gray-900 font-semibold text-center font-albert text-xl max-[365px]:text-md">
                   {testimonials[currentSlide].author}
                 </p>
               </div>
@@ -121,13 +125,12 @@ export default function Testimonials() {
 
           <button
             onClick={nextSlide}
-            className="absolute w-fit right-[25%] translate-x-12 md:translate-x-16 text-black hover:text-gray-600 transition-colors"
+            className="absolute w-fit max-[365px]:right-[20%] md:right-[20%] right-[10%] translate-x-12 md:translate-x-16 text-black hover:text-gray-600 transition-colors"
             aria-label="Next testimonial"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="96"
-              height="96"
+             className="md:w-24 md:h-24 sm:w-16 sm:h-16 max-[640px]:w-12 max-[640px]:h-12 max-[365px]:w-8 max-[365px]:h-8"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

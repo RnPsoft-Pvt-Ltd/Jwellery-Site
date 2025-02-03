@@ -22,7 +22,7 @@ const CategoryCarousel = () => {
           .filter(collection => allowedCollections.includes(collection.name))
           .map(collection => ({
             title: collection.name,
-            image: collection.products?.[0]?.images?.[0]?.image_url || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
+            image: collection.thumbnail || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
             bgColor: getBgColorForCollection(collection.name),
           }));
         
@@ -119,8 +119,6 @@ const CategoryCarousel = () => {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {collections.map((collection, index) => (
-            console.log("collection",collection),
-            console.log("index",index),
             <div 
               key={index}
               className="flex-none w-full snap-start h-[400px]"

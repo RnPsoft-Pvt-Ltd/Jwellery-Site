@@ -146,6 +146,7 @@ model Category {
   name               String
   description        String?
   created_at   DateTime   @default(now())
+  thumbnail          String?
   products           Product[]
 }
 
@@ -154,6 +155,7 @@ model Collection {
   name         String
   description  String?
   created_at   DateTime   @default(now())
+  thumbnail    String?
   products     Product[]
 }
 

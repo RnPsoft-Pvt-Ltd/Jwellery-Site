@@ -147,29 +147,35 @@ async function createCategories() {
       {
         name: "Rings",
         description: "Beautiful rings collection",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%2029.png",
       },
       {
         name: "Necklaces",
         description: "Elegant necklaces",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%2031.png",
 
       },
       {
         name: "Earrings",
         description: "Stunning earrings",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%2030.png",
 
       },
       {
         name: "Bracelets",
         description: "Stylish bracelets",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/bracelet-category.png",
       },
       {
         name: "Amulets",
         description: "Lucky amulets",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/amulet.png",
 
       },
       {
         name: "Brooches",
         description: "Trendy brooches",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/brooch-category.png",
 
       },
     ],
@@ -184,57 +190,67 @@ async function createCollections() {
       {
         name: "Mens Collection",
         description: "Stylish mens jewelry",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/men.jpeg",
       },
       {
         name: "Women Collection",
         description: "Elegant womens jewelry",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/women.jpeg",
       },
       {
         name: "Kids Collection",
         description: "Cute kids jewelry",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/kids.jpeg",
       },
       {
         name: "Gold Collection",
         description: "Exquisite gold jewelry",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/gold-carousel.png",
       },
       {
         name: "Silver Collection",
         description: "Elegant silver jewelry",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/silver-carousel.png",
       },
       {
         name: "Platinum Collection",
         description: "Luxurious platinum jewelry",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/Frame%201321315013.png",
       },
       {
-        name: "Perl Collection",
-        description: "Beautiful perl jewelry",
-      },      {
-        name: "Silver Collection",
-        description: "Elegant silver jewelry",
+        name: "Pearl Collection",
+        description: "Beautiful pearl jewelry",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/pearl-carousel.png",
       },
       {
         name: "Wedding Jwellery",
         description: "Jwellery for wedding",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/1.jpeg",
       },
       {
         name: "Auspicious Jwellery",
         description: "Jwellery for auspicious occasions",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/3.jpeg",
       },
       {
         name: "Festive Jwellery",
         description: "Jwellery for festive occasions",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/2.jpeg",
       },
       {
         name: "Party Jwellery",
         description: "Jwellery for party wear",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/party-wear.jpeg",
       },
       {
         name: "Casual Jwellery",
         description: "Jwellery for casual wear",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/common-wear.jpeg",
       },
       {
         name: "Date Night Jwellery",
         description: "Jwellery for date nights",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/date-night.jpeg",
       },
     ],
   });

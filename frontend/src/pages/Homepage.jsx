@@ -13,7 +13,8 @@ import ProductSlider from '../components/ProductSlider'
 import JewelryCards from '../components/JewelryCards'
 
 import Hero from '../components/Hero'
-import NavBar from '../components/NavBar'
+import NavBar from '../components/Navbar'
+import ImageSlider from '../components/ImageSlider'
 
 
 
@@ -23,6 +24,7 @@ export default function Homepage() {
         <NavBar/>
         <Hero/>
         <JewelryCards/>
+        <ImageSlider/>
         <ProductSlider/> 
 
         <Carousal/>

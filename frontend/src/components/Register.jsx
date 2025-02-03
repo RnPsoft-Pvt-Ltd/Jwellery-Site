@@ -45,7 +45,7 @@ const RegisterUser = () => {
     try {
       // Sending POST request to backend
       const response = await axios.post(
-        "http://localhost:8000/api/users/register",
+        "http://localhost:5000/v1/auth/register",
         userData,
         {
           headers: {

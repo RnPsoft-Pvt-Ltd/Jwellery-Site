@@ -57,22 +57,28 @@ class AuthController {
 
   async getUserProfile(req, res) {
     try {
-      // The user ID is extracted from req.user (set by authentication middleware)
       const userId = req.user.id;
-
-      // Fetch user details from the database
+  
       const user = await authService.getUserById(userId);
-
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-
-      res.status(200).json({ user });
+  
+      res.status(200).json({ 
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }
+      });
+  
     } catch (error) {
       console.error("Error fetching user profile:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
+  
 
 
   async updateUserProfile(req, res) {

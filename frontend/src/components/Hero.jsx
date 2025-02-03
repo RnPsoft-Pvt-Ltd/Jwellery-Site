@@ -1,41 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+
+const slides = [
+  {
+    image: "https://storage.googleapis.com/jwelleryrnpsoft/image.png",
+    heading: "Heading",
+    text: "Always Enhancing What's Already Beautiful",
+    textPosition: "left-16 top-1/3",
+    contentPosition: "right-16 bottom-32 text-left",
+  },
+  {
+    image: "https://storage.googleapis.com/jwelleryrnpsoft/hero.png",
+    heading: "Grace in Every Detail",
+    text: "Always Enhancing What's Already Beautiful",
+    textPosition: "center top-1/4",
+    contentPosition: "left-16 bottom-32 text-right",
+  },
+];
 
 const Hero = () => {
-  const [position, setPosition] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [visibleSlide, setVisibleSlide] = useState(0);
+  const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPosition((prev) => {
-        if (prev >= 0.5 || prev <= -0.5) setDirection(-direction);
-        return prev + direction * 0.1;
-      });
-    }, 120);
+      setIsFading(true); // Start fade-out effect
+
+      setTimeout(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 500); // Delay text update for smooth transition
+
+      setTimeout(() => {
+        setIsFading(false); // Fade in new text after delay
+        setVisibleSlide((prev) => (prev + 1) % slides.length);
+      }, 1000); // Matches the duration of background transition
+    }, 3000); // Change slide every 3 seconds
+
     return () => clearInterval(interval);
-  }, [direction]);
+  }, []);
 
   return (
-    <div 
-      className="relative bg-gray-100 py-40 px-5 text-center overflow-hidden min-h-screen"
-      style={{
-        backgroundImage: 'url(https://storage.googleapis.com/jwelleryrnpsoft/image.png)',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-      }}
+    <div
+      className="relative w-full h-screen flex items-center justify-center bg-cover bg-center transition-all duration-1000 ease-in-out"
+      style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
     >
-      <h2 className="text-4xl font-bold text-gray-800 mb-5">Heading</h2>
+      {/* Fade Overlay for Smooth Transition */}
+      <div
+        className={`absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-500 ${
+          isFading ? "opacity-0" : "opacity-100"
+        }`}
+      ></div>
 
-      {/* Action Button Section */}
-      <div className="mb-6">
-        <p className="text-lg text-gray-600 mb-4">Always Enhancing What's<br />Already Beautiful</p>
-        <button className="px-6 py-3 bg-blue-600 text-white text-lg rounded-md transition duration-300 hover:bg-blue-800">
+      {/* Heading */}
+      <h2
+        className={`text-5xl font-light text-white absolute transition-opacity duration-500 ${
+          slides[visibleSlide].textPosition
+        } ${isFading ? "opacity-0" : "opacity-100"}`}
+      >
+        {slides[visibleSlide].heading}
+      </h2>
+
+      {/* Text and Button */}
+      <div
+        className={`absolute text-white transition-opacity duration-500 ${
+          slides[visibleSlide].contentPosition
+        } ${isFading ? "opacity-0" : "opacity-100"}`}
+      >
+        <p className="text-lg font-light mb-4">{slides[visibleSlide].text}</p>
+        <button className="px-6 py-3 border-2 border-white text-white text-lg hover:bg-white hover:text-black transition">
           Explore Now
         </button>
-      </div>
-
-      {/* Drop-down Image (Static) */}
-      <div className="absolute left-1/2 top-[99%] transform -translate-x-1/2 z-50">
-        <img src="https://storage.googleapis.com/jwelleryrnpsoft/image.png" alt="Drop Down" className="w-20 h-auto" />
       </div>
     </div>
   );

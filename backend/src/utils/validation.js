@@ -11,3 +11,8 @@
 export const validateEmail = (email) => email.includes("@");
 
 export const validatePassword = (password) => password.length >= 4;
+
+export const validateShipmentStatus = (status) => {
+  const validStatuses = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
+  return validStatuses.includes(status);
+};

@@ -4,6 +4,7 @@ class ProductService {
   async getAllProducts(filters = {}) {
     const {
       categoryId,
+      collectionId,
       minPrice,
       maxPrice,
       search,
@@ -22,6 +23,10 @@ class ProductService {
     // Only add conditions if they exist
     if (categoryId) {
       where.AND.push({ category_id: categoryId });
+    }
+
+    if(collectionId) {
+      where.AND.push({ collection_id: collectionId });
     }
 
     if (minPrice || maxPrice) {

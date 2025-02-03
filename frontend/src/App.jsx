@@ -11,11 +11,9 @@ import AddressPage from "./pages/AddressPage";
 import EditAddressPage from "./pages/EditAddressPage"
 import WishlistPage from "./pages/WishlistPage";
 import OrdersPage from "./pages/OrdersPage";
-import MenCollection from './components/MenCollection';
-import WomenCollection from './components/WomenCollection';
-import KidsCollection from './components/KidsCollection';
 import RegisterUser from './components/Register';
 import CresthavenLogin from './components/Login';
+import ProductGrid from './pages/ProductGrid';
 
 function App() {
   return (
@@ -33,9 +31,9 @@ function App() {
             <Route path="/account/wishlist" element={<WishlistPage />} />
             <Route path="/account/orders" element={<OrdersPage />} />
 
-            <Route path="/mencollection" element={<MenCollection />} />
-            <Route path="/womencollection" element={<WomenCollection />} />
-            <Route path="/kidcollection" element={<KidsCollection />} />
+            {/* Use grid view (4/2/25) Bhavya */}
+            {/* Removed mens women and kids collection */}
+            <Route path="/productgrid" element={<ProductGrid />} />
 
 
             <Route path="/register" element={<RegisterUser />} />

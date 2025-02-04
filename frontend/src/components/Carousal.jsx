@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { collectionService } from '../services/api'; 
+import { useNavigate } from 'react-router-dom';
 
 const CategoryCarousel = () => {
   const carouselRef = useRef(null);
@@ -7,6 +8,7 @@ const CategoryCarousel = () => {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   // Fetch collections from the backend
   useEffect(() => {
@@ -16,11 +18,12 @@ const CategoryCarousel = () => {
         const response = await collectionService.getCollections({ limit: 10, page: 1 });
         console.log(response);
         // Filter for specific collections
-        const allowedCollections = ['Gold Collection', 'Silver Collection', 'Perl Collection', 'Platinum Collection'];
+        const allowedCollections = ['Gold Collection', 'Silver Collection', 'Pearl Collection', 'Platinum Collection'];
         
         const filteredCollections = response.data
           .filter(collection => allowedCollections.includes(collection.name))
           .map(collection => ({
+            id: collection.id,
             title: collection.name,
             image: collection.thumbnail || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
             bgColor: getBgColorForCollection(collection.name),
@@ -96,7 +99,7 @@ const CategoryCarousel = () => {
           onClick={() => {
             setError(null);
             setLoading(true);
-            fetchCollections();
+            //fetchCollections();
           }}
         >
           Retry
@@ -120,9 +123,11 @@ const CategoryCarousel = () => {
         >
           {collections.map((collection, index) => (
             <div 
-              key={index}
-              className="flex-none w-full snap-start h-[400px]"
-            >
+            key={index}
+            className="flex-none w-full snap-start h-[400px] cursor-pointer"
+            onClick={() => navigate(`/products/${collection.id}`)}
+          >
+
               <div className="relative h-full">
                 <div className="relative w-full h-full flex">
                   <div className="absolute w-1/2 h-full right-0 flex items-center justify-center z-10 overflow-hidden">

@@ -33,7 +33,7 @@ function App() {
 
             {/* Use grid view (4/2/25) Bhavya */}
             {/* Removed mens women and kids collection */}
-            <Route path="/productgrid" element={<ProductGrid />} />
+            <Route path="/products/:collectionId" element={<ProductGrid />} />
 
 
             <Route path="/register" element={<RegisterUser />} />

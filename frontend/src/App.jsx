@@ -15,6 +15,7 @@ import RegisterUser from './components/Register';
 import CresthavenLogin from './components/Login';
 import CollectionGrid from './pages/CollectionGrid';
 import CategoryGrid from './pages/CategoryGrid';
+import ProductGrid from './pages/ProductGrid';
 
 function App() {
   return (
@@ -36,7 +37,8 @@ function App() {
             {/* Removed mens women and kids collection */}
             <Route path="/categories/:categoryId" element={<CategoryGrid />} />
             <Route path="/collections/:collectionId" element={<CollectionGrid />} />
-            
+            <Route path="/products" element={<ProductGrid />} />
+
 
             <Route path="/register" element={<RegisterUser />} />
             <Route path="/login" element={<CresthavenLogin />} />

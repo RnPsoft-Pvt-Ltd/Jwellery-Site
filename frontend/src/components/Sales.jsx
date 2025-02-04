@@ -1,13 +1,35 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Sales = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  const navigate = useNavigate();
+    const handleClick = (id) => {
+      navigate(`/collections/${id}`);
+    };
 
   const slides = [
     "https://storage.googleapis.com/jwelleryrnpsoft/pearl.png",
     "https://storage.googleapis.com/jwelleryrnpsoft/gold.png",
     "https://storage.googleapis.com/jwelleryrnpsoft/diamond.png"
   ];
+
+  // const slides = [
+  //   {
+  //     id: "7dcd2e58-2bbe-45ef-90e7-b78500bf3eed",
+  //     image: "https://storage.googleapis.com/jwelleryrnpsoft/pearl.png",
+  //   },
+  //   {
+  //     id: "7515ebd5-8aa4-4634-9610-f4644f1d58c3",
+  //     image: "https://storage.googleapis.com/jwelleryrnpsoft/gold.png",
+  //   },
+  //   {
+  //     id: "005daa73-7472-442e-be9b-b52952830658",
+  //     image: "https://storage.googleapis.com/jwelleryrnpsoft/diamond.png",
+  //   },
+  // ];
+  
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -40,7 +62,7 @@ const Sales = () => {
               <h2 className="text-2xl md:text-4xl lg:text-5xl text-white font-bold text-center">
                 Offers
               </h2>
-              <button className="px-2 py-1 md:px-4 md:py-2 text-sm md:text-2xl font-semibold border-2 border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-6 md:mb-6">
+              <button onClick={()=>navigate(`/collections/76453539-a29b-4dd2-80b4-daea17fc0dbf`)} className="px-2 py-1 md:px-4 md:py-2 text-sm md:text-2xl font-semibold border-2 border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-6 md:mb-6">
                 Buy Now
               </button>
             </div>

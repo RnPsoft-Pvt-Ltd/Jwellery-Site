@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import CollectionTemplate from "../components/CollectionTemplate";
+import { useParams } from 'react-router-dom';
 
 const ProductGrid = () => {
-  const [collection_Id, setCollection_Id] = useState(null);
+  const { collectionId } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,13 +15,13 @@ const ProductGrid = () => {
   };
 
   useEffect(() => {
-    const fetchMenCategoryId = async () => {
+    const fetchCategoryId = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5000/v1/collections/6cd6d839-fa21-4cc6-aac4-4047e135b955');
-        console.log(response.data);
-        console.log(response.data.id);
-        setCollection_Id(response.data.id);
+        const response = await axios.get(`http://localhost:5000/v1/collections/${collectionId}`);
+        console.log("Response data",response.data);
+        console.log("Data id",response.data.id);
+        //collectionId(response.data.id);
       } catch (err) {
         console.error('Error fetching category:', err);
         setError('Failed to load category. Please try again later.');
@@ -29,7 +30,7 @@ const ProductGrid = () => {
       }
     };
 
-    fetchMenCategoryId();
+    fetchCategoryId();
   }, []);
 
   if (loading || error) {
@@ -44,10 +45,10 @@ const ProductGrid = () => {
     );
   }
 
-  return collection_Id ? (
+  return collectionId ? (
     <CollectionTemplate 
       title="Men"
-      collectionId={collection_Id} // This should be the UUID string
+      collectionId={collectionId} // This should be the UUID string
       defaultFilters={defaultFilters}
     />
   ) : null;

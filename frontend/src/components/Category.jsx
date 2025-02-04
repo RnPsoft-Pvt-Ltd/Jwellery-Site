@@ -1,13 +1,15 @@
 import { useRef, useEffect, useState } from 'react';
-import axios from 'axios';
 import { categoryService } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
-const CategoryGallery = () => {
-  const containerRef = useRef(null);
+const CategoryCarousal = () => {
   const indicatorRef = useRef(null);
+  const carouselRef = useRef(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -20,6 +22,7 @@ const CategoryGallery = () => {
         
         // Transform the backend data to match the frontend structure
         const transformedCategories = categoryData.map(category => ({
+          id: category.id,
           image: category.thumbnail || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
           title: category.name
         }));
@@ -38,7 +41,7 @@ const CategoryGallery = () => {
   }, []);
 
   useEffect(() => {
-    const container = containerRef.current;
+    const container = carouselRef.current;
     const indicator = indicatorRef.current;
 
     const handleScroll = () => {
@@ -72,11 +75,15 @@ const CategoryGallery = () => {
   return (
     <div className="relative pb-8 bg-[#FCF8FC]">
       <div 
-        ref={containerRef}
+        ref={carouselRef}
         className="flex flex-row gap-4 h-[50vh] overflow-x-auto scrollbar-hide"
       >
         {categories.map((category, index) => (
-          <div key={index} className="relative flex-none">
+          <div 
+          key={index} 
+          className="relative flex-none"
+          onClick={() => navigate(`/categories/${category.id}`)}
+          >
             <div className="relative h-full">
               <img 
                 src={category.image} 
@@ -105,4 +112,4 @@ const CategoryGallery = () => {
   );
 };
 
-export default CategoryGallery;
+export default CategoryCarousal;

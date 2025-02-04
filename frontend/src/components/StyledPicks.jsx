@@ -1,6 +1,8 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const StyledPicks = () => {
+  const navigate = useNavigate();
   const galleryRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -14,6 +16,10 @@ const StyledPicks = () => {
     { id: 4, image: "https://storage.googleapis.com/jwelleryrnpsoft/jewelry4.png", alt: "Jewelry item 4" },
     { id: 5, image: "https://storage.googleapis.com/jwelleryrnpsoft/jewelry5.png", alt: "Jewelry item 5" }
   ];
+
+  const handleItemClick = useCallback(() => {
+    navigate('/products');
+  }, [navigate]);
 
   const handleScroll = useCallback(() => {
     if (!galleryRef.current) return;
@@ -81,10 +87,12 @@ const StyledPicks = () => {
           {jewelryItems.map((item) => (
             <div 
               key={item.id}
+              onClick={handleItemClick}
               className="flex-none w-[250px] sm:w-[280px] lg:w-[320px] 
                        h-[340px] sm:h-[380px] lg:h-[420px] 
                        rounded-xl overflow-hidden relative 
-                       transform transition-transform duration-300 hover:scale-[1.02]"
+                       transform transition-transform duration-300 hover:scale-[1.02]
+                       cursor-pointer"
             >
               <img
                 src={item.image}

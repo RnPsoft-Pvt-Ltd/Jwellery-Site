@@ -1,10 +1,12 @@
-import React, {useEffect, useState } from 'react';
+import {useEffect, useState } from 'react';
 import { collectionService } from '../services/api'; 
+import { useNavigate } from 'react-router-dom';
 
 const SpecialProducts = () => {
     const [collections, setCollections] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
   
     // Fetch collections from the backend
     useEffect(() => {
@@ -19,6 +21,7 @@ const SpecialProducts = () => {
           const filteredCollections = response.data
             .filter(collection => allowedCollections.includes(collection.name))
             .map(collection => ({
+              id: collection.id,
               title: collection.name,
               image: collection.thumbnail || 'https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png',
             }));
@@ -52,7 +55,7 @@ const SpecialProducts = () => {
             onClick={() => {
               setError(null);
               setLoading(true);
-              fetchCollections();
+              //fetchCollections();
             }}
           >
             Retry
@@ -91,6 +94,7 @@ const SpecialProducts = () => {
                   </div>
               
               <button
+                onClick={() => navigate(`/collections/${collection.id}`)}
                 className="self-center mb-8 px-5 py-2.5 bg-black text-white border border-white
                          cursor-pointer transition-colors duration-300 ease-in-out
                          hover:bg-white hover:text-black  font-['Albert_Sans']"

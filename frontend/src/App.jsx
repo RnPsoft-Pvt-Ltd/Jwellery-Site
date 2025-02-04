@@ -13,7 +13,8 @@ import WishlistPage from "./pages/WishlistPage";
 import OrdersPage from "./pages/OrdersPage";
 import RegisterUser from './components/Register';
 import CresthavenLogin from './components/Login';
-import ProductGrid from './pages/ProductGrid';
+import CollectionGrid from './pages/CollectionGrid';
+import CategoryGrid from './pages/CategoryGrid';
 
 function App() {
   return (
@@ -33,8 +34,9 @@ function App() {
 
             {/* Use grid view (4/2/25) Bhavya */}
             {/* Removed mens women and kids collection */}
-            <Route path="/products/:collectionId" element={<ProductGrid />} />
-
+            <Route path="/categories/:categoryId" element={<CategoryGrid />} />
+            <Route path="/collections/:collectionId" element={<CollectionGrid />} />
+            
 
             <Route path="/register" element={<RegisterUser />} />
             <Route path="/login" element={<CresthavenLogin />} />

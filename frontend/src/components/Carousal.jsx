@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { collectionService } from '../services/api'; 
 import { useNavigate } from 'react-router-dom';
 
-const CategoryCarousel = () => {
+const CollectionCarousel = () => {
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [collections, setCollections] = useState([]);
@@ -125,7 +125,7 @@ const CategoryCarousel = () => {
             <div 
             key={index}
             className="flex-none w-full snap-start h-[400px] cursor-pointer"
-            onClick={() => navigate(`/products/${collection.id}`)}
+            onClick={() => navigate(`/collections/${collection.id}`)}
           >
 
               <div className="relative h-full">
@@ -176,4 +176,4 @@ const CategoryCarousel = () => {
   );
 };
 
-export default CategoryCarousel;
+export default CollectionCarousel;

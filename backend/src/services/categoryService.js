@@ -12,14 +12,15 @@ class CategoryService {
         products: {
           include: {
             images: true,
-            product_metadata: true
+            variants: true,
+            product_metadata: true,
           }
         }
       },
       skip: (validPage - 1) * validLimit,
       take: validLimit,
       orderBy: {
-        name: "asc"
+        name: "desc"
       }
     });
 
@@ -43,6 +44,7 @@ class CategoryService {
         products: {
           include: {
             images: true,
+            variants: true,
             product_metadata: true
           }
         }

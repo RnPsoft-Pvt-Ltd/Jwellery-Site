@@ -96,7 +96,7 @@ class ProductService {
         collection: true,
         images: true,
         variants: true,
-        attributes: true,
+        // attributes: true,
         product_metadata: true,
       },
     });
@@ -112,7 +112,9 @@ class ProductService {
   }
 
   async createProduct(productData) {
-    const { variants, images, attributes, metadata, ...productDetails } =
+    // const { variants, images, attributes, metadata, ...productDetails } =
+    const { variants, images, metadata, ...productDetails } =
+
       productData;
 
     // Start a transaction to ensure all related data is created consistently
@@ -177,7 +179,7 @@ class ProductService {
           },
           images: true,
           product_metadata: true,
-          attributes: true
+          // attributes: true
         }
       });
     }, {
@@ -186,7 +188,8 @@ class ProductService {
   }
 
   async updateProduct(id, updateData) {
-    const { variants, images, attributes, metadata, ...productDetails } =
+    // const { variants, images, attributes, metadata, ...productDetails } =
+    const { variants, images, metadata, ...productDetails } =
       updateData;
 
     return prisma.$transaction(async (tx) => {
@@ -250,15 +253,15 @@ class ProductService {
                 })),
               }
             : undefined,
-          attributes: attributes
-            ? {
-                upsert: attributes.map((attr) => ({
-                  where: { id: attr.id || "new" },
-                  create: attr,
-                  update: attr,
-                })),
-              }
-            : undefined,
+          // attributes: attributes
+          //   ? {
+          //       upsert: attributes.map((attr) => ({
+          //         where: { id: attr.id || "new" },
+          //         create: attr,
+          //         update: attr,
+          //       })),
+          //     }
+          //   : undefined,
           product_metadata: metadata
             ? {
                 update: metadata,
@@ -272,7 +275,7 @@ class ProductService {
             },
           },
           images: true,
-          attributes: true,
+          // attributes: true,
           product_metadata: true,
         },
       });
@@ -299,7 +302,7 @@ class ProductService {
       await prisma.productMetadata.deleteMany({ where: { product_id: id } });
       await prisma.productVariant.deleteMany({ where: { product_id: id } });
       await prisma.productImage.deleteMany({ where: { product_id: id } });
-      await prisma.productAttribute.deleteMany({ where: { product_id: id } });
+      // await prisma.productAttribute.deleteMany({ where: { product_id: id } });
       await prisma.wishlist.deleteMany({ where: { product_id: id } });
       await prisma.productReview.deleteMany({ where: { product_id: id } });
       await prisma.productTaxMapping.deleteMany({ where: { product_id: id } });

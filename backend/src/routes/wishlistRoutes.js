@@ -13,6 +13,6 @@ router.post('/', authenticate, wishlistController.addToWishlist);
 router.get('/', authenticate, wishlistController.getAllWishlistItems);
 
 // DELETE /wishlist/:id - Remove product from wishlist (Authenticated users only)
-router.delete('/:id', authenticate, wishlistController.removeFromWishlist);
+router.delete('/', authenticate, wishlistController.removeFromWishlist);
 
 export default router;

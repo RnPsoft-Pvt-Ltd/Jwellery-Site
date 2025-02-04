@@ -1,6 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
+    const handleClickMen = () => {
+      navigate(`/collections/55688862-3c47-4cef-9757-4e9e0ec791dd`);
+    };
+    const handleClickWomen = () => {
+      navigate(`/collections/c94014f7-1802-4b8a-949e-443637f33f94`);
+    };
+    const handleClickKids = () => {
+      navigate(`/collections/2073c73d-c4da-444f-bbfc-145982b4055b`);
+    };
   return (
     <footer className="flex flex-col md:flex-row w-[100%]">
       {/* Main Footer Section */}
@@ -45,19 +56,19 @@ export default function Footer() {
                 </h2>
                 <ul className="space-y-3 text-center lg:text-left">
                   <li>
-                    <a href="#" className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl">
+                    <span onClick={()=>handleClickMen()} className="text-gray-300 cursor-pointer hover:text-white font-albert text-lg lg:text-xl">
                       Mens Jewelry
-                    </a>
+                    </span>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl">
+                    <span onClick={()=>handleClickWomen()} className="text-gray-300 cursor-pointer hover:text-white font-albert text-lg lg:text-xl">
                       Womens Jewelry
-                    </a>
+                    </span>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl">
+                    <span onClick={()=>handleClickKids()} className="text-gray-300 cursor-pointer hover:text-white font-albert text-lg lg:text-xl">
                       Kids Jewelry
-                    </a>
+                    </span>
                   </li>
                 </ul>
               </div>

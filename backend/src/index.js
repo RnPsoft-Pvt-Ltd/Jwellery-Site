@@ -12,6 +12,7 @@ import collectionRoutes from './routes/collectionRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import wishlistRoutes from './routes/wishlistRoutes.js';
 import { connectDB } from './config/db.js';
 
 
@@ -44,7 +45,8 @@ app.use('/v1/address', addressRoutes);
 app.use('/v1/collections', collectionRoutes);
 app.use('/v1/categories', categoryRoutes);
 app.use('/v1/inventory',inventoryRoutes)
-app.use('v1/users',userRoutes);
+app.use('/v1/users',userRoutes);
+app.use('/v1/wishlist',wishlistRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

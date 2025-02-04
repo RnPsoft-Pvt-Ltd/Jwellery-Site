@@ -6,7 +6,8 @@ class WishlistController {
   // Add product to the wishlist
   async addToWishlist(req, res, next) {
     try {
-      const { userId, productId } = req.body; // Assuming userId and productId come from the request body
+      const userId = req.user.id; // Assuming user ID is stored in `req.user` (e.g., from authentication middleware)
+      const { productId } = req.body; // Assuming userId and productId come from the request body
       if (!userId || !productId) {
         return res.status(400).json({ message: 'userId and productId are required' });
       }
@@ -33,7 +34,7 @@ class WishlistController {
   async removeFromWishlist(req, res, next) {
     try {
       const userId = req.user.id;
-      const productId = req.params.id; // Extract productId from request params
+      const {productId} = req.body; // Extract productId from request params
       if (!productId) {
         return res.status(400).json({ message: 'Invalid product ID' });
       }

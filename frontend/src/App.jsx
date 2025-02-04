@@ -13,9 +13,11 @@ import WishlistPage from "./pages/WishlistPage";
 import OrdersPage from "./pages/OrdersPage";
 import RegisterUser from './components/Register';
 import CresthavenLogin from './components/Login';
+
 import CollectionGrid from './pages/CollectionGrid';
 import CategoryGrid from './pages/CategoryGrid';
 import ProductGrid from './pages/ProductGrid';
+import ExpandedProduct from './pages/ExpandedProduct';
 
 function App() {
   return (
@@ -39,6 +41,9 @@ function App() {
             <Route path="/collections/:collectionId" element={<CollectionGrid />} />
             <Route path="/products" element={<ProductGrid />} />
 
+
+            <Route path='/products/:productId' element={<ExpandedProduct />} />
+            
 
             <Route path="/register" element={<RegisterUser />} />
             <Route path="/login" element={<CresthavenLogin />} />

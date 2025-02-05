@@ -33,10 +33,12 @@ const Navbar = () => {
   const handleAddToCart = () => navigate("/cart");
   const handleWishlist = () => navigate("/account/wishlist");
   const handleUserProfile = () => navigate("/account");
-
+  const handleAboutUs = () => navigate("/aboutUs");
+  const handleCollection = () => navigate("/products");
+  const handleLogo = () => navigate("/");
   return (
     <nav className="sticky top-0 z-50 w-full text-white px-5 py-3 flex items-center justify-between border-b border-gray-200 bg-black">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 cursor-pointer" onClick={()=>handleLogo()}>
         <img
           src="https://storage.googleapis.com/jwelleryrnpsoft/LogoWithName.png"
           alt="Logo"
@@ -49,8 +51,8 @@ const Navbar = () => {
       </button>
 
       <div className={`absolute lg:static top-16 left-0 w-full lg:w-auto bg-black lg:bg-transparent p-5 lg:p-0 transition-transform ${isOpen ? "block" : "hidden"} lg:flex items-center gap-8`}>
-        <a href="#" className="text-white">Collection</a>
-        <a href="#" className="text-white">About Us</a>
+        <span onClick={()=>handleCollection()} className="text-white cursor-pointer">Collection</span>
+        <span onClick={()=>handleAboutUs()} className="text-white cursor-pointer">About Us</span>
 
         {user ? (
           <div className="flex items-center gap-4">

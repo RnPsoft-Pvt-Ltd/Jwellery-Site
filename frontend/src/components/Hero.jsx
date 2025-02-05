@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const slides = [
   {
@@ -21,6 +22,10 @@ const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [visibleSlide, setVisibleSlide] = useState(0);
   const [isFading, setIsFading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleExploreMore = () => navigate("/products");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,7 +72,7 @@ const Hero = () => {
         } ${isFading ? "opacity-0" : "opacity-100"}`}
       >
         <p className="text-lg font-light mb-4">{slides[visibleSlide].text}</p>
-        <button className="px-6 py-3 border-2 border-white text-white text-lg hover:bg-white hover:text-black transition">
+        <button onClick={()=>handleExploreMore()} className="px-6 py-3 border-2 border-white text-white text-lg hover:bg-white hover:text-black transition">
           Explore Now
         </button>
       </div>

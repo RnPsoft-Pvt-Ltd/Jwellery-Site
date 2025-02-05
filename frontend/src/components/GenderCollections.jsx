@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const JewelryCards = () => {
+const GenderCollections = () => {
   const navigate = useNavigate();
 
   const jewelryItems = [
@@ -37,4 +37,4 @@ const JewelryCards = () => {
   );
 };
 
-export default JewelryCards;
+export default GenderCollections;

@@ -16,13 +16,10 @@ import CresthavenLogin from './components/Login';
 
 import CollectionGrid from './pages/CollectionGrid';
 import CategoryGrid from './pages/CategoryGrid';
-<<<<<<< HEAD
 import Cart from './components/Cart';
 import CheckoutPage from './pages/CheckoutPage';
-=======
 import ProductGrid from './pages/ProductGrid';
 import ExpandedProduct from './pages/ExpandedProduct';
->>>>>>> b2e879b5f9f62f0ce7a91516ea25ff1f75898201
 
 function App() {
   return (

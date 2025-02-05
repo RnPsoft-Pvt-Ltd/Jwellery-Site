@@ -57,26 +57,20 @@ const ProductSlider = () => {
   
       if (isWishlisted) {
         // REMOVE from wishlist
-        await axios.delete(`http://localhost:5000/v1/wishlist/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        
+      await axios.delete(`http://localhost:5000/v1/wishlist`, {
+        data: { productId }, // Request body needs to be in a 'data' property
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
   
         setWishlist((prev) => prev.filter((item) => item.product_id !== productId));
         console.log("Removed from wishlist");
       } else {
         // ADD to wishlist
-        const response = await axios.post(
-          "http://localhost:5000/v1/wishlist",
-          { userId, productId },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await axios.post(`http://localhost:5000/v1/wishlist`, {
+          productId },{ // Request body needs to be in a 'data' property
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
   
         setWishlist((prev) => [...prev, response.data]);
         console.log("Added to wishlist");

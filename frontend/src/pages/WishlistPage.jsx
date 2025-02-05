@@ -2,27 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import AccountSidebar from '../components/layout/AccountSidebar';
 import Header from '../components/layout/Header';
-
+import axios from 'axios';
 function WishlistPage() {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const[productId,setProductId]=useState(null);
 
   const BASE_URL = 'http://localhost:5000/v1/wishlist';
 
   useEffect(() => {
     const fetchWishlistItems = async () => {
       try {
-        const response = await fetch(`${BASE_URL}`, {
+        // const response = await fetch(`${BASE_URL}`, {
+        //   headers: {
+        //     Authorization: `Bearer ${localStorage.getItem('token')}`,
+        //   },
+        // });
+        const response=await axios.get("http://localhost:5000/v1/wishlist", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        if (!response.ok) {
+        console.log(response);
+        if (!response) {
           throw new Error('Failed to fetch wishlist items');
         }
-        const data = await response.json();
+        // const data = await response.json();
+        const data=response.data;
         setWishlistItems(data);
+        setProductId(data.product_id);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -34,19 +43,17 @@ function WishlistPage() {
   }, []);
 
   const handleAddToWishlist = async (productId) => {
+
     try {
-      const response = await fetch(`${BASE_URL}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ productId }),
+      
+      const response = await axios.post(`http://localhost:5000/v1/wishlist`, {
+        productId },{ // Request body needs to be in a 'data' property
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      if (!response.ok) {
+      if (!response) {
         throw new Error('Failed to add product to wishlist');
       }
-      const newItem = await response.json();
+      const newItem = await response.data;
       setWishlistItems([...wishlistItems, newItem]);
     } catch (error) {
       console.error('Error adding to wishlist:', error);
@@ -55,13 +62,13 @@ function WishlistPage() {
 
   const handleRemoveFromWishlist = async (productId) => {
     try {
-      const response = await fetch(`${BASE_URL}/${productId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+      console.log(productId);
+      const response = await axios.delete(`http://localhost:5000/v1/wishlist`, {
+        data: { productId }, // Request body needs to be in a 'data' property
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      if (!response.ok) {
+      console.log(response);
+      if (!response) {
         throw new Error('Failed to remove product from wishlist');
       }
       setWishlistItems(wishlistItems.filter((item) => item.product.id !== productId));

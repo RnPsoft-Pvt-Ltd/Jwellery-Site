@@ -62,7 +62,8 @@ const Sales = () => {
               <h2 className="text-2xl md:text-4xl lg:text-5xl text-white font-bold text-center">
                 Offers
               </h2>
-              <button onClick={()=>navigate(`/collections/76453539-a29b-4dd2-80b4-daea17fc0dbf`)} className="px-2 py-1 md:px-4 md:py-2 text-sm md:text-2xl font-semibold border-2 border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-6 md:mb-6">
+              {/* Redirects to festive  jwellery collection # TODO change later */}
+              <button onClick={()=>navigate(`/collections/a6aed6f1-0dca-434f-b4e5-c3b8efe6bc1b`)} className="px-2 py-1 md:px-4 md:py-2 text-sm md:text-2xl font-semibold border-2 border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-6 md:mb-6">
                 Buy Now
               </button>
             </div>

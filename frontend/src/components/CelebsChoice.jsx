@@ -11,23 +11,28 @@ import { useNavigate } from "react-router-dom";
 
 const celebs = [
   {
-    id: "efbab753-a649-4598-a2cc-0bd0fea58500",
+    // Bracelet
+    id: "2b0ac489-0b34-493e-8016-d65c08e1c7ee",
     image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb1.png",
   },
   {
-    id: "846d2bf7-a634-4e0b-aa70-23eb37c77dc6",
+    // Earrings
+    id: "78f14e45-c25a-4abf-8a3e-718cc3d4b448",
     image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb2.png",
   },
   {
-    id: "846d2bf7-a634-4e0b-aa70-23eb37c77dc6",
+    // Earrings
+    id: "78f14e45-c25a-4abf-8a3e-718cc3d4b448",
     image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb3.png",
   },
   {
-    id: "7fb3587b-1a6d-44cf-9213-d58e67ba9a24",
+    // Necklace
+    id: "a353bdf4-56e5-4a07-86a9-c255785aaa9f",
     image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb4.png",
   },
   {
-    id: "7fb3587b-1a6d-44cf-9213-d58e67ba9a24",
+    // Necklaces
+    id: "a353bdf4-56e5-4a07-86a9-c255785aaa9f",
     image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb5.png",
   },
 ];

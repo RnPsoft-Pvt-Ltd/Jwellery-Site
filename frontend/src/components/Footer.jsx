@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 export default function Footer() {
   const navigate = useNavigate();
   const handleClickMen = () => {
-    navigate(`/collections/55688862-3c47-4cef-9757-4e9e0ec791dd`);
+    navigate(`/collections/8d08f894-9c7a-4a57-8c64-b7d70dfd5848`);
   };
   const handleClickWomen = () => {
-    navigate(`/collections/c94014f7-1802-4b8a-949e-443637f33f94`);
+    navigate(`/collections/f1ab0cfd-b2d9-45ee-978c-83ef1809e031`);
   };
   const handleClickKids = () => {
-    navigate(`/collections/2073c73d-c4da-444f-bbfc-145982b4055b`);
+    navigate(`/collections/546e1cfd-c60c-428d-948c-843ea279deba`);
   };
 
   const handleAboutUs = () => {

@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Homepage from './pages/Homepage';
 import AdminPage from './pages/Adminpage';  
-import Addtocart from "./pages/Addtocart"; 
+// import Addtocart from "./pages/Addtocart"; 
 import ShoppingCartPage from "./pages/Shoppedcart"; 
 
 import AccountPage from "./pages/AccountPage";
@@ -16,6 +16,8 @@ import CresthavenLogin from './components/Login';
 
 import CollectionGrid from './pages/CollectionGrid';
 import CategoryGrid from './pages/CategoryGrid';
+import Cart from './components/Cart';
+import CheckoutPage from './pages/CheckoutPage';
 import ProductGrid from './pages/ProductGrid';
 import ExpandedProduct from './pages/ExpandedProduct';
 
@@ -25,7 +27,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/admin" element={<AdminPage />} />  
-        <Route path="/cart" element={<Addtocart />} />
+        {/* <Route path="/cart" element={<Addtocart />} /> */}
         <Route path="/shoppedcart" element={<ShoppingCartPage />} />
 
         <Route path="/account" element={<AccountPage />} />
@@ -47,6 +49,11 @@ function App() {
 
             <Route path="/register" element={<RegisterUser />} />
             <Route path="/login" element={<CresthavenLogin />} />
+
+
+            //cartsection
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<CheckoutPage />}/>
 
 
       </Routes>

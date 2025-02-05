@@ -18,23 +18,23 @@ class CollectionService {
             }
           }
         },
-        skip: (validPage - 1) * validLimit,
-        take: validLimit,
+        // skip: (validPage - 1) * validLimit,
+        // take: validLimit,
         orderBy: {
           created_at: "desc"
         }
       });
 
-      const total = await prisma.collection.count();
+      // const total = await prisma.collection.count();
 
       return {
         data: collections,
-        pagination: {
-          total,
-          totalPages: Math.ceil(total / validLimit),
-          currentPage: validPage,
-          perPage: validLimit
-        }
+        // pagination: {
+        //   total,
+        //   totalPages: Math.ceil(total / validLimit),
+        //   currentPage: validPage,
+        //   perPage: validLimit
+        // }
       };
     } catch (error) {
       throw new Error(`Failed to fetch collections: ${error.message}`);

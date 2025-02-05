@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useNavigate } from 'react-router-dom';
+import Navbar from "./Navbar";
 
 const CategoryTemplate = ({ 
   title, 
@@ -158,7 +159,7 @@ const CategoryTemplate = ({
     .slice(startIndex, endIndex);
   return (
     <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-md">
+      {/* <nav className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex space-x-4">
             <a href="/" className="text-lg font-semibold">Collection</a>
@@ -171,7 +172,8 @@ const CategoryTemplate = ({
             <button className="text-xl">👤</button>
           </div>
         </div>
-      </nav>
+      </nav> */}
+      <Navbar />
 
       <div className="text-center py-8">
         <h1 className="text-4xl font-bold">{category?.name || title}</h1>

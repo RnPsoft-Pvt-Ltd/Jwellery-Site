@@ -140,12 +140,11 @@ const CollectionTemplate = ({
 
   const filteredVariants = allVariants
     .filter((variant) => {
-        console.log("Variant",variant);
 
       const matchesPrice = variant.totalPrice >= priceRange.min && 
                           variant.totalPrice <= priceRange.max;
                         
-      console.log("Match price",matchesPrice);
+
       const matchesColor = !activeFilters.color.length || 
         activeFilters.color.includes(variant.color);
       
@@ -157,7 +156,7 @@ const CollectionTemplate = ({
       return 0;
     })
     .slice(startIndex, endIndex);
-console.log(filteredVariants);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-md">

@@ -46,7 +46,11 @@ class WishlistService {
           user_id: userId,
         },
         include: {
-          product: true, // Assuming you want to include product details
+          product: {
+            include: {
+              images: true, // Includes product images
+            },
+          },
         },
       });
       return wishlistItems;

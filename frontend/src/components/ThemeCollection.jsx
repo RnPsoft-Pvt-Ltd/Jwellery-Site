@@ -123,7 +123,7 @@ const JewelryCategories = () => {
 
   return (
     <section className="max-w-7xl mx-auto mt-10 px-4">
-      <div className="w-full h-auto flex gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8 overflow-x-auto scroll-smooth touch-pan-x scrollbar-hide snap-x snap-mandatory">
+      <div className="w-full h-auto flex gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8 overflow-x-auto scroll-smooth touch-pan-x snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {collections.map((collection) => (
           <div 
           key={collection.id} 

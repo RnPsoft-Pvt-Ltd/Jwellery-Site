@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { useNavigate } from 'react-router-dom';
 
 const CollectionTemplate = ({ 
   title, 
@@ -11,6 +12,7 @@ const CollectionTemplate = ({
     type: ["Modern", "Ethnic"]
   }
 }) => {
+  const navigate = useNavigate();
   const [collection, setCollection] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -241,6 +243,7 @@ const CollectionTemplate = ({
               <div
                 key={`${variant.productId}-${variant.id}`}
                 className="bg-white rounded-lg shadow p-4 flex flex-col"
+                onClick={() => navigate(`/products/${variant.product_id}`)}
               >
                 <div className="relative">
                   <img

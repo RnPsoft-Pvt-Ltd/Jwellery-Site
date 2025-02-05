@@ -76,7 +76,7 @@ const CategoryCarousal = () => {
     <div className="relative pb-8 bg-[#FCF8FC]">
       <div 
         ref={carouselRef}
-        className="flex flex-row gap-4 h-[50vh] overflow-x-auto scrollbar-hide"
+        className="w-full h-[400px] md:h-[450px] flex overflow-x-auto gap-5 p-2 scrollbar-thin scrollbar-thumb-black scrollbar-track-transparent"
       >
         {categories.map((category, index) => (
           <div 
@@ -100,13 +100,6 @@ const CategoryCarousal = () => {
             </div>
           </div>
         ))}
-      </div>
-      
-      <div className="absolute bottom-5 w-full h-1 bg-gray-200">
-        <div 
-          ref={indicatorRef}
-          className="h-full w-1/4 bg-black absolute left-0 transition-transform duration-300"
-        />
       </div>
     </div>
   );

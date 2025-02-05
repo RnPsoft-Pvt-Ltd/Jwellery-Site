@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { useNavigate } from 'react-router-dom';
 
 const CategoryTemplate = ({ 
   title, 
@@ -11,6 +12,7 @@ const CategoryTemplate = ({
     type: ["Modern", "Ethnic"]
   }
 }) => {
+  const navigate = useNavigate();
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -235,9 +237,11 @@ const CategoryTemplate = ({
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredVariants.map((variant) => (
+              console.log("Variant", variant),
               <div
                 key={`${variant.productId}-${variant.id}`}
                 className="bg-white rounded-lg shadow p-4 flex flex-col"
+                onClick={() => navigate(`/products/${variant.product_id}`)}
               >
                 <div className="relative">
                   <img

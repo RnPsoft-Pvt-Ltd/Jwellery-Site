@@ -3,9 +3,8 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { useNavigate } from 'react-router-dom';
 
-const CollectionTemplate = ({ 
+const ProductTemplate = ({ 
   title, 
-  collectionId,
   defaultFilters = {
     color: ["Gold", "Silver"],
     occasion: ["Party", "Formal", "Traditional"],
@@ -13,7 +12,7 @@ const CollectionTemplate = ({
   }
 }) => {
   const navigate = useNavigate();
-  const [collection, setCollection] = useState(null);
+  const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeFilters, setActiveFilters] = useState({
@@ -31,39 +30,34 @@ const CollectionTemplate = ({
     perPage: 10
   });
 
-  // Helper function to calculate variant price
   const calculateVariantPrice = (basePrice, priceModifier) => {
     return parseFloat(basePrice) + parseFloat(priceModifier || 0);
   };
 
   useEffect(() => {
-    const fetchCollection = async () => {
+    const fetchAllProducts = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:5000/v1/collections/${collectionId}`);
-        setCollection(response.data);
-        
-        // Count total variants instead of products
-        const totalVariants = response.data.products.reduce(
-          (acc, product) => acc + (product.variants?.length || 0), 
-          0
+        const response = await axios.get(
+          `http://localhost:5000/v1/products?page=${pagination.currentPage}&limit=${pagination.perPage}`
         );
+        setProducts(response.data);
         
         setPagination(prev => ({
           ...prev,
-          total: totalVariants,
-          totalPages: Math.ceil(totalVariants / prev.perPage)
+          total: response.data.pagination.total,
+          totalPages: response.data.pagination.totalPages
         }));
       } catch (err) {
-        console.error('Error fetching collection:', err);
+        console.error('Error fetching products:', err);
         setError('Failed to load products. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCollection();
-  }, [collectionId]);
+    fetchAllProducts();
+  }, [pagination.currentPage, pagination.perPage]);
 
   const handleFilterChange = (category, value) => {
     setActiveFilters((prev) => {
@@ -124,11 +118,7 @@ const CollectionTemplate = ({
     );
   }
 
-  const startIndex = (pagination.currentPage - 1) * pagination.perPage;
-  const endIndex = startIndex + pagination.perPage;
-  
-  // Transform products into variant-based display items
-  const allVariants = collection?.products?.flatMap(product => 
+  const allVariants = products?.data?.flatMap(product => 
     product.variants?.map(variant => ({
       ...variant,
       productId: product.id,
@@ -136,17 +126,14 @@ const CollectionTemplate = ({
       basePrice: product.base_price,
       totalPrice: calculateVariantPrice(product.base_price, variant.price_modifier),
       description: product.description,
-      images: product.images // We'll use variant-specific images if available
+      images: product.images
     })) || []
   ) || [];
 
   const filteredVariants = allVariants
     .filter((variant) => {
-
       const matchesPrice = variant.totalPrice >= priceRange.min && 
                           variant.totalPrice <= priceRange.max;
-                        
-
       const matchesColor = !activeFilters.color.length || 
         activeFilters.color.includes(variant.color);
       
@@ -156,15 +143,14 @@ const CollectionTemplate = ({
       if (sort === "price-low-high") return a.totalPrice - b.totalPrice;
       if (sort === "price-high-low") return b.totalPrice - a.totalPrice;
       return 0;
-    })
-    .slice(startIndex, endIndex);
+    });
 
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex space-x-4">
-            <a href="/" className="text-lg font-semibold">Collection</a>
+            <a href="/" className="text-lg font-semibold">All Products</a>
             <a href="/" className="text-lg font-semibold">About Us</a>
           </div>
           <div className="flex space-x-4 items-center">
@@ -177,10 +163,7 @@ const CollectionTemplate = ({
       </nav>
 
       <div className="text-center py-8">
-        <h1 className="text-4xl font-bold">{collection?.name || title}</h1>
-        {collection?.description && (
-          <p className="mt-2 text-gray-600">{collection.description}</p>
-        )}
+        <h1 className="text-4xl font-bold">{title}</h1>
       </div>
 
       <div className="flex px-10 gap-8">
@@ -240,10 +223,11 @@ const CollectionTemplate = ({
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredVariants.map((variant) => (
+              console.log("Variant", variant),
               <div
                 key={`${variant.productId}-${variant.id}`}
                 className="bg-white rounded-lg shadow p-4 flex flex-col"
-                onClick={() => navigate(`/products/${variant.product_id}`)}
+                onClick={() => navigate(`/products/${variant.productId}`)}
               >
                 <div className="relative">
                   <img
@@ -291,9 +275,8 @@ const CollectionTemplate = ({
   );
 };
 
-CollectionTemplate.propTypes = {
+ProductTemplate.propTypes = {
   title: PropTypes.string.isRequired,
-  collectionId: PropTypes.string.isRequired,
   defaultFilters: PropTypes.shape({
     color: PropTypes.arrayOf(PropTypes.string),
     occasion: PropTypes.arrayOf(PropTypes.string),
@@ -301,4 +284,4 @@ CollectionTemplate.propTypes = {
   }),
 };
 
-export default CollectionTemplate;
+export default ProductTemplate;

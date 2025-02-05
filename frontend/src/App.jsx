@@ -13,10 +13,16 @@ import WishlistPage from "./pages/WishlistPage";
 import OrdersPage from "./pages/OrdersPage";
 import RegisterUser from './components/Register';
 import CresthavenLogin from './components/Login';
+
 import CollectionGrid from './pages/CollectionGrid';
 import CategoryGrid from './pages/CategoryGrid';
+<<<<<<< HEAD
 import Cart from './components/Cart';
 import CheckoutPage from './pages/CheckoutPage';
+=======
+import ProductGrid from './pages/ProductGrid';
+import ExpandedProduct from './pages/ExpandedProduct';
+>>>>>>> b2e879b5f9f62f0ce7a91516ea25ff1f75898201
 
 function App() {
   return (
@@ -38,6 +44,10 @@ function App() {
             {/* Removed mens women and kids collection */}
             <Route path="/categories/:categoryId" element={<CategoryGrid />} />
             <Route path="/collections/:collectionId" element={<CollectionGrid />} />
+            <Route path="/products" element={<ProductGrid />} />
+
+
+            <Route path='/products/:productId' element={<ExpandedProduct />} />
             
 
             <Route path="/register" element={<RegisterUser />} />

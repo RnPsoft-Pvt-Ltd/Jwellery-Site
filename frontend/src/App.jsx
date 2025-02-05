@@ -21,6 +21,9 @@ import CheckoutPage from './pages/CheckoutPage';
 import ProductGrid from './pages/ProductGrid';
 import ExpandedProduct from './pages/ExpandedProduct';
 
+import ArrangeCallback from './pages/ArrangeCallback';
+import AboutUs from './pages/AboutUsPage';
+
 function App() {
   return (
     <BrowserRouter>
@@ -49,6 +52,11 @@ function App() {
 
             <Route path="/register" element={<RegisterUser />} />
             <Route path="/login" element={<CresthavenLogin />} />
+
+
+            <Route path="/arrangecallback" element={<ArrangeCallback />} />  
+            <Route path="/aboutUs" element={<AboutUs />} />  
+
 
 
             //cartsection

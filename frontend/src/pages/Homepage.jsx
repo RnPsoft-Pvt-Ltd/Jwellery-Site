@@ -10,7 +10,7 @@ import SpecialProducts from '../components/SpecialProducts'
 import Category from '../components/Category'
 import MetalCollection from '../components/MetalCollection'
 import ProductSlider from '../components/ProductSlider'
-import JewelryCards from '../components/JewelryCards'
+import GenderCollections from '../components/GenderCollections'
 
 import Hero from '../components/Hero'
 import NavBar from '../components/Navbar'
@@ -23,7 +23,7 @@ export default function Homepage() {
     <div>
         <NavBar/>
         <Hero/>
-        <JewelryCards/>
+        <GenderCollections/>
         <ImageSlider/>
         <ProductSlider/> 
 

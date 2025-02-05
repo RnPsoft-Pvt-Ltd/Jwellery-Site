@@ -1,7 +1,17 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Callback = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCallbackClick = () => {
+    navigate(`/arrangecallback`);
+  };
+
+  const handleExploreClick = () => {
+    navigate(`/products`);
+  };
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -84,20 +94,30 @@ const Callback = () => {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
-            {["Arrange a Callback", "Explore More"].map((text) => (
-              <button
-                key={text}
-                className="bg-black text-white text-lg sm:text-2xl 
+            <button
+              onClick={() => handleCallbackClick()}
+              className="bg-black text-white text-lg sm:text-2xl 
                          py-2 px-6 rounded-lg
                          hover:bg-gray-800 active:bg-gray-900
                          transform transition-all duration-300
                          hover:-translate-y-0.5 hover:shadow-lg
                          focus:outline-none focus:ring-2 focus:ring-gray-400
-                         font-albert"
-              >
-                {text}
-              </button>
-            ))}
+                         font-albert text-center"
+            >
+              Arrange a Callback
+            </button>
+            <button
+              onClick={() => handleExploreClick()}
+              className="bg-black text-white text-lg sm:text-2xl 
+                         py-2 px-6 rounded-lg
+                         hover:bg-gray-800 active:bg-gray-900
+                         transform transition-all duration-300
+                         hover:-translate-y-0.5 hover:shadow-lg
+                         focus:outline-none focus:ring-2 focus:ring-gray-400
+                         font-albert text-center"
+            >
+              Explore More
+            </button>
           </div>
         </div>
       </div>

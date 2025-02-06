@@ -33,7 +33,7 @@ const ArrangeCallback = () => {
       <main className="flex-grow flex items-center justify-center px-4 py-8 bg-white">
         <div className="w-full max-w-xl">
           {/* Form Title */}
-          <h1 className="text-3xl md:text-4xl text-center mb-8 font-normal">
+          <h1 className="text-3xl md:text-4xl text-center mb-8 font-bold">
             Arrange a Callback
           </h1>
           

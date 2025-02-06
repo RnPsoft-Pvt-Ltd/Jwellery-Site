@@ -23,7 +23,8 @@ export default function Homepage() {
     <div>
         <NavBar/>
         <Hero/>
-        <GenderCollections/>
+        <GenderCollections title="Style Picks" />
+
         <ImageSlider/>
         <ProductSlider/> 
 

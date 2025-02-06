@@ -1,13 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-// Products Component
 const Products = () => {
-  const products = [
-    { name: 'Striped Cotton Sweater', price: 90.00, sku: 'SCS-24680', stock: 150, status: true },
-    { name: 'Denim Skinny Jeans', price: 120.00, sku: 'DSJ-54321', stock: 90, status: true },
-    { name: 'Classic Leather Loafers', price: 120.00, sku: 'CLL-98765', stock: 120, status: true },
-    { name: 'Floral Maxi Dress', price: 100.00, sku: 'FMD-12345', stock: 100, status: true }
-  ];
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/v1/products');
+        const formattedProducts = response.data.data.map((product) => ({
+          name: product.name,
+          price: product.base_price,
+          sku: product.SKU,
+          stock: 10,
+          status: true,
+          thumbnail: product.images.find((img) => img.is_primary)?.image_url || product.images[0]?.image_url || '',
+        }));
+        setProducts(formattedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <div className="ml-64 p-6">
@@ -50,14 +65,18 @@ const Products = () => {
               <tr key={idx} className="border-t">
                 <td className="px-4 py-3"><input type="checkbox" /></td>
                 <td className="px-4 py-3">
-                  <div className="w-12 h-12 bg-gray-200 rounded"></div>
+                  {product.thumbnail ? (
+                    <img src={product.thumbnail} alt={product.name} className="w-12 h-12 object-cover rounded" />
+                  ) : (
+                    <div className="w-12 h-12 bg-gray-200 rounded"></div>
+                  )}
                 </td>
                 <td className="px-4 py-3">{product.name}</td>
-                <td className="px-4 py-3">${product.price.toFixed(2)}</td>
+                <td className="px-4 py-3">${product.price}</td>
                 <td className="px-4 py-3">{product.sku}</td>
                 <td className="px-4 py-3 text-red-600">{product.stock}</td>
                 <td className="px-4 py-3">
-                  <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                  <div className={`w-2 h-2 rounded-full ${product.status ? 'bg-emerald-400' : 'bg-gray-400'}`}></div>
                 </td>
               </tr>
             ))}
@@ -73,14 +92,12 @@ const Products = () => {
             <span>per page</span>
           </div>
           <div>
-            <span>1</span>
-            <span className="mx-2">4 records</span>
+            <span className="mx-2">{products.length} records</span>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default Products;

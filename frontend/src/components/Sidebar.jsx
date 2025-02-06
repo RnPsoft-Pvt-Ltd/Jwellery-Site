@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Home, Package, Tag, List, Settings, ShoppingCart, Users, Gift } from 'lucide-react';
+import { Home, Package, Tag, List, ShoppingCart, Users, Gift } from 'lucide-react';
 
 // Sidebar Component
 const Sidebar = ({ onNavigate }) => {
@@ -14,7 +14,6 @@ const Sidebar = ({ onNavigate }) => {
         { name: 'Products', icon: <Package size={20} />, path: '/products' },
         { name: 'Categories', icon: <Tag size={20} />, path: '/categories' },
         { name: 'Collections', icon: <List size={20} />, path: '/collections' },
-        { name: 'Attributes', icon: <Settings size={20} />, path: '/attributes' }
       ]},
       { section: 'SALE', items: [
         { name: 'Orders', icon: <ShoppingCart size={20} />, path: '/orders' }

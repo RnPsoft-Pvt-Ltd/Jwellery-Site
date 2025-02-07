@@ -11,6 +11,7 @@ import CreateCoupon from '../components/CreateCoupon.jsx';
 // import Dashboard from '../components/dashboard.jsx';
 import CustomersTable from '../components/CustomersTable.jsx';
 import Orders from '../components/Orders.jsx';
+import Dashboard from '../components/Dashboard.jsx';
 
 
 
@@ -29,6 +30,9 @@ const AdminPage = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <Sidebar onNavigate={handleNavigation} />
+      
+      
+      {activeComponent === 'dashboard' && <Dashboard/>}
       
       {activeComponent === 'new-product' && <CreateProduct />}
       {activeComponent === 'new-coupon' && <CreateCoupon />}

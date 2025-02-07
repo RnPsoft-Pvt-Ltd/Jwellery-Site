@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Collections = () => {
-  const collections = [
-    { id: 1, name: 'Featured Products', code: 'homepage' }
-  ];
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/v1/collections');
+        const formattedProducts = response.data.data.map((product) => ({
+          ID: product.id,
+          name: product.name,
+          description: product.description,
+          status: true,
+          thumbnail: product.thumbnail,
+        }));
+        setProducts(formattedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <div className="ml-64 p-6">
@@ -15,49 +33,49 @@ const Collections = () => {
       </div>
       
       <div className="bg-white rounded-lg shadow">
-        <div className="p-4 border-b flex justify-between items-center">
+        <div className="p-4 border-b flex gap-4">
           <input
             type="text"
             placeholder="Search"
-            className="w-full max-w-sm px-4 py-2 border rounded-md"
+            className="flex-1 max-w-sm px-4 py-2 border rounded-md"
           />
-          <a href="#" className="text-blue-600 hover:text-blue-700">
-            Clear filter
-          </a>
+          {/* <select className="px-4 py-2 border rounded-md">
+            <option>Status</option>
+          </select> */}
         </div>
         
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="w-12 px-4 py-3"><input type="checkbox" /></th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-700">ID</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-700">COLLECTION NAME</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-700">CODE</th>
+              {/* <th className="w-12 px-4 py-3"><input type="checkbox" /></th> */}
+              <th className="text-left px-4 py-3">THUMBNAIL</th>
+              <th className="text-left px-4 py-3">NAME</th>
+              <th className="text-left px-4 py-3">DESCRIPTION</th>
+              <th className="text-left px-4 py-3">ID</th>
             </tr>
           </thead>
           <tbody>
-            {collections.map((collection) => (
-              <tr key={collection.id} className="border-t">
-                <td className="px-4 py-3"><input type="checkbox" /></td>
-                <td className="px-4 py-3">{collection.id}</td>
-                <td className="px-4 py-3">{collection.name}</td>
-                <td className="px-4 py-3">{collection.code}</td>
+            {products.map((product, idx) => (
+              <tr key={idx} className="border-t">
+                {/* <td className="px-4 py-3"><input type="checkbox" /></td> */}
+                <td className="px-4 py-3">
+                  {product.thumbnail ? (
+                    <img src={product.thumbnail} alt={product.name} className="w-12 h-12 object-cover rounded" />
+                  ) : (
+                    <div className="w-12 h-12 bg-gray-200 rounded"></div>
+                  )}
+                </td>
+                <td className="px-4 py-3">{product.name}</td>
+                <td className="px-4 py-3">{product.description}</td>
+                <td className="px-4 py-3">{product.ID}</td>
               </tr>
             ))}
           </tbody>
         </table>
         
         <div className="p-4 border-t flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span>Show</span>
-            <select className="border rounded px-2 py-1">
-              <option>20</option>
-            </select>
-            <span>per page</span>
-          </div>
           <div>
-            <span>1</span>
-            <span className="mx-2">1 records</span>
+            <span className="mx-2">{products.length} records</span>
           </div>
         </div>
       </div>

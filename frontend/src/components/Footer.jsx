@@ -12,7 +12,9 @@ export default function Footer() {
   const handleClickKids = () => {
     navigate(`/collections/546e1cfd-c60c-428d-948c-843ea279deba`);
   };
-
+  const handleReviews = () => {
+    navigate("/reviews");
+  };
   const handleAboutUs = () => {
     navigate("/aboutUs");
   };
@@ -101,7 +103,9 @@ export default function Footer() {
                     </span>
                   </li>
                   <li>
-                    <span className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer">
+                    <span 
+                      onClick={() => handleReviews()}
+                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer">
                       Reviews
                     </span>
                   </li>

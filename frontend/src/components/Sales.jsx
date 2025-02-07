@@ -3,33 +3,22 @@ import { useNavigate } from 'react-router-dom';
 
 const Sales = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
   const navigate = useNavigate();
-    const handleClick = (id) => {
-      navigate(`/collections/${id}`);
-    };
 
   const slides = [
-    "https://storage.googleapis.com/jwelleryrnpsoft/pearl.png",
-    "https://storage.googleapis.com/jwelleryrnpsoft/gold.png",
-    "https://storage.googleapis.com/jwelleryrnpsoft/diamond.png"
+    {
+      id: "560883a9-0f36-44fb-98cd-ee0a3a69a4e8",
+      image: "https://storage.googleapis.com/jwelleryrnpsoft/pearl.png",
+    },
+    {
+      id: "898a7627-1b2a-4bd6-98dd-6557ec46ed76",
+      image: "https://storage.googleapis.com/jwelleryrnpsoft/gold.png",
+    },
+    {
+      id: "7503e9a3-aacd-4255-851e-b758c9f0aedf",
+      image: "https://storage.googleapis.com/jwelleryrnpsoft/diamond.png",
+    },
   ];
-
-  // const slides = [
-  //   {
-  //     id: "7dcd2e58-2bbe-45ef-90e7-b78500bf3eed",
-  //     image: "https://storage.googleapis.com/jwelleryrnpsoft/pearl.png",
-  //   },
-  //   {
-  //     id: "7515ebd5-8aa4-4634-9610-f4644f1d58c3",
-  //     image: "https://storage.googleapis.com/jwelleryrnpsoft/gold.png",
-  //   },
-  //   {
-  //     id: "005daa73-7472-442e-be9b-b52952830658",
-  //     image: "https://storage.googleapis.com/jwelleryrnpsoft/diamond.png",
-  //   },
-  // ];
-  
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -40,21 +29,25 @@ const Sales = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const handleClick = () => {
+    navigate(`/sales/${slides[currentSlide].id}`);
+  };
+
   return (
-    <div className="relative w-[100%] h-[30rem] md:h-[40rem] lg:h-[45rem] overflow-hidden">
+    <div className="relative w-full h-[30rem] md:h-[40rem] lg:h-[45rem] overflow-hidden">
       {/* Slides */}
       <div className="relative w-full h-full">
         {slides.map((slide, index) => (
           <div
-            key={index}
+            key={slide.id}
             className={`absolute w-full h-full transition-opacity duration-700 ease-in-out ${
               currentSlide === index ? 'opacity-100' : 'opacity-0'
             }`}
           >
             {/* Background Image */}
             <div
-              className="w-full h-full bg-cover bg-no-repeat bg-center md:bg-center lg:bg-center"
-              style={{ backgroundImage: `url(${slide})`, backgroundSize: '100% 100%' }}
+              className="w-full h-full bg-cover bg-no-repeat bg-center"
+              style={{ backgroundImage: `url(${slide.image})`, backgroundSize: '100% 100%' }}
             />
             
             {/* Offers Title and Buy Now Button */}
@@ -62,8 +55,11 @@ const Sales = () => {
               <h2 className="text-2xl md:text-4xl lg:text-5xl text-white font-bold text-center">
                 Offers
               </h2>
-              {/* Redirects to festive  jwellery collection # TODO change later */}
-              <button onClick={()=>navigate(`/collections/a6aed6f1-0dca-434f-b4e5-c3b8efe6bc1b`)} className="px-2 py-1 md:px-4 md:py-2 text-sm md:text-2xl font-semibold border-2 border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-6 md:mb-6">
+              {/* Buy Now Button */}
+              <button
+                onClick={handleClick}
+                className="px-2 py-1 md:px-4 md:py-2 text-sm md:text-2xl font-semibold border-2 border-white text-white hover:bg-white hover:text-black transition-colors mt-auto mb-6 md:mb-6"
+              >
                 Buy Now
               </button>
             </div>

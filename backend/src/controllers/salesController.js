@@ -11,6 +11,16 @@ class SalesController {
     }
   }
 
+  async getActiveSalesById(req, res) {
+    try {
+      const { id } = req.params;
+      const sales = await salesService.getActiveSalesById(id);
+      res.status(200).json(sales);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching sales", error: error.message });
+    }
+  }
+
   // Create a sale
   async createSale(req, res) {
     try {

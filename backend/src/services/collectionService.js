@@ -71,7 +71,8 @@ class CollectionService {
       const collection = await prisma.collection.create({
         data: {
           name: collectionData.name,
-          description: collectionData.description
+          description: collectionData.description,
+          thumbnail: collectionData.thumbnail
         }
       });
 
@@ -87,7 +88,8 @@ class CollectionService {
         where: { id },
         data: {
           name: updateData.name,
-          description: updateData.description
+          description: updateData.description,
+          thumbnail: updateData.thumbnail
         }
       });
 

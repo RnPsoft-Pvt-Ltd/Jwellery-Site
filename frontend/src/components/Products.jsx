@@ -9,6 +9,7 @@ const Products = () => {
       try {
         const response = await axios.get('http://localhost:5000/v1/products');
         const formattedProducts = response.data.data.map((product) => ({
+          ID: product.id,
           name: product.name,
           price: product.base_price,
           sku: product.SKU,
@@ -40,30 +41,31 @@ const Products = () => {
             placeholder="Search"
             className="flex-1 max-w-sm px-4 py-2 border rounded-md"
           />
-          <select className="px-4 py-2 border rounded-md">
+          {/* <select className="px-4 py-2 border rounded-md">
             <option>Status</option>
           </select>
           <select className="px-4 py-2 border rounded-md">
             <option>Product Type</option>
-          </select>
+          </select> */}
         </div>
         
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="w-12 px-4 py-3"><input type="checkbox" /></th>
+              {/* <th className="w-12 px-4 py-3"><input type="checkbox" /></th> */}
               <th className="text-left px-4 py-3">THUMBNAIL</th>
               <th className="text-left px-4 py-3">NAME</th>
               <th className="text-left px-4 py-3">PRICE</th>
               <th className="text-left px-4 py-3">SKU</th>
-              <th className="text-left px-4 py-3">STOCK</th>
-              <th className="text-left px-4 py-3">STATUS</th>
+              <th className="text-left px-4 py-3">ID</th>
+              {/* <th className="text-left px-4 py-3">STOCK</th> */}
+              {/* <th className="text-left px-4 py-3">STATUS</th> */}
             </tr>
           </thead>
           <tbody>
             {products.map((product, idx) => (
               <tr key={idx} className="border-t">
-                <td className="px-4 py-3"><input type="checkbox" /></td>
+                {/* <td className="px-4 py-3"><input type="checkbox" /></td> */}
                 <td className="px-4 py-3">
                   {product.thumbnail ? (
                     <img src={product.thumbnail} alt={product.name} className="w-12 h-12 object-cover rounded" />
@@ -74,23 +76,24 @@ const Products = () => {
                 <td className="px-4 py-3">{product.name}</td>
                 <td className="px-4 py-3">${product.price}</td>
                 <td className="px-4 py-3">{product.sku}</td>
-                <td className="px-4 py-3 text-red-600">{product.stock}</td>
+                <td className="px-4 py-3">{product.ID}</td>
+                {/* <td className="px-4 py-3 text-red-600">{product.stock}</td>
                 <td className="px-4 py-3">
                   <div className={`w-2 h-2 rounded-full ${product.status ? 'bg-emerald-400' : 'bg-gray-400'}`}></div>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
         </table>
         
         <div className="p-4 border-t flex justify-between items-center">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span>Show</span>
             <select className="border rounded px-2 py-1">
               <option>20</option>
             </select>
             <span>per page</span>
-          </div>
+          </div> */}
           <div>
             <span className="mx-2">{products.length} records</span>
           </div>

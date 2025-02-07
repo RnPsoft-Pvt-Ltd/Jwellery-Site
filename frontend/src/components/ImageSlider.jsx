@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ImageSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const images = [
     {
-      src: 'https://storage.googleapis.com/jwelleryrnpsoft/feat1.jpeg',
-      title: 'Product 1',
-      description: 'This is a brief description of Product 1.',
+      src: "https://storage.googleapis.com/jwelleryrnpsoft/feat1.jpeg",
+      title: "Product 1",
+      description: "This is a brief description of Product 1.",
     },
     {
-      src: 'https://storage.googleapis.com/jwelleryrnpsoft/feat2.jpeg',
-      title: 'Product 2',
-      description: 'This is a brief description of Product 2.',
+      src: "https://storage.googleapis.com/jwelleryrnpsoft/feat2.jpeg",
+      title: "Product 2",
+      description: "This is a brief description of Product 2.",
     },
     {
-      src: 'https://storage.googleapis.com/jwelleryrnpsoft/feat3.jpeg',
-      title: 'Product 3',
-      description: 'This is a brief description of Product 3.',
+      src: "https://storage.googleapis.com/jwelleryrnpsoft/feat3.jpeg",
+      title: "Product 3",
+      description: "This is a brief description of Product 3.",
     },
   ];
 
+  const totalSlides = images.length;
+
   const showSlide = (index) => {
-    const totalSlides = images.length;
-    setCurrentSlide((index + totalSlides) % totalSlides); // Handles circular navigation
+    setCurrentSlide((index + totalSlides) % totalSlides);
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      showSlide(currentSlide + 1);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [currentSlide]);
 
   return (
     <div>
@@ -36,25 +44,29 @@ const ImageSlider = () => {
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
           {images.map((image, index) => (
-            <div
-              className="min-w-full relative group"
-              key={index}
-            >
-              {/* Image Container */}
-              <img
-                className="w-full h-72 object-cover transition duration-300 group-hover:blur-sm"
-                src={image.src}
-                alt={`Slide ${index + 1}`}
-              />
+            <div className="min-w-full relative group" key={index}>
+              {/* Image with Blur Effect on Hover */}
+              <div className="relative w-full h-72 overflow-hidden">
+  {/* Image */}
+                  <img
+                    className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform group-hover:scale-105"
+                    src={image.src}
+                    alt={`Slide ${index + 1}`}
+                  />
+                  
+                  {/* Dark Overlay on Hover */}
+                  <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
 
-              {/* Hover Effect Overlay */}
-              <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex flex-col justify-center items-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h3 className="text-white text-2xl font-bold mb-2 text-center">{image.title}</h3>
-                <p className="text-white mb-4 text-center">{image.description}</p>
-                {/* Button aligned to bottom right */}
-                <button className="absolute bottom-4 right-4 text-white text-lg font-semibold hover:underline">
-                  View Details
-                </button>
+
+              {/* Title (centered, only appears on hover) */}
+              <div className="absolute inset-0 flex justify-center items-center text-white text-2xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {image.title}
+              </div>
+
+              {/* Description at Bottom (always visible, no shadow) */}
+              <div className="absolute bottom-0 left-0 w-full bg-transparent text-white p-3 text-center transition-opacity duration-300">
+                <p className="text-sm">{image.description}</p>
               </div>
             </div>
           ))}

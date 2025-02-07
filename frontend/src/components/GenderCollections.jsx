@@ -58,17 +58,18 @@ const GenderCollections = ({ title }) => {
           <button
             key={collection.id}
             onClick={() => navigate(`/collections/${collection.id}`)}
-            className="relative w-72 h-72 border-2 border-transparent hover:border-gray-300 rounded-md overflow-hidden focus:outline-none"
+            className="relative w-72 h-72 border-2 border-transparent rounded-md overflow-hidden focus:outline-none transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
           >
+            {/* Image with hover effect */}
             <img
-              src={collection.thumbnail }
-              
+              src={collection.thumbnail}
               alt={collection.name}
-              loading="eager" 
-              className="w-full h-full object-cover rounded-md brightness-75"
+              loading="eager"
+              className="w-full h-full object-cover rounded-md brightness-75 hover:brightness-100 transition-all duration-300"
             />
-            
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-xl font-normal tracking-wide text-center">
+
+            {/* Collection Name */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-xl font-normal tracking-wide text-center transition-all duration-300 group-hover:text-2xl group-hover:font-bold">
               {collection.name}
             </div>
           </button>

@@ -103,9 +103,7 @@ const ProductSlider = () => {
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <h1 className="text-center py-8 sm:py-12 text-3xl sm:text-4xl lg:text-5xl font-light leading-tight font-['Albert_Sans']">
-        Style Picks
-      </h1>
+      
 
       <div className="relative pb-8">
         <div
@@ -119,15 +117,14 @@ const ProductSlider = () => {
             >
               <button
                 onClick={() => toggleWishlist(item.id)}
-                className="absolute top-4 right-4 p-2 bg-transparent"
+                className="absolute top-2 right-2 bg-white rounded-full p-2 shadow"
               >
                 {wishlist.some((wish) => wish.product_id === item.id) ? (
-                  <IoHeartOutline className="text-red-500 text-3xl" /> // Wishlisted (red)
+                  "❤️"// Wishlisted (red)
                 ) : (
-                  <IoHeartOutline className="text-gray-500 text-3xl" /> // Not wishlisted
+                  "🤍" // Not wishlisted
                 )}
               </button>
-
               <img
                 src={
                   item.images[0]?.image_url ||

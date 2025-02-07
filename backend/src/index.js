@@ -13,8 +13,7 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
-import dashboardRoutes from './routes/dashboardRoutes.js';
-import salestatisticsRoutes from './routes/salestatisticsRoutes.js';
+import salesRoutes from './routes/salesRoutes.js';
 import { connectDB } from './config/db.js';
 
 
@@ -49,8 +48,7 @@ app.use('/v1/categories', categoryRoutes);
 app.use('/v1/inventory',inventoryRoutes)
 app.use('/v1/users',userRoutes);
 app.use('/v1/wishlist',wishlistRoutes);
-app.use ('/v1/dashboard',dashboardRoutes);
-app.use('/v1/salestatistics', salestatisticsRoutes);
+app.use('/v1/sales', salesRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

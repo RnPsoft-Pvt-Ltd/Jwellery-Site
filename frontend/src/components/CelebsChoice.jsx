@@ -1,14 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-// const celebs = [
-//   "https://storage.googleapis.com/jwelleryrnpsoft/celeb1.png",
-//   "https://storage.googleapis.com/jwelleryrnpsoft/celeb2.png",
-//   "https://storage.googleapis.com/jwelleryrnpsoft/celeb3.png",
-//   "https://storage.googleapis.com/jwelleryrnpsoft/celeb4.png",
-//   "https://storage.googleapis.com/jwelleryrnpsoft/celeb5.png",
-// ];
-
 const celebs = [
   {
     // Bracelet
@@ -37,8 +29,6 @@ const celebs = [
   },
 ];
 
-console.log(celebs);
-
 const CelebsChoice = () => {
   const navigate = useNavigate();
   const handleClick = (id) => {
@@ -55,7 +45,7 @@ const CelebsChoice = () => {
       {/* Slider */}
       <div className="w-full h-[400px] md:h-[450px] flex overflow-x-auto gap-5 p-2 scrollbar-thin scrollbar-thumb-black scrollbar-track-transparent">
         {celebs.map((item, index) => (
-          <div key={index} className="flex-shrink-0 w-[320px] h-[320px] md:w-[370px] md:h-[370px]" onClick={() => handleClick(item.id)}>
+          <div key={index} className="flex-shrink-0 cursor-pointer transition-transform duration-500 ease-in-out hover:scale-105 w-[320px] h-[320px] md:w-[370px] md:h-[370px]" onClick={() => handleClick(item.id)}>
             <img src={item.image} alt={`celeb${index + 1}`} className="w-full h-full object-cover" />
           </div>
         ))}

@@ -63,6 +63,25 @@ class ReviewController {
     }
   }
 
+  async getAllProductReviews(req, res) {
+    try {
+      const { productId, page = 1, limit = 10 } = req.query;
+
+      const reviews = await reviewService.getReviews(
+        productId,
+        parseInt(page),
+        parseInt(limit)
+      );
+
+      res.status(200).json({
+        success: true,
+        data: reviews,
+      });
+    } catch (error) {
+      errorHandler(error, req, res);
+    }
+  }
+
   async deleteReview(req, res) {
     try {
       const { id } = req.params;

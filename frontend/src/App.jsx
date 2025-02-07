@@ -23,6 +23,8 @@ import ExpandedProduct from './pages/ExpandedProduct';
 
 import ArrangeCallback from './pages/ArrangeCallback';
 import AboutUs from './pages/AboutUsPage';
+import ReviewsPage from './pages/ReviewsPage';
+import SalesGrid from './pages/SalesGrid';
 
 function App() {
   return (
@@ -56,7 +58,8 @@ function App() {
 
             <Route path="/arrangecallback" element={<ArrangeCallback />} />  
             <Route path="/aboutUs" element={<AboutUs />} />  
-
+            <Route path="/reviews" element={<ReviewsPage />} />
+            <Route path="/sales/:salesId" element={<SalesGrid />} />
 
 
             //cartsection

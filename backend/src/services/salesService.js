@@ -13,7 +13,39 @@ class SalesService {
         include: {
           sale_products: {
             include: {
-              product: true, // Include the product details
+              product:{
+                include:{
+                  images:true
+                }
+              }, // Include the product details
+            },
+          },
+        },
+      });
+      return sales;
+    } catch (error) {
+      console.error("Error in salesService.getActiveSales:", error.message);
+      throw new Error("Failed to fetch active sales");
+    }
+  }
+
+  async getActiveSalesById(id) {
+    try {
+      const sales = await prisma.sale.findMany({
+        where: {
+          id: id,
+          is_active: true,
+        },
+        include: {
+          sale_products: {
+            include: {
+              product: {
+                include:{
+                  images:true,
+                  variants:true,
+                  product_metadata:true
+                }
+              }
             },
           },
         },

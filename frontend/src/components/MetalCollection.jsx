@@ -41,6 +41,18 @@ const CollectionCarousel = () => {
     fetchCollections();
   }, []);
 
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (carousel && collections.length > 0) {
+      const autoScroll = setInterval(() => {
+        const nextIndex = (activeIndex + 1) % collections.length;
+        scrollToIndex(nextIndex);
+      }, 3000); // Scroll every 3 seconds
+  
+      return () => clearInterval(autoScroll);
+    }
+  }, [activeIndex, collections.length]);
+
   const handleScroll = () => {
     if (carouselRef.current) {
       const index = Math.round(carouselRef.current.scrollLeft / carouselRef.current.offsetWidth);
@@ -54,6 +66,7 @@ const CollectionCarousel = () => {
         left: index * carouselRef.current.offsetWidth,
         behavior: 'smooth'
       });
+      setActiveIndex(index);
     }
   };
 
@@ -147,7 +160,7 @@ const CollectionCarousel = () => {
                     }}
                   />
                   <div className="absolute top-1/2 left-[5%] transform -translate-y-1/2 z-30">
-                    <h3 className="text-5xl font-normal text-black font-['Albert_Sans-Light'] whitespace-pre-line leading-tight">
+                    <h3 className="text-5xl font-thin text-black font-['Albert_Sans'] whitespace-pre-line leading-tight">
                       {collection.title}
                     </h3>
                   </div>

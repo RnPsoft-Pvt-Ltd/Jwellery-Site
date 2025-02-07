@@ -1,6 +1,5 @@
 import React, { useState } from 'react'; 
 import Categories from '../components/Categories.jsx';
-import Attributes from '../components/Attributes.jsx';
 import Products from '../components/Products.jsx';
 import Navbar from '../components/Navbar.jsx';
 import Sidebar from '../components/Sidebar.jsx';
@@ -37,7 +36,6 @@ const AdminPage = () => {
       {activeComponent === 'new-product' && <CreateProduct />}
       {activeComponent === 'new-coupon' && <CreateCoupon />}
       {activeComponent === 'categories' && <Categories />}
-      {activeComponent === 'attributes' && <Attributes />}
       {activeComponent === 'products' && <Products />}
       {activeComponent === 'collections' && <Collections />}
 

@@ -57,6 +57,7 @@ class CategoryService {
       data: {
         name: categoryData.name,
         description: categoryData.description,
+        thumbnail: categoryData.thumbnail
       }
     });
 
@@ -69,6 +70,7 @@ class CategoryService {
       data: {
         name: updateData.name,
         description: updateData.description,
+        thumbnail: updateData.thumbnail
       }
     });
   }

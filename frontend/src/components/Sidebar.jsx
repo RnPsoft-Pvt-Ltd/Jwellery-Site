@@ -6,7 +6,7 @@ import { Home, Package, Tag, List, ShoppingCart, Users, Gift } from 'lucide-reac
 const Sidebar = ({ onNavigate }) => {
     const menuItems = [
       { section: 'QUICK LINKS', items: [
-        { name: 'Dashboard', icon: <Home size={20} />, path: '/' },
+        { name: 'Dashboard', icon: <Home size={20} />, path: '/dashboard' },
         { name: 'New Product', icon: <Package size={20} />, path: '/new-product' },
         { name: 'New Coupon', icon: <Gift size={20} />, path: '/new-coupon' }
       ]},

@@ -11,19 +11,37 @@ class SalesController {
     }
   }
 
+  async getActiveSalesById(req, res) {
+    try {
+      const { id } = req.params;
+      const sales = await salesService.getActiveSalesById(id);
+      res.status(200).json(sales);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching sales", error: error.message });
+    }
+  }
+
   // Create a sale
   async createSale(req, res) {
     try {
       const saleData = req.body;
-      console.log("Sale Data:", saleData);  // Debugging log
-
-      // Use the salesService to interact with the database
+      console.log("Sale Data:", saleData); // Debugging log
+  
+      // Validate that products are provided
+      if (!saleData.products || !Array.isArray(saleData.products)) {
+        return res.status(400).json({ message: "Products array is required" });
+      }
+  
       const newSale = await salesService.createSale(saleData);
-
-      console.log("Created Sale:", newSale);  // Debugging log
-      res.status(201).json(newSale);  // Respond with the newly created sale
+      console.log("Created Sale:", newSale); // Debugging log
+      res.status(201).json(newSale);
     } catch (error) {
       console.error("Error in salesController.createSale:", error.message);
+  
+      if (error.message.includes("does not exist")) {
+        return res.status(400).json({ message: error.message });
+      }
+  
       res.status(500).json({ message: "Failed to create sale", error: error.message });
     }
   }

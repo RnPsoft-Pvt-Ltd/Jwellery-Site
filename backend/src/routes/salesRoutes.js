@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Get all active sales (accessible by everyone)
 router.get('/', salesController.getActiveSales);
+router.get('/:id', salesController.getActiveSalesById);
 
 // Admin only routes
 router.post('/', authenticate, isAdmin, salesController.createSale);

@@ -80,7 +80,7 @@ class userController {
   // Fetch all users with filters
   async getAllUsers(req, res) {
     try {
-        console.log("hi")
+        // console.log("hi")
       const { email, name } = req.query;  // Use query parameters for filtering
       const filters = { email, name };
 

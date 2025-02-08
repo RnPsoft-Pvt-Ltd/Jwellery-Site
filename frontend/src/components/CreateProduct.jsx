@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Camera } from 'lucide-react';
-import Sidebar from './layouts/components/AdminSidebar';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({
@@ -222,8 +221,6 @@ const CreateProduct = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Sidebar />
-      
       <main className="pl-64 pt-16">
         <div className="p-6 max-w-7xl mx-auto">
           {/* Header */}

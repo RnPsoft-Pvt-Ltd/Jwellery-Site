@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Header from '../components/layouts/components/Header';
-import Footer from '../components/layouts/components/Footer';
 
 const ArrangeCallback = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +25,7 @@ const ArrangeCallback = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+
       
       {/* Main content */}
       <main className="flex-grow flex items-center justify-center px-4 py-8 bg-white">
@@ -134,8 +132,6 @@ const ArrangeCallback = () => {
           </form>
         </div>
       </main>
-      
-      <Footer />
     </div>
   );
 };

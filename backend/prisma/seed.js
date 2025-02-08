@@ -32,6 +32,9 @@ async function main() {
     );
     console.log("✅ Created products");
 
+    await createProductTaxMappings(products, taxCategories);
+    console.log("✅ Created product tax mappings");
+
     // Create addresses for users
     const addresses = await createAddresses(users);
     console.log("✅ Created addresses");
@@ -275,6 +278,25 @@ async function createTaxCategories() {
   });
 
   return prisma.taxCategory.findMany();
+}
+
+async function createProductTaxMappings(products, taxCategories) {
+  for (const product of products) {
+    // Create multiple tax mappings for each product
+    for (const taxCategory of taxCategories) {
+      // Generate a random special rate between 0.05 (5%) and 0.25 (25%)
+      const specialRate = parseFloat((Math.random() * 0.20 + 0.05).toFixed(4));
+      
+      await prisma.productTaxMapping.create({
+        data: {
+          product_id: product.id,
+          tax_category_id: taxCategory.id,
+          special_rate: specialRate,
+          effective_date: new Date(),
+        },
+      });
+    }
+  }
 }
 
 async function createProducts(categories, collections, taxCategories) {

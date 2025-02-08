@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+
+
 
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState([]);
@@ -33,7 +33,6 @@ export default function ReviewsPage() {
 
   return (
     <>
-      <Navbar></Navbar>
       <div className="w-full py-12 px-2 md:px-24 bg-contain bg-[url('https://storage.googleapis.com/jwelleryrnpsoft/testimonials.png')] h-fit">
         <div className="w-full mx-auto z-10">
           <h1 className="text-4xl md:text-5xl font-bold text-center font-albert pb-[50px] border-black border-b-4">
@@ -57,7 +56,6 @@ export default function ReviewsPage() {
             : ""}
         </div>
       </div>
-      <Footer></Footer>
     </>
   );
 }

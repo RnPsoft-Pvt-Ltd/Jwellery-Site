@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { useImageLoader } from "../utils/GlobalLoadingManager";
+
+const images = [
+  {
+    src: "https://storage.googleapis.com/jwelleryrnpsoft/feat1.jpeg",
+    title: "Product 1",
+    description: "This is a brief description of Product 1.",
+  },
+  {
+    src: "https://storage.googleapis.com/jwelleryrnpsoft/feat2.jpeg",
+    title: "Product 2",
+    description: "This is a brief description of Product 2.",
+  },
+  {
+    src: "https://storage.googleapis.com/jwelleryrnpsoft/feat3.jpeg",
+    title: "Product 3",
+    description: "This is a brief description of Product 3.",
+  },
+];
+
 
 const ImageSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const images = [
-    {
-      src: "https://storage.googleapis.com/jwelleryrnpsoft/feat1.jpeg",
-      title: "Product 1",
-      description: "This is a brief description of Product 1.",
-    },
-    {
-      src: "https://storage.googleapis.com/jwelleryrnpsoft/feat2.jpeg",
-      title: "Product 2",
-      description: "This is a brief description of Product 2.",
-    },
-    {
-      src: "https://storage.googleapis.com/jwelleryrnpsoft/feat3.jpeg",
-      title: "Product 3",
-      description: "This is a brief description of Product 3.",
-    },
-  ];
+  
+  // Preload all images
+  images.forEach((slide) => {
+    useImageLoader(slide.src);
+  });
+
 
   const totalSlides = images.length;
 

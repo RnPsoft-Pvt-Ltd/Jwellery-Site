@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useImageLoader } from "../utils/GlobalLoadingManager";
 
 const celebs = [
   {
@@ -31,6 +32,12 @@ const celebs = [
 
 const CelebsChoice = () => {
   const navigate = useNavigate();
+
+    // Preload all images
+    celebs.forEach((slide) => {
+      useImageLoader(slide.image);
+    });
+
   const handleClick = (id) => {
     navigate(`/categories/${id}`);
   };

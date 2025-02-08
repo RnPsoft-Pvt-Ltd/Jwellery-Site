@@ -2,6 +2,21 @@ import { useCallback, useEffect, useState } from 'react';
 import { collectionService } from '../services/api';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { useGlobalLoading, useImageLoader } from '../utils/GlobalLoadingManager';
+
+// Create a wrapper component for images
+const LoadingImage = ({ src, alt, className, onError }) => {
+  useImageLoader(src);
+  
+  return (
+    <img 
+      src={src}
+      alt={alt}
+      className={className}
+      onError={onError}
+    />
+  );
+};
 
 const CategoryCard = ({ collection }) => {
   const [imageLoading, setImageLoading] = useState(true);
@@ -44,24 +59,27 @@ const CategoryCard = ({ collection }) => {
 
 const JewelryCategories = () => {
   const [collections, setCollections] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { registerImage, markImageLoaded } = useGlobalLoading();
   const [error, setError] = useState(null);
-
   const navigate = useNavigate();
 
 
-  const allowedCollections = [
-    'Casual Jwellery',
-    'Party Jwellery',
-    'Date Night Jwellery'
-  ];
 
-  const fetchCollections = useCallback(async () => {
+
+  useEffect(() => {
+  const fetchCollections = async () => {
     try {
-      setLoading(true);
-      setError(null);
+
+        // Register a loading state for the API call
+        const loadingKey = 'api-loading';
+        registerImage(loadingKey);
+
       const response = await collectionService.getCollections({ limit: 10, page: 1 });
-      
+      const allowedCollections = [
+        'Casual Jwellery',
+        'Party Jwellery',
+        'Date Night Jwellery'
+      ];
 
       if (!response.data) {
         throw new Error('No data received from the server');
@@ -78,26 +96,20 @@ const JewelryCategories = () => {
         }));
 
       setCollections(filteredCollections);
-      // console.log('Collections:', collections); // Debug log
+              // Mark API loading as complete
+              markImageLoaded(loadingKey);
+      
     } catch (err) {
       console.error('Error fetching collections:', err);
       setError(err.message || 'Failed to fetch collections');
-    } finally {
-      setLoading(false);
+              // Make sure to mark loading as complete even on error
+              markImageLoaded('api-loading');
     }
-  }, []);
+  };
+  
+  fetchCollections();
+  }, [registerImage, markImageLoaded]);
 
-  useEffect(() => {
-    fetchCollections();
-  }, [fetchCollections]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -109,14 +121,6 @@ const JewelryCategories = () => {
         >
           Retry
         </button>
-      </div>
-    );
-  }
-
-  if (collections.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-96">
-        <p className="text-gray-600">No collections available</p>
       </div>
     );
   }

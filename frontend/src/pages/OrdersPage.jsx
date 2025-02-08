@@ -90,7 +90,6 @@
 "use client"
 
 import { useState } from "react"
-import AccountSidebar from "../components/layout/AccountSidebar"
 import OrderTracking from "../components/OrderTracking"
 import CancelOrderForm from "../components/CancelOrderForm"
 import ReturnForm from "../components/ReturnForm"
@@ -170,7 +169,6 @@ function OrdersPage() {
 
   return (
     <div className="flex gap-8">
-      <AccountSidebar />
       <div className="flex-1">
         <h1 className="text-2xl font-bold mb-8">My Account</h1>
         <h2 className="text-xl font-semibold mb-6">Order History</h2>

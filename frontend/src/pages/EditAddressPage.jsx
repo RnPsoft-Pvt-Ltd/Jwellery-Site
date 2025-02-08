@@ -1,306 +1,258 @@
-// import React, { useState } from "react"
-// import { useNavigate } from "react-router-dom"
-// import AccountSidebar from "../components/layout/AccountSidebar"
-// import Header from '../components/layout/Header';
-// function EditAddressPage() {
-//   const navigate = useNavigate()
-//   const [formData, setFormData] = useState({
-//     fullName: "Jhondoe",
-//     mobile: "98900000000",
-//     addressLine1: "Patia, Nandan Vihar, India",
-//     zipCode: "12345",
-//     country: "India",
-//     state: "Odisha",
-//     city: "Bhuneswar",
-//     landmark: "Ram Temple",
-//     isDefault: false,
-//   })
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked } = e.target
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: type === "checkbox" ? checked : value,
-//     }))
-//   }
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault()
-//     // Handle form submission here
-//     navigate("/account/address")
-//   }
-
-//   return (
-//     <div className="min-h-screen bg-gray-100">
-//     <Header />
-//     <div className="flex gap-8">
-//       <AccountSidebar />
-//       <div className="flex-1">
-//         <h1 className="text-2xl font-bold mb-8">My Account</h1>
-//         <h2 className="text-xl font-semibold mb-6">Address Information</h2>
-
-//         <form onSubmit={handleSubmit} className="max-w-2xl space-y-4">
-//           <div>
-//             <label className="block text-sm font-medium mb-1">Full Name</label>
-//             <input
-//               type="text"
-//               name="fullName"
-//               value={formData.fullName}
-//               onChange={handleChange}
-//               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block text-sm font-medium mb-1">Mobile No.</label>
-//             <input
-//               type="text"
-//               name="mobile"
-//               value={formData.mobile}
-//               onChange={handleChange}
-//               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block text-sm font-medium mb-1">Address Line 1</label>
-//             <input
-//               type="text"
-//               name="addressLine1"
-//               value={formData.addressLine1}
-//               onChange={handleChange}
-//               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block text-sm font-medium mb-1">ZIP Code</label>
-//             <input
-//               type="text"
-//               name="zipCode"
-//               value={formData.zipCode}
-//               onChange={handleChange}
-//               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block text-sm font-medium mb-1">Country</label>
-//             <input
-//               type="text"
-//               name="country"
-//               value={formData.country}
-//               onChange={handleChange}
-//               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//             />
-//           </div>
-
-//           <div className="grid grid-cols-2 gap-4">
-//             <div>
-//               <label className="block text-sm font-medium mb-1">State</label>
-//               <input
-//                 type="text"
-//                 name="state"
-//                 value={formData.state}
-//                 onChange={handleChange}
-//                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-sm font-medium mb-1">City</label>
-//               <input
-//                 type="text"
-//                 name="city"
-//                 value={formData.city}
-//                 onChange={handleChange}
-//                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//               />
-//             </div>
-//           </div>
-
-//           <div>
-//             <label className="block text-sm font-medium mb-1">Landmark</label>
-//             <input
-//               type="text"
-//               name="landmark"
-//               value={formData.landmark}
-//               onChange={handleChange}
-//               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-//             />
-//           </div>
-
-//           <div className="flex items-center">
-//             <input
-//               type="checkbox"
-//               id="isDefault"
-//               name="isDefault"
-//               checked={formData.isDefault}
-//               onChange={handleChange}
-//               className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
-//             />
-//             <label htmlFor="isDefault" className="ml-2 block text-sm">
-//               Make this Default Address
-//             </label>
-//           </div>
-
-//           <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded hover:bg-gray-800">
-//             Add Address
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//     </div>
-//   )
-// }
-
-// export default EditAddressPage
-
-
-
-
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import AccountSidebar from "../components/layout/AccountSidebar";
-import Header from "../components/layout/Header";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Loader2, Save, User, Phone, MapPin, Building, Flag, Navigation } from 'lucide-react';
 
 function EditAddressPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
-    fullName: "",
-    mobile: "",
-    addressLine1: "",
-    zipCode: "",
-    country: "",
-    state: "",
-    city: "",
-    landmark: "",
+    fullName: '',
+    phone: '',
+    addressLine1: '',
+    zipCode: '',
+    country: '',
+    state: '',
+    city: '',
+    landmark: '',
     isDefault: false,
   });
-  const [message, setMessage] = useState("");
+
+  const [status, setStatus] = useState({
+    loading: true,
+    saving: false,
+    message: '',
+    error: '',
+    success: false
+  });
 
   useEffect(() => {
     if (id) {
-      const fetchAddress = async () => {
-        try {
-          const token = localStorage.getItem("token");
-          if (!token) {
-            setMessage("User is not authenticated.");
-            return;
-          }
-
-          const response = await fetch(`http://localhost:5000/v1/addresses/${id}`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (!response.ok) {
-            setMessage("Address not found. Creating a new one.");
-            return;
-          }
-
-          const result = await response.json();
-          setFormData(result);
-        } catch (error) {
-          console.error("Fetch error:", error);
-          setMessage("Error fetching address data.");
-        }
-      };
-
       fetchAddress();
+    } else {
+      setStatus(prev => ({ ...prev, loading: false }));
     }
   }, [id]);
 
+  const fetchAddress = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setStatus(prev => ({ 
+          ...prev, 
+          error: 'Please log in to view address details', 
+          loading: false 
+        }));
+        return;
+      }
+
+      const response = await fetch(`http://localhost:5000/v1/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch user data');
+
+      const userData = await response.json();
+      
+      // If user has an address, populate the form
+      if (userData.addresses && userData.addresses.length > 0) {
+        const address = userData.addresses[0];
+        setFormData({
+          fullName: address.full_name || '',
+          phone: address.phone || '',
+          addressLine1: address.address_line1 || '',
+          zipCode: address.zip_code || '',
+          country: address.country || '',
+          state: address.state || '',
+          city: address.city || '',
+          landmark: address.landmark || '',
+          isPrimary: address.is_primary || false,
+        });
+      }
+    } catch (error) {
+      setStatus(prev => ({ 
+        ...prev, 
+        error: error.message || 'Error loading address data'
+      }));
+    } finally {
+      setStatus(prev => ({ ...prev, loading: false }));
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
+    const newValue = type === 'checkbox' ? checked : value;
+    
+    setFormData(prev => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     }));
+    
+    setStatus(prev => ({ ...prev, message: '', error: '', success: false }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus(prev => ({ ...prev, saving: true, message: '', error: '', success: false }));
+
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
-        setMessage("User is not authenticated.");
+        setStatus(prev => ({ 
+          ...prev, 
+          error: 'Please log in to save address',
+          saving: false 
+        }));
         return;
       }
 
-      const method = id ? "PUT" : "POST";
-      const endpoint = id ? `http://localhost:5000/v1/address/${id}` : "http://localhost:5000/v1/address";
+      // Prepare address data in the format expected by the backend
+      const addressData = {
+        address: {
+          full_name: formData.fullName,
+          phone: formData.phone,
+          address_line1: formData.addressLine1,
+          zip_code: formData.zipCode,
+          country: formData.country,
+          state: formData.state,
+          city: formData.city,
+          landmark: formData.landmark,
+          is_primary: formData.isPrimary,
+        }
+      };
 
-      const response = await fetch(endpoint, {
-        method,
+      const response = await fetch('http://localhost:5000/v1/users/me', {
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(addressData),
       });
 
-      if (response.ok) {
-        setMessage(id ? "Address updated successfully!" : "Address created successfully!");
-        navigate("/account/address");
-      } else {
-        setMessage("Error saving address.");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to save address');
       }
+
+      setStatus(prev => ({ 
+        ...prev, 
+        success: true,
+        message: 'Address updated successfully!' 
+      }));
+      
+      navigate('/account/address');
     } catch (error) {
-      console.error("Save error:", error);
-      setMessage("Error saving address.");
+      setStatus(prev => ({ 
+        ...prev, 
+        error: error.message || 'Error saving address. Please try again.' 
+      }));
+    } finally {
+      setStatus(prev => ({ ...prev, saving: false }));
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-      <div className="flex gap-8">
-        <AccountSidebar />
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-8">My Account</h1>
-          <h2 className="text-xl font-semibold mb-6">Address Information</h2>
-
-          {message && <p className="text-red-600">{message}</p>}
-
-          <form onSubmit={handleSubmit} className="max-w-2xl space-y-4">
-            {Object.keys(formData).map((key) => (
-              key !== "isDefault" ? (
-                <div key={key}>
-                  <label className="block text-sm font-medium mb-1">{key}</label>
-                  <input
-                    type="text"
-                    name={key}
-                    value={formData[key] || ""}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-                  />
-                </div>
-              ) : null
-            ))}
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="isDefault"
-                name="isDefault"
-                checked={formData.isDefault}
-                onChange={handleChange}
-                className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
-              />
-              <label htmlFor="isDefault" className="ml-2 block text-sm">
-                Make this Default Address
-              </label>
-            </div>
-
-            <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded hover:bg-gray-800">
-              {id ? "Update Address" : "Add Address"}
-            </button>
-          </form>
+  const FormField = ({ name, label, icon: Icon }) => (
+    <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-4">{label}</label>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Icon className="h-5 w-5 text-gray-400" />
         </div>
+        <input
+          id={name}
+          type="text"
+          name={name}
+          value={formData[name]}
+          onChange={handleChange}
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          placeholder={`Enter ${label.toLowerCase()}`}
+          // autoComplete="off"
+        />
+
+        
       </div>
+    </div>
+  );
+
+  if (status.loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto p-4">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">
+          {id ? 'Edit Address' : 'Add New Address'}
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          {id ? 'Update your address information' : 'Add a new delivery address'}
+        </p>
+      </div>
+
+      {(status.error || status.message) && (
+        <div className={`mb-6 p-4 rounded-lg ${
+          status.error 
+            ? 'bg-red-50 border border-red-200 text-red-600' 
+            : 'bg-green-50 border border-green-200 text-green-600'
+        }`}>
+          {status.error || status.message}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField name="fullName" label="Full Name" icon={User} />
+          <FormField name="mobile" label="Mobile Number" icon={Phone} />
+          <FormField name="addressLine1" label="Address Line 1" icon={MapPin} />
+          <FormField name="landmark" label="Landmark" icon={Navigation} />
+          <FormField name="city" label="City" icon={Building} />
+          <FormField name="state" label="State" icon={Flag} />
+          <FormField name="country" label="Country" icon={Flag} />
+          <FormField name="zipCode" label="ZIP Code" icon={MapPin} />
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <label className="flex items-center space-x-3">
+            <input
+              type="checkbox"
+              name="isDefault"
+              checked={formData.isDefault}
+              onChange={handleChange}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">
+              Make this my default address
+            </span>
+          </label>
+        </div>
+
+        <div className="flex justify-end mt-8">
+          <button
+            type="submit"
+            disabled={status.saving}
+            className="flex items-center justify-center gap-2 px-6 py-2 rounded-lg
+              bg-black text-white hover:bg-gray-800 transition-colors
+              disabled:bg-gray-300 disabled:cursor-not-allowed
+              min-w-[150px]"
+          >
+            {status.saving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                {id ? 'Update Address' : 'Add Address'}
+              </>
+            )}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

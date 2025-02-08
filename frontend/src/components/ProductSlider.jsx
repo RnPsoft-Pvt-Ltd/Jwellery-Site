@@ -1,30 +1,37 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useGlobalLoading } from '../utils/GlobalLoadingManager';
 
 const ProductSlider = () => {
   const galleryRef = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
   const [products, setProducts] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const { registerImage, markImageLoaded } = useGlobalLoading();
 
   const navigate = useNavigate();
   const BASE_URL = "http://localhost:5000/v1";
 
   const fetchProducts = async () => {
     try {
+
+      // Register a loading state for the API call
+      const loadingKey = 'api-loading';
+      registerImage(loadingKey);
+
       const response = await axios.get(`${BASE_URL}/products`);
       setProducts(response.data.data);
+
+      // Mark API loading as complete
+      markImageLoaded(loadingKey);
+
     } catch (error) {
       console.error("Error fetching products:", error);
+      // Make sure to mark loading as complete even on error
+      markImageLoaded('api-loading');
     }
   };
 
-  console.log(products);
 
   const fetchWishlist = async () => {
     try {
@@ -99,7 +106,7 @@ const ProductSlider = () => {
   useEffect(() => {
     fetchProducts();
     fetchWishlist();
-  }, []);
+  }, [registerImage, markImageLoaded]);
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">

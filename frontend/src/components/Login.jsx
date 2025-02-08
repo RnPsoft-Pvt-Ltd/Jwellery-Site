@@ -1,39 +1,26 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios"; // For API calls
-import { useNavigate } from "react-router-dom"; // For redirecting
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
-  const [email, setEmail] = useState(""); // Use email state
-  const [password, setPassword] = useState(""); // Use password state
-  const [errorMessage, setErrorMessage] = useState(""); // To show error messages
-  const navigate = useNavigate(); // For navigation
-
-  useEffect(() => {
-    // Redirect if user is already logged in
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/"); // Redirect to homepage if already logged in
-    }
-  }, [navigate]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
     try {
       const response = await axios.post(
         "http://localhost:5000/v1/auth/login",
         { email, password },
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );
-  
-      console.log("Login Success:", response.data);
-  
+
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);  // Set token
-        localStorage.setItem("user", JSON.stringify(response.data.user)); // Save user data
-        navigate("/"); // Redirect to homepage after successful login
-      } else {
-        alert("Failed to login");
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        navigate("/");
       }
     } catch (error) {
       console.error("Error logging in:", error.response);
@@ -42,69 +29,78 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="flex w-[900px] h-[333px] rounded-t-lg bg-gray-100 shadow-md overflow-hidden">
+    <div className="bg-white rounded-lg shadow-xl overflow-hidden max-w-4xl mx-auto">
+      <div className="flex flex-col md:flex-row">
         {/* Image Section */}
-        <div className="w-[356px] h-[356px] -mt-3 flex justify-center items-center">
+        <div className="md:w-1/2 bg-gray-50 flex items-center justify-center p-6">
           <img
-            src={"https://storage.googleapis.com/jwelleryrnpsoft/ring.png"}
-            alt="Ring"
-            className="max-w-full max-h-full object-cover"
+            src="https://storage.googleapis.com/jwelleryrnpsoft/flower.png"
+            alt="Decorative flower"
+            className="max-w-full h-auto object-contain"
           />
         </div>
 
-        {/* Login Section */}
-        <div className="flex-auto flex justify-center px-16 items-center rounded-t-lg">
-          <div className="w-full max-w-lg text-center py-6 px-6 bg-white rounded-lg">
-            <h1 className="text-xl font-bold mb-2">Welcome To Cresthaven</h1>
-            <p className="text-gray-600 mb-6">Login/Sign-up</p>
+        {/* Form Section */}
+        <div className="md:w-1/2 p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-gray-900">Welcome to Cresthaven</h1>
+            <p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
+          </div>
 
-            {/* Display error message if login fails */}
-            {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
+          {errorMessage && (
+            <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-md">
+              {errorMessage}
+            </div>
+          )}
 
-            <form onSubmit={handleSubmit}>
-              {/* Email Input */}
-              <div className="mb-4">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter Email"
-                  required
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="Enter your email"
+              />
+            </div>
 
-              {/* Password Input */}
-              <div className="mb-4">
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter Password"
-                  required
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="Enter your password"
+              />
+            </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full bg-red-700 text-white py-2 rounded-lg hover:bg-red-800 transition"
-              >
-                Login
-              </button>
-            </form>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Sign in
+            </button>
+          </form>
 
-            {/* Register Message */}
-            <p className="mt-4 text-gray-600">
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
               Don't have an account?{" "}
-              <span
-                onClick={() => navigate("/register")} // Redirect to the register page
-                className="text-red-700 cursor-pointer hover:underline"
+              <button
+                onClick={() => navigate("/register")}
+                className="font-medium text-red-700 hover:text-red-800"
               >
                 Register here
-              </span>
+              </button>
             </p>
           </div>
         </div>

@@ -1,10 +1,8 @@
 // src/services/userService.js
 
-import prisma from '../config/db.js';
-
+import prisma from "../config/db.js";
 
 class userService {
-
   async getUserById(userId) {
     return await prisma.user.findUnique({
       where: { id: userId },
@@ -20,12 +18,10 @@ class userService {
     });
   }
 
-
-
   async updateUser(userId, updatedData) {
     const existingUser = await prisma.user.findUnique({
       where: { id: userId },
-      include: { addresses: true } // Fetch user addresses for validation
+      include: { addresses: true }, // Fetch user addresses for validation
     });
 
     if (!existingUser) {
@@ -48,14 +44,14 @@ class userService {
         addressUpdates.push(
           prisma.address.update({
             where: { id: userAddress.id },
-            data: updatedData.address
+            data: updatedData.address,
           })
         );
       } else {
         // Create a new address
         addressUpdates.push(
           prisma.address.create({
-            data: { ...updatedData.address, user_id: userId }
+            data: { ...updatedData.address, user_id: userId },
           })
         );
       }
@@ -71,24 +67,21 @@ class userService {
       prisma.user.update({
         where: { id: userId },
         data: updateFields,
-        include: { addresses: true }
+        include: { addresses: true },
       }),
-      ...addressUpdates
+      ...addressUpdates,
     ]);
 
     return updatedUser;
   }
 
-
- 
-
   async getUsersWithOrders() {
-    try{
+    try {
       const users = await prisma.user.findMany({
         where: {
           orders: {
-            some: {} // Ensures only users with at least one order are fetched
-          }
+            some: {}, // Ensures only users with at least one order are fetched
+          },
         },
         include: {
           orders: {
@@ -96,48 +89,32 @@ class userService {
               order_items: true, // Fetch order items related to each order
               shipping_address: true, // Include shipping address
               billing_address: true, // Include billing address
-              payment_transactions: true // Include payment transactions
-            }
-          }
-        }
+              payment_transactions: true, // Include payment transactions
+            },
+          },
+        },
       });
-    
+
       console.log("Users with orders:", users); // Debugging output
       return users;
-    }catch(error){
+    } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
+  }
+
+  async getAllUsers(filters) {
+    try {
+      return await prisma.user.findMany({
+        where: {
+          email: filters.email ? { contains: filters.email } : undefined,
+          name: filters.name ? { contains: filters.name } : undefined,
+        },
+        include: { orders: true }, // Optional: include orders with the user
+      });
+    } catch (error) {
+      throw new Error("Error fetching users");
     }
-
-
-    async getUserById(id) {
-        try {
-          const user = await prisma.user.findUnique({
-            where: { id }
-          });
-          return user;
-        } catch (error) {
-          throw new Error('Error fetching user by ID');
-        }
-      }
-    
-      // Fetch all users with optional filters
-      async getAllUsers(filters) {
-        try {
-          return await prisma.user.findMany({
-            where: {
-              email: filters.email ? { contains: filters.email } : undefined,
-              name: filters.name ? { contains: filters.name } : undefined,
-            },
-            include: { orders: true },  // Optional: include orders with the user
-          });
-        } catch (error) {
-          throw new Error('Error fetching users');
-        }
-      }
-      
-
-
+  }
 }
 
 export default new userService();

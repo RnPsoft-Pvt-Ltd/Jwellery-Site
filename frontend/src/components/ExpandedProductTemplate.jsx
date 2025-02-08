@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Navbar from "./Navbar";
 
 const ExpandedProductTemplate = () => {
   const { productId } = useParams();
@@ -112,7 +111,6 @@ const ExpandedProductTemplate = () => {
 
   return (
     <>
-    <Navbar></Navbar>
     <div className="min-h-screen bg-white">
       <ProductDetailSection
         product={product}

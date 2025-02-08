@@ -1,24 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useImageLoader } from "../utils/GlobalLoadingManager";
+
+
+const slides = [
+  {
+    id: "560883a9-0f36-44fb-98cd-ee0a3a69a4e8",
+    image: "https://storage.googleapis.com/jwelleryrnpsoft/pearl.png",
+  },
+  {
+    id: "898a7627-1b2a-4bd6-98dd-6557ec46ed76",
+    image: "https://storage.googleapis.com/jwelleryrnpsoft/gold.png",
+  },
+  {
+    id: "7503e9a3-aacd-4255-851e-b758c9f0aedf",
+    image: "https://storage.googleapis.com/jwelleryrnpsoft/diamond.png",
+  },
+];
 
 const Sales = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
 
-  const slides = [
-    {
-      id: "560883a9-0f36-44fb-98cd-ee0a3a69a4e8",
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/pearl.png",
-    },
-    {
-      id: "898a7627-1b2a-4bd6-98dd-6557ec46ed76",
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/gold.png",
-    },
-    {
-      id: "7503e9a3-aacd-4255-851e-b758c9f0aedf",
-      image: "https://storage.googleapis.com/jwelleryrnpsoft/diamond.png",
-    },
-  ];
+   // Preload all images
+  slides.forEach((slide) => {
+    useImageLoader(slide.image);
+  });
+
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);

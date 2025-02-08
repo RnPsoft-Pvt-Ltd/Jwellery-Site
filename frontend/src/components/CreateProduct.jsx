@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Camera } from 'lucide-react';
-import Sidebar from './Sidebar';
+import Sidebar from './layouts/components/AdminSidebar';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({

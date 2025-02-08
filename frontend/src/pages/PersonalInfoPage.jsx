@@ -1,79 +1,6 @@
-// import React from "react"
-// import AccountSidebar from "../components/layout/AccountSidebar"
-// import Header from '../components/layout/Header';
-// function PersonalInfoPage() {
-//   const personalInfo = {
-//     title: "Mr.",
-//     name: "Jhondoe",
-//     email: "Jhondoe@gmail.com",
-//     dob: "2000/12/12",
-//     mobile: "+919800000000",
-//   }
-
-//   return (
-//     <div className="min-h-screen bg-gray-100">
-//     <Header />
-//     <div className="flex gap-8">
-//       <AccountSidebar />
-//       <div className="flex-1">
-//         <h1 className="text-2xl font-bold mb-8">My Account</h1>
-//         <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
-
-//         <div className="space-y-6">
-//           <div className="flex justify-between items-center">
-//             <div>
-//               <div className="text-sm text-gray-600">Title</div>
-//               <div>{personalInfo.title}</div>
-//             </div>
-//             <button className="px-4 py-1 rounded-full border hover:bg-gray-50">Edit</button>
-//           </div>
-
-//           <div className="flex justify-between items-center">
-//             <div>
-//               <div className="text-sm text-gray-600">Name</div>
-//               <div>{personalInfo.name}</div>
-//             </div>
-//             <button className="px-4 py-1 rounded-full border hover:bg-gray-50">Edit</button>
-//           </div>
-
-//           <div className="flex justify-between items-center">
-//             <div>
-//               <div className="text-sm text-gray-600">Email</div>
-//               <div>{personalInfo.email}</div>
-//             </div>
-//             <button className="px-4 py-1 rounded-full border hover:bg-gray-50">Edit</button>
-//           </div>
-
-//           <div className="flex justify-between items-center">
-//             <div>
-//               <div className="text-sm text-gray-600">DOB</div>
-//               <div>{personalInfo.dob}</div>
-//             </div>
-//             <button className="px-4 py-1 rounded-full border hover:bg-gray-50">Edit</button>
-//           </div>
-
-//           <div className="flex justify-between items-center">
-//             <div>
-//               <div className="text-sm text-gray-600">Primary Mobile Number</div>
-//               <div>{personalInfo.mobile}</div>
-//             </div>
-//             <button className="px-4 py-1 rounded-full border hover:bg-gray-50">Edit</button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//     </div>
-//   )
-// }
-
-// export default PersonalInfoPage
-
-
-
-
+// PersonalInfoPage.jsx
 import React, { useState, useEffect } from 'react';
-import AccountSidebar from '../components/layout/AccountSidebar';
-import Header from '../components/layout/Header';
+import { Loader2 } from 'lucide-react';
 
 function PersonalInfoPage() {
   const [personalInfo, setPersonalInfo] = useState({
@@ -82,91 +9,73 @@ function PersonalInfoPage() {
     mobile: '',
     dob: 'Not Updated',
   });
-
-  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchPersonalInfo = async () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          setMessage('User is not authenticated.');
+          setError('Please log in to view your information');
           return;
         }
 
         const response = await fetch('http://localhost:5000/v1/users/me', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!response.ok) {
-          setMessage('Error fetching user data.');
-          return;
+          throw new Error('Failed to fetch user data');
         }
 
-        const result = await response.json();
-        const userData = result.user;
-
-        if (userData) {
-          setPersonalInfo({
-            name: userData.name || '',
-            email: userData.email || '',
-            mobile: userData.phone || '',
-            dob: userData.date_of_birth ? userData.date_of_birth.split('T')[0] : 'Not Updated',
-          });
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-        setMessage('Error fetching user data.');
+        const { user } = await response.json();
+        setPersonalInfo({
+          name: user.name || 'Not provided',
+          email: user.email || 'Not provided',
+          mobile: user.phone || 'Not provided',
+          dob: user.date_of_birth ? new Date(user.date_of_birth).toLocaleDateString() : 'Not provided',
+        });
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchPersonalInfo();
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
+  const InfoField = ({ label, value }) => (
+    <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="text-sm text-gray-500 mb-1">{label}</div>
+      <div className="font-medium text-gray-900">{value}</div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-      <div className="flex gap-8">
-        <AccountSidebar />
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold mb-8">My Account</h1>
-          <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
-
-          {message && <p className="text-red-600">{message}</p>}
-
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="text-sm text-gray-600">Name</div>
-                <div>{personalInfo.name}</div>
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="text-sm text-gray-600">Email</div>
-                <div>{personalInfo.email}</div>
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="text-sm text-gray-600">DOB</div>
-                <div>{personalInfo.dob}</div>
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="text-sm text-gray-600">Primary Mobile Number</div>
-                <div>{personalInfo.mobile}</div>
-              </div>
-            </div>
-          </div>
+    <div className="max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-8">Personal Information</h1>
+      
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+          {error}
         </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <InfoField label="Name" value={personalInfo.name} />
+        <InfoField label="Email" value={personalInfo.email} />
+        <InfoField label="Date of Birth" value={personalInfo.dob} />
+        <InfoField label="Mobile Number" value={personalInfo.mobile} />
       </div>
     </div>
   );

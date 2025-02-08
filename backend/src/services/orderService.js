@@ -90,17 +90,42 @@ class OrderService {
     try {
       const orders = await prisma.order.findMany({
         include: {
-          order_items: true,
-          shipping_address: true,
-          billing_address: true,
+          user: {
+            select: {
+              email: true, // Fetch customer email
+            },
+          },
+          order_shipments: {
+            select: {
+              status: true, // Fetch shipment status
+            },
+          },
+          payment_transactions: {
+            select: {
+              status: true, // Fetch payment status
+            },
+          },
         },
       });
-      return orders;
+  
+      // Transform response to match frontend expectations
+      const transformedOrders = orders.map((order) => ({
+        id: order.id,
+        order_number: order.order_number,
+        created_at: order.order_date, // Map order_date correctly
+        customer_email: order.user?.email || "N/A",
+        shipment_status: order.order_shipments?.[0]?.status || "N/A", // Get first shipment status
+        payment_status: order.payment_transactions?.[0]?.status || "N/A", // Get first payment status
+        total: order.total_amount.toFixed(2), // Ensure correct currency format
+      }));
+  
+      return transformedOrders;
     } catch (error) {
       console.error("Error in orderService.getAllOrders:", error.message);
       throw new Error("Failed to fetch all orders");
     }
   }
+  
 
   // Update order status (Admin only)
   async updateOrderStatus(orderId, status) {

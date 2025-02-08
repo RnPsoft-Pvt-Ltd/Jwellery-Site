@@ -1,13 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Search, Heart, ShoppingBag, User } from 'lucide-react';
-import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
+import Footer from '../components/layouts/components/Footer';
 
 function AboutUs() {
   return (
     <>
-    <Navbar></Navbar>
+
     <main className="flex-grow px-4 py-12 bg-white">
   <div className="container mx-auto max-w-4xl">
     {/* Page Title */}
@@ -35,10 +32,8 @@ function AboutUs() {
     </div>
   </div>
 </main>
+</>
 
-
-
-    <Footer></Footer></>
   );
 }
 

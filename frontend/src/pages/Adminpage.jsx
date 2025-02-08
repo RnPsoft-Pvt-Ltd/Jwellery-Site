@@ -1,8 +1,8 @@
 import React, { useState } from 'react'; 
 import Categories from '../components/Categories.jsx';
 import Products from '../components/Products.jsx';
-import Navbar from '../components/Navbar.jsx';
-import Sidebar from '../components/Sidebar.jsx';
+
+import Sidebar from '../components/layouts/components/AdminSidebar.jsx';
 import Collections from '../components/Collections.jsx';
 import CreateProduct from '../components/CreateProduct.jsx';
 import CreateCoupon from '../components/CreateCoupon.jsx';
@@ -27,7 +27,7 @@ const AdminPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+
       <Sidebar onNavigate={handleNavigation} />
       
       

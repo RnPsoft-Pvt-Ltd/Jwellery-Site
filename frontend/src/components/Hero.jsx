@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useImageLoader } from "../utils/GlobalLoadingManager";
 
 const slides = [
   {
     image: "https://storage.googleapis.com/jwelleryrnpsoft/image.png",
-    heading: "Heading",
+    heading: "Discover the Beauty",
     text: "Always Enhancing What's Already Beautiful",
     textPosition: "left-16 top-1/3",
     contentPosition: "right-16 bottom-32 text-left",
@@ -21,11 +22,16 @@ const slides = [
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+  
+  // Preload all images
+  slides.forEach((slide) => {
+    useImageLoader(slide.image);
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 3000); // Change slide every 3 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -35,7 +41,7 @@ const Hero = () => {
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 flex items-center justify-center bg-cover bg-center transition-opacity duration-1000 ${
+          className={`absolute inset-0 flex items-center justify-center bg-cover bg-center transition-opacity duration-3000 ${
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
           style={{ backgroundImage: `url(${slide.image})` }}

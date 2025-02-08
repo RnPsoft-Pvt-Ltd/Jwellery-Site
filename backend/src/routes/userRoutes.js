@@ -19,15 +19,10 @@ const router = express.Router();
 router.get('/me', authenticate, userController.getUserProfile);
 router.put('/me', authenticate, userController.updateUserProfile.bind(userController));
 
-
-
 // Route to fetch all users with optional filters (Only accessible by Admin)
 router.get('/filteruser',authenticate, isAdmin, userController.getAllUsers);
 // Route to fetch a user by ID (Only accessible by Admin)
 router.get('/:id',authenticate, isAdmin, userController.getUserById);
-
-
-
 router.get('/users-with-orders', authenticate, isAdmin, userController.getUsersWithOrders);
 
 

@@ -192,17 +192,17 @@ async function createCollections() {
     data: [
       {
         name: "Mens Collection",
-        description: "Stylish mens jewelry",
-        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/men.jpeg",
+        description: "Stylish mens jewellery",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/mens.jpeg",
       },
       {
         name: "Women Collection",
-        description: "Elegant womens jewelry",
+        description: "Elegant womens jewellery",
         thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/women.jpeg",
       },
       {
         name: "Kids Collection",
-        description: "Cute kids jewelry",
+        description: "Cute kids jewellery",
         thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/kids.jpeg",
       },
       {
@@ -243,17 +243,17 @@ async function createCollections() {
       {
         name: "Party Jwellery",
         description: "Jwellery for party wear",
-        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/party-wear.jpeg",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/party-wear.png",
       },
       {
         name: "Casual Jwellery",
         description: "Jwellery for casual wear",
-        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/common-wear.jpeg",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/common-wear.png",
       },
       {
         name: "Date Night Jwellery",
         description: "Jwellery for date nights",
-        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/date-night.jpeg",
+        thumbnail: "https://storage.googleapis.com/jwelleryrnpsoft/date-night.png",
       },
     ],
   });

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import Sidebar from './Sidebar';
+import Sidebar from './layouts/components/AdminSidebar';
 
 const CreateCoupon = () => {
   const [formData, setFormData] = useState({

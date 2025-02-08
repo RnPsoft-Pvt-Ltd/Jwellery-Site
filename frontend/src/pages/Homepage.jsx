@@ -1,30 +1,30 @@
 import React from 'react'
-import Footer from '../components/Footer'
-import Testimonials from '../components/Testimonials'
-import Callback from '../components/Callback'
-import CelebsChoice from '../components/CelebsChoice'
-import Sales from '../components/Sales'
-import ThemeCollection from '../components/ThemeCollection'
-import StyledPicks from '../components/StyledPicks'
-import SpecialProducts from '../components/SpecialProducts'
-import Category from '../components/Category'
-import MetalCollection from '../components/MetalCollection'
-import ProductSlider from '../components/ProductSlider'
-import GenderCollections from '../components/GenderCollections'
 
 import Hero from '../components/Hero'
-import NavBar from '../components/Navbar'
+import GenderCollections from '../components/GenderCollections'
 import ImageSlider from '../components/ImageSlider'
+import ProductSlider from '../components/ProductSlider'
+
+import MetalCollection from '../components/MetalCollection'
+import Category from '../components/Category'
+import SpecialProducts from '../components/SpecialProducts'
+import StyledPicks from '../components/StyledPicks'
+import ThemeCollection from '../components/ThemeCollection'
+
+import CelebsChoice from '../components/CelebsChoice'
+import Callback from '../components/Callback'
+import Sales from '../components/Sales'
+import Testimonials from '../components/Testimonials'
+import { GlobalLoadingProvider } from '../utils/GlobalLoadingManager';
 
 
 
 export default function Homepage() {
   return (
+    <GlobalLoadingProvider>
     <div>
-        <NavBar/>
         <Hero/>
-        <GenderCollections title="Style Picks" />
-
+        <GenderCollections />
         <ImageSlider/>
         <ProductSlider/> 
 
@@ -38,7 +38,7 @@ export default function Homepage() {
         <Callback/>
         <Sales/>
         <Testimonials/>
-        <Footer/> 
     </div>
+    </GlobalLoadingProvider>
   )
 }

@@ -1,364 +1,184 @@
-
-
-
-
-// import React, { useState } from "react";
-// import axios from "axios"; // Import axios for making API calls
-
-// const RegisterUser = () => {
-//   const [formData, setFormData] = useState({
-//     title: "Mr.",
-//     name: "",
-//     phone: "",
-//     email: "",
-//     password: "",
-//     role: "CUSTOMER",
-//   });
-
-//   // Google Cloud Storage Image URL (Replace with your actual URL)
-//   const imageURL = "https://storage.googleapis.com/jwelleryrnpsoft/flower.png"; 
-
-//   // Handle input changes
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-
-//   // Handle form submission
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     // Construct the data object
-//     const userData = {
-//       name: formData.name,
-//       phone: formData.phone,
-//       email: formData.email,
-//       password: formData.password,
-//       role: formData.role,
-//     };
-
-//     console.log("Sending Data:", userData); // Debugging: See what is being sent
-
-//     try {
-//       // Sending POST request to backend
-//       const response = await axios.post(
-//         "http://localhost:5000/v1/auth/register",
-//         userData,
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-
-//       // Handle the successful response
-//       alert(`User Registered Successfully!\n\n${JSON.stringify(response.data, null, 2)}`);
-
-//       // Clear the form after successful submission
-//       setFormData({
-//         title: "Mr.",
-//         name: "",
-//         phone: "",
-//         email: "",
-//         password: "",
-//         role: "CUSTOMER",
-//       });
-//     } catch (error) {
-//       console.error("Error registering user:", error);
-//       alert("Error registering user! Please try again.");
-//     }
-//   };
-
-//   return (
-//     <div className="flex items-center justify-center w-full min-h-screen bg-gray-100">
-//       <div className="flex bg-white text-black rounded-lg shadow-xl border border-t-2 overflow-hidden w-full max-w-4xl">
-        
-//         {/* Form Section */}
-//         <div className="w-1/2 p-6">
-//           <h2 className="text-2xl font-semibold mb-6">Register User</h2>
-//           <form onSubmit={handleSubmit}>
-
-//             {/* Role Selection */}
-//             <div className="mb-6">
-//               <label className="block mb-2 font-medium">Select Role</label>
-//               <select
-//                 name="role"
-//                 value={formData.role}
-//                 onChange={handleChange}
-//                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
-//               >
-//                 <option value="CUSTOMER">Customer</option>
-//                 <option value="ADMIN">Admin</option>
-//               </select>
-//             </div>
-
-//             {/* Title Selection */}
-//             <div className="mb-4">
-//               <select
-//                 name="title"
-//                 value={formData.title}
-//                 onChange={handleChange}
-//                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
-//               >
-//                 <option value="Mr.">Mr.</option>
-//                 <option value="Ms.">Ms.</option>
-//                 <option value="Mrs.">Mrs.</option>
-//               </select>
-//             </div>
-
-//             {/* Full Name */}
-//             <div className="mb-4">
-//               <input
-//                 type="text"
-//                 name="name"
-//                 placeholder="Enter Full Name"
-//                 value={formData.name}
-//                 onChange={handleChange}
-//                 required
-//                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
-//               />
-//             </div>
-
-//             {/* Phone Number */}
-//             <div className="mb-4">
-//               <div className="flex">
-//                 <span className="bg-gray-200 p-2 border border-gray-300 rounded-l">
-//                   +91
-//                 </span>
-//                 <input
-//                   type="tel"
-//                   name="phone"
-//                   placeholder="9800000000"
-//                   value={formData.phone}
-//                   onChange={handleChange}
-//                   required
-//                   className="w-full p-2 border border-gray-300 rounded-r focus:outline-none focus:ring focus:ring-red-300"
-//                 />
-//               </div>
-//             </div>
-
-//             {/* Email */}
-//             <div className="mb-4">
-//               <input
-//                 type="email"
-//                 name="email"
-//                 placeholder="JohnDoe@gmail.com"
-//                 value={formData.email}
-//                 onChange={handleChange}
-//                 required
-//                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
-//               />
-//             </div>
-
-//             {/* Password */}
-//             <div className="mb-4">
-//               <input
-//                 type="password"
-//                 name="password"
-//                 placeholder="Password"
-//                 value={formData.password}
-//                 onChange={handleChange}
-//                 required
-//                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
-//               />
-//             </div>
-
-//             {/* Submit Button */}
-//             <button
-//               type="submit"
-//               className="w-full bg-red-700 text-white py-2 rounded hover:bg-red-800 transition"
-//             >
-//               Submit
-//             </button>
-//           </form>
-//         </div>
-
-//         {/* Image Section */}
-//         <div className="w-1/2 bg-gray-100 flex items-center justify-center">
-//           <img src={imageURL} alt="Flower" className="max-w-full h-auto" />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RegisterUser;
-
-
-
-
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const RegisterUser = () => {
-  const navigate = useNavigate(); // Initialize navigation
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "CUSTOMER", // Fixed role
+    role: "CUSTOMER",
   });
+  const [error, setError] = useState("");
 
-  // Google Cloud Storage Image URL (Replace with your actual URL)
-  const imageURL = "https://storage.googleapis.com/jwelleryrnpsoft/flower.png";
-
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // Check if password and confirm password match
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
       return;
     }
 
-    // Construct user data
-    const userData = {
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      password: formData.password,
-      confirmPassword: formData.confirmPassword,
-      role: "CUSTOMER", // Fixed role
-    };
-
-    console.log("Sending Data:", userData);
-
     try {
-      // Send API request
       const response = await axios.post(
         "http://localhost:5000/v1/auth/register",
-        userData,
+        formData,
         {
           headers: { "Content-Type": "application/json" },
         }
       );
 
-      // Success message
-      alert(`User Registered Successfully!\n\n${JSON.stringify(response.data, null, 2)}`);
-
-      // Reset form
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "CUSTOMER",
-      });
-
-      // Redirect to Login Page
-      navigate("/login"); // Redirect to login page after successful registration
+      if (response.data) {
+        navigate("/login");
+      }
     } catch (error) {
-      console.error("Error registering user:", error);
-      alert(`Error: ${error.response?.data?.message || "Registration failed."}`);
+      console.error("Error registering:", error);
+      setError(error.response?.data?.message || "Registration failed. Please try again.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center w-full min-h-screen bg-gray-100">
-      <div className="flex bg-white text-black rounded-lg shadow-xl border border-t-2 overflow-hidden w-full max-w-4xl">
+    <div className="bg-white rounded-lg shadow-xl overflow-hidden max-w-4xl mx-auto">
+      <div className="flex flex-col md:flex-row">
+        {/* Image Section */}
+        <div className="md:w-1/2 bg-gray-50 flex items-center justify-center p-6">
+          <img
+            src="https://storage.googleapis.com/jwelleryrnpsoft/flower.png"
+            alt="Decorative flower"
+            className="max-w-full h-auto object-contain"
+          />
+        </div>
+
         {/* Form Section */}
-        <div className="w-1/2 p-6">
-          <h2 className="text-2xl font-semibold mb-6">Register User</h2>
-          <form onSubmit={handleSubmit}>
-            {/* Full Name */}
-            <div className="mb-4">
+        <div className="md:w-1/2 p-8">
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">Create an Account</h1>
+            <p className="mt-2 text-sm text-gray-600">Join Cresthaven today</p>
+          </div>
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-md">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
               <input
+                id="name"
                 type="text"
                 name="name"
-                placeholder="Enter Full Name"
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="Enter your full name"
               />
             </div>
 
-            {/* Phone Number */}
-            <div className="mb-4">
-              <div className="flex">
-                <span className="bg-gray-200 p-2 border border-gray-300 rounded-l">+91</span>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                  +91
+                </span>
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="9800000000"
+                  id="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border border-gray-300 rounded-r focus:outline-none focus:ring focus:ring-red-300"
+                  className="flex-1 block w-full px-3 py-2 border border-gray-300 rounded-none rounded-r-md focus:outline-none focus:ring-red-500 focus:border-red-500"
+                  placeholder="9800000000"
                 />
               </div>
             </div>
 
-            {/* Email */}
-            <div className="mb-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
               <input
+                id="email"
                 type="email"
                 name="email"
-                placeholder="JohnDoe@gmail.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="you@example.com"
               />
             </div>
 
-            {/* Password */}
-            <div className="mb-4">
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
               <input
+                id="password"
                 type="password"
                 name="password"
-                placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="Create a password"
               />
             </div>
 
-            {/* Confirm Password */}
-            <div className="mb-4">
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
               <input
+                id="confirmPassword"
                 type="password"
                 name="confirmPassword"
-                placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-red-300"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="Confirm your password"
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-red-700 text-white py-2 rounded hover:bg-red-800 transition"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
-              Submit
+              Create Account
             </button>
           </form>
-        </div>
 
-        {/* Image Section */}
-        <div className="w-1/2 bg-gray-100 flex items-center justify-center">
-          <img src={imageURL} alt="Flower" className="max-w-full h-auto" />
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Already have an account?{" "}
+              <button
+                onClick={() => navigate("/login")}
+                className="font-medium text-red-700 hover:text-red-800"
+              >
+                Sign in
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

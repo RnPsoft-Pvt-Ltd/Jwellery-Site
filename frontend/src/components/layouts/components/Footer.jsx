@@ -19,7 +19,7 @@ export default function Footer() {
     navigate("/aboutUs");
   };
   return (
-    <footer className="flex flex-col md:flex-row w-[100%]">
+    <footer className="flex flex-col md:flex-row w-[100%] pt-10">
       {/* Main Footer Section */}
       <div className="bg-black text-white py-8 w-[100%] md:w-[65%]">
         <div className="container mx-auto px-4">

@@ -1,11 +1,7 @@
-
-
-
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CartItem from "./CartItem";
-import Navbar from "./Navbar";
+
 
 const SHIPPING_COST = 99;
 
@@ -90,7 +86,6 @@ export default function Cart() {
 
   return (
     <>
-      <Navbar />
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           <h1 className="text-2xl font-bold mb-6">Your Cart</h1>

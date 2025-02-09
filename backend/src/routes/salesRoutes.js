@@ -1,6 +1,6 @@
 import express from 'express';
-import salesController from '../controllers/salesController.js'; // Correct import for ES module
-import { authenticate, isAdmin } from '../middlewares/authMiddleware.js'; // Authentication and authorization middleware
+import salesController from '../controllers/salesController.js';
+import { authenticate, isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 

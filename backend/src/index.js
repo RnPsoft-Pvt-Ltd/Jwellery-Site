@@ -16,6 +16,8 @@ import userRoutes from './routes/userRoutes.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
 import salesRoutes from './routes/salesRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import searchRoutes from './routes/searchRoutes.js';
+
 import { connectDB } from './config/db.js';
 
 
@@ -53,6 +55,9 @@ app.use('/v1/users',userRoutes);
 app.use('/v1/wishlist',wishlistRoutes);
 app.use('/v1/sales', salesRoutes);
 app.use('/v1/orders', orderRoutes);
+app.use('/v1/search',searchRoutes);
+
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

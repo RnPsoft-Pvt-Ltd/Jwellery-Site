@@ -24,7 +24,6 @@ const ProductSlider = () => {
     }
   };
 
-  console.log(products);
 
   const fetchWishlist = async () => {
     try {

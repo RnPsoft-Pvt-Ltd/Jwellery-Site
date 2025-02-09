@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Homepage from './pages/Homepage';
-import AdminPage from './pages/Adminpage';  
+
 
 
 
@@ -37,24 +37,25 @@ import MainLayout from './components/layouts/MainLayout';
 import Categories from './components/Categories.jsx';
 import Products from './components/Products.jsx';
 
-import Sidebar from './components/layouts/components/AdminSidebar.jsx';
+
 import Collections from './components/Collections.jsx';
 import CreateProduct from './components/CreateProduct.jsx';
 import CreateCoupon from './components/CreateCoupon.jsx';
 import NewSale from './components/NewSale.jsx';
 import AdminSalesPage from './components/SalesList.jsx';
 // import Dashboard from '../components/dashboard.jsx';
+
+
 import CustomersTable from './components/CustomersTable.jsx';
 import Orders from './components/Orders.jsx';
 import Dashboard from './components/Dashboard.jsx';
-import GridLayout from './components/layouts/GridLayout.jsx';
+// import GridLayout from './components/layouts/GridLayout.jsx';
 // import { GlobalLoadingProvider } from './utils/GlobalLoadingManager';
 
-import CreateCategory from './components/CreateCategory.jsx';
-import CreateCollection from './components/CreateCollection.jsx';
-import UpdateCategory from './components/UpdateCategory.jsx';
+import UpdateCategory from './components/UpdateCategory.jsx'
 import UpdateCollection from './components/UpdateCollection.jsx';
-
+import CreateCategory from './components/CreateCategory.jsx'
+import CreateCollection from './components/CreateCollection.jsx'
 
 
 function App() {

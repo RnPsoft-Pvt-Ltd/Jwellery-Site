@@ -2,42 +2,46 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-
 const ALLOWED_CATEGORIES = ["Men", "Women", "Kids"];
+import {
+  useGlobalLoading,
+  useImageLoader,
+} from "../utils/GlobalLoadingManager";
 
-const GenderCollections = ({ title }) => {
+const GenderCollections = () => {
   const navigate = useNavigate();
   const [collections, setCollections] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { registerImage, markImageLoaded } = useGlobalLoading();
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/v1/collections");
+          // Register a loading state for the API call
+          const loadingKey = 'api-loading';
+          registerImage(loadingKey);
+
+        const response = await axios.get(
+          "http://localhost:5000/v1/collections"
+        );
+        const ALLOWED_CATEGORIES = ["Men", "Women", "Kids"];
+
         const filteredCollections = response.data.data.filter((collection) =>
           ALLOWED_CATEGORIES.some((category) =>
             collection.name.toLowerCase().includes(category.toLowerCase())
           )
         );
         setCollections(filteredCollections);
+                // Mark API loading as complete
+                markImageLoaded(loadingKey);
       } catch (err) {
         console.error("Error fetching collections:", err);
         setError("Failed to load collections.");
-      } finally {
-        setLoading(false);
-      }
+        markImageLoaded("api-loading");
+      } 
     };
     fetchCollections();
   }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -50,7 +54,7 @@ const GenderCollections = ({ title }) => {
   return (
     <div className="min-h-full bg-gray-10">
       <div className="text-center py-8">
-        <h1 className="text-4xl font-bold">{title}</h1>
+        {/* <h1 className="text-4xl font-bold">{title}</h1> */}
       </div>
 
       <div className="flex flex-wrap justify-center gap-5 p-5">
@@ -79,8 +83,8 @@ const GenderCollections = ({ title }) => {
   );
 };
 
-GenderCollections.propTypes = {
-  title: PropTypes.string.isRequired,
-};
+// GenderCollections.propTypes = {
+//   title: PropTypes.string.isRequired,
+// };
 
 export default GenderCollections;

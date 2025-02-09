@@ -12,7 +12,6 @@ export default function Footer() {
         const response = await axios.get(
           "http://localhost:5000/v1/collections"
         );
-        console.log("response", response.data.data);
         const ALLOWED_CATEGORIES = ["Men", "Women", "Kids"];
 
         const filteredCollections = response.data.data.filter((collection) =>
@@ -86,19 +85,17 @@ export default function Footer() {
                   Collection
                 </h2>
                 <ul className="space-y-3 text-center lg:text-left">
-                  {collections.map((collection) => (
-                    <li>
+                  {collections.map((collection, index) => (
+                    <li key={index}>
                       <span
-                        key={collection.id}
-                        onClick={() =>
-                          navigate(`/collections/${collection.id}`)
-                        }
+                        onClick={() => navigate(`/collections/${collection.id}`)}
                         className="text-gray-300 cursor-pointer hover:text-white font-albert text-lg lg:text-xl"
                       >
                         {collection.name}
                       </span>
                     </li>
                   ))}
+
 
                   {/* <li>
                     <span

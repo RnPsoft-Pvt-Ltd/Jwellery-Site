@@ -18,6 +18,8 @@ import salesRoutes from './routes/salesRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import salesStatisticsRoutes from './routes/salestatisticsRoutes.js'
+import searchRoutes from './routes/searchRoutes.js';
+
 import { connectDB } from './config/db.js';
 
 
@@ -55,8 +57,10 @@ app.use('/v1/users',userRoutes);
 app.use('/v1/wishlist',wishlistRoutes);
 app.use('/v1/sales', salesRoutes);
 app.use('/v1/orders', orderRoutes);
-app.use("/api", dashboardRoutes);
+app.use('/v1/search',searchRoutes);
+app.use("/v1/dashboard", dashboardRoutes);
 app.use("/v1/salestatistics", salesStatisticsRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

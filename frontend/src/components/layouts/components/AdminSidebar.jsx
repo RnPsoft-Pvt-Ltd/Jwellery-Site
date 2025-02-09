@@ -1,7 +1,7 @@
 // src/components/AdminSidebar.jsx
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Package, Tag, List, ShoppingCart, Users, Gift } from 'lucide-react';
+import { Home, Package, Tag, List, ShoppingCart, Users, Gift, Percent } from 'lucide-react';
 
 const MenuItem = ({ item }) => {
   const location = useLocation();
@@ -12,10 +12,7 @@ const MenuItem = ({ item }) => {
       to={item.path}
       className={({ isActive }) => `
         flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200
-        ${isActive 
-          ? 'bg-primary text-white' 
-          : 'text-gray-700 hover:bg-gray-100'
-        }
+        ${isActive ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-100'}
       `}
     >
       {React.cloneElement(item.icon, {
@@ -34,7 +31,8 @@ const Sidebar = () => {
       items: [
         { name: 'Dashboard', icon: <Home />, path: '/admin' },
         { name: 'New Product', icon: <Package />, path: '/admin/new-products' },
-        { name: 'New Coupon', icon: <Gift />, path: '/admin/new-coupon' }
+        { name: 'New Coupon', icon: <Gift />, path: '/admin/new-coupon' },
+        { name: 'New Sale', icon: <Percent />, path: '/admin/new-sale' }
       ]
     },
     {
@@ -48,7 +46,8 @@ const Sidebar = () => {
     {
       section: 'SALE',
       items: [
-        { name: 'Orders', icon: <ShoppingCart />, path: '/admin/orders' }
+        { name: 'Orders', icon: <ShoppingCart />, path: '/admin/orders' },
+        { name: 'All Sales', icon: <Percent />, path: '/admin/sales' } // Added "All Sales"
       ]
     },
     {

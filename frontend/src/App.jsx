@@ -41,7 +41,8 @@ import Sidebar from './components/layouts/components/AdminSidebar.jsx';
 import Collections from './components/Collections.jsx';
 import CreateProduct from './components/CreateProduct.jsx';
 import CreateCoupon from './components/CreateCoupon.jsx';
-
+import NewSale from './components/NewSale.jsx';
+import AdminSalesPage from './components/SalesList.jsx';
 // import Dashboard from '../components/dashboard.jsx';
 import CustomersTable from './components/CustomersTable.jsx';
 import Orders from './components/Orders.jsx';
@@ -70,6 +71,8 @@ function App() {
         <Route path="/admin/orders" element={<Orders />} />
         <Route path="/admin/customers" element={<CustomersTable />} />
         <Route path="/admin/new-coupon" element={<CreateCoupon />} />
+        <Route path="/admin/new-sale" element={<NewSale />} />
+        <Route path="/admin/sales" element={<AdminSalesPage />} />
       </Route>
 
 

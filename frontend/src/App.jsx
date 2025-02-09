@@ -50,6 +50,12 @@ import Dashboard from './components/Dashboard.jsx';
 import GridLayout from './components/layouts/GridLayout.jsx';
 // import { GlobalLoadingProvider } from './utils/GlobalLoadingManager';
 
+import CreateCategory from './components/CreateCategory.jsx';
+import CreateCollection from './components/CreateCollection.jsx';
+import UpdateCategory from './components/UpdateCategory.jsx';
+import UpdateCollection from './components/UpdateCollection.jsx';
+
+
 
 function App() {
   return (
@@ -73,6 +79,10 @@ function App() {
         <Route path="/admin/new-coupon" element={<CreateCoupon />} />
         <Route path="/admin/new-sale" element={<NewSale />} />
         <Route path="/admin/sales" element={<AdminSalesPage />} />
+        <Route path="/admin/new-category" element={<CreateCategory />} />
+        <Route path="/admin/new-collection" element={<CreateCollection />} />
+        <Route path="/admin/update-category" element={<UpdateCategory />} />
+        <Route path="/admin/update-collection" element={<UpdateCollection />} />
       </Route>
 
 

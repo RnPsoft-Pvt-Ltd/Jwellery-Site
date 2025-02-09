@@ -7,10 +7,14 @@ const router = express.Router();
 // Get all active sales (accessible by everyone)
 router.get('/', salesController.getActiveSales);
 router.get('/:id', salesController.getActiveSalesById);
+router.post('/', salesController.createSale);
+router.put('/:id', salesController.updateSale);
+router.delete('/:id', salesController.deleteSale);
+
 
 // Admin only routes
-router.post('/', authenticate, isAdmin, salesController.createSale);
-router.put('/:id', authenticate, isAdmin, salesController.updateSale);
-router.delete('/:id', authenticate, isAdmin, salesController.deleteSale);
+// router.post('/', authenticate, isAdmin, salesController.createSale);
+// router.put('/:id', authenticate, isAdmin, salesController.updateSale);
+// router.delete('/:id', authenticate, isAdmin, salesController.deleteSale);
 
 export default router;

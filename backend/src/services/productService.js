@@ -65,6 +65,12 @@ class ProductService {
             size: true,
             color: true,
             price_modifier: true,
+            inventory: {
+              select: {
+                total_quantity: true,
+                reserved_quantity: true,
+              },
+            },
           },
         },
       },
@@ -321,3 +327,12 @@ class ProductService {
 }
 
 export default new ProductService();
+
+
+
+
+
+
+
+
+

@@ -1,35 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/v1/products');
-        const formattedProducts = response.data.data.map((product) => ({
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/v1/products');
+      const formattedProducts = response.data.data.map((product) => {
+        const totalStock = product.variants?.reduce((sum, variant) => {
+          return sum + (variant.inventory?.total_quantity || 0);
+        }, 0) || 0;
+
+        return {
           ID: product.id,
           name: product.name,
           price: product.base_price,
           sku: product.SKU,
-          stock: 10,
-          status: true,
+          stock: totalStock,
           thumbnail: product.images.find((img) => img.is_primary)?.image_url || product.images[0]?.image_url || '',
-        }));
-        setProducts(formattedProducts);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
+        };
+      });
+      setProducts(formattedProducts);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [products]);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/v1/products/${id}`);
+      setProducts(products.filter((product) => product.ID !== id));
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
+
+  // const handleUpdate = async (id) => {
+  //   try {
+  //     await axios.put(`http://localhost:5000/v1/products/${id}`, { /* Add update data */ });
+  //     fetchProducts();
+  //   } catch (error) {
+  //     console.error('Error updating product:', error);
+  //   }
+  // };
 
   return (
-    <div className="ml-64 p-6">
+    <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Products</h1>
-        <button className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700">
+        <button
+          onClick={()=>navigate('/admin/new-product')}
+         className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700">
           New Product
         </button>
       </div>
@@ -56,9 +84,11 @@ const Products = () => {
               <th className="text-left px-4 py-3">THUMBNAIL</th>
               <th className="text-left px-4 py-3">NAME</th>
               <th className="text-left px-4 py-3">PRICE</th>
+              <th className="text-left px-4 py-3">STOCK</th>
               <th className="text-left px-4 py-3">SKU</th>
-              <th className="text-left px-4 py-3">ID</th>
-              {/* <th className="text-left px-4 py-3">STOCK</th> */}
+              {/* <th className="text-left px-4 py-3">ID</th> */}
+              {/* <th className="text-left px-4 py-3">UPDATE</th> */}
+              <th className="text-left px-4 py-3">DELETE</th>
               {/* <th className="text-left px-4 py-3">STATUS</th> */}
             </tr>
           </thead>
@@ -74,9 +104,20 @@ const Products = () => {
                   )}
                 </td>
                 <td className="px-4 py-3">{product.name}</td>
-                <td className="px-4 py-3">${product.price}</td>
+                <td className="px-4 py-3">₹{product.price}</td>
+                <td className="px-4 py-3">{product.stock}</td>
                 <td className="px-4 py-3">{product.sku}</td>
-                <td className="px-4 py-3">{product.ID}</td>
+                {/* <td className="px-4 py-3">{product.ID}</td> */}
+                {/* <td>
+                  <button
+                    onClick={()=>handleUpdate(product.ID)} 
+                    className='bg-orange-600 px-3 py-2 text-white rounded-lg hover:bg-orange-700'>update</button>
+                </td> */}
+                <td>
+                  <button
+                    onClick={()=>handleDelete(product.ID)} 
+                    className='bg-red-600 px-3 py-2 text-white rounded-lg hover:bg-red-700'>delete</button>
+                </td>
                 {/* <td className="px-4 py-3 text-red-600">{product.stock}</td>
                 <td className="px-4 py-3">
                   <div className={`w-2 h-2 rounded-full ${product.status ? 'bg-emerald-400' : 'bg-gray-400'}`}></div>

@@ -1,11 +1,41 @@
-// ProductDetail.jsx
 import React, { useState, useEffect } from "react";
-import { Heart } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { Heart, Minus, Plus, Share2, ArrowLeft, Loader2 } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastProvider, useToast } from "../utils/toastContext";
 
-const ExpandedProductTemplate = () => {
+// Custom tooltip component to replace shadcn/ui tooltip
+const Tooltip = ({ children, content }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      {isVisible && (
+        <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap z-50">
+          {content}
+          <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-gray-900"></div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Wrap the entire component with ToastProvider in your app
+const ProductDetailWrapper = () => (
+  <ToastProvider>
+    <ProductDetail />
+  </ToastProvider>
+);
+
+const ProductDetail = () => {
+  const { addToast } = useToast();
   const { productId } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [mainImage, setMainImage] = useState("");
@@ -14,6 +44,8 @@ const ExpandedProductTemplate = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [isWishLoading, setIsWishLoading] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   useEffect(() => {
     const fetchProductAndWishlistStatus = async () => {
@@ -35,7 +67,6 @@ const ExpandedProductTemplate = () => {
         );
         setSelectedVariant(productResponse.data.variants[0]);
 
-        // Check if product is in wishlist
         const isInWishlist = wishlistResponse.data.some(
           (item) => item.product_id === productId
         );
@@ -54,6 +85,7 @@ const ExpandedProductTemplate = () => {
   }, [productId]);
 
   const handleAddToCart = async () => {
+    setIsAddingToCart(true);
     try {
       if (!selectedVariant) return;
 
@@ -67,31 +99,45 @@ const ExpandedProductTemplate = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-
-      // Show success message or update cart UI
+      addToast(
+        `${quantity} ${quantity === 1 ? "item" : "items"} added to your cart`,
+        "success"
+      );
     } catch (error) {
       console.error("Error adding to cart:", error);
-      // Show error message
+      addToast("Failed to add item to cart. Please try again.", "error");
+    } finally {
+      setIsAddingToCart(false);
     }
   };
 
   const handleWishlist = async () => {
+    setIsWishLoading(true);
     try {
       if (isWishlisted) {
         await axios.delete(`http://localhost:5000/v1/wishlist`, {
-          data: { productId }, // Request body needs to be in a 'data' property
+          data: { productId },
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
+        addToast("Item removed from your wishlist");
       } else {
-        await axios.post(`http://localhost:5000/v1/wishlist`, {
-          productId },{ // Request body needs to be in a 'data' property
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+        await axios.post(
+          `http://localhost:5000/v1/wishlist`,
+          { productId },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        addToast("Item added to your wishlist", "success");
       }
       setIsWishlisted(!isWishlisted);
     } catch (error) {
       console.error("Error updating wishlist:", error);
-      // Show error message
+      addToast("Failed to update wishlist. Please try again.", "error");
+    } finally {
+      setIsWishLoading(false);
     }
   };
 
@@ -99,7 +145,7 @@ const ExpandedProductTemplate = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         {loading ? (
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent" />
         ) : (
           <div className="text-red-600">{error}</div>
         )}
@@ -110,7 +156,6 @@ const ExpandedProductTemplate = () => {
   if (!product) return null;
 
   return (
-    <>
     <div className="min-h-screen bg-white">
       <ProductDetailSection
         product={product}
@@ -121,16 +166,15 @@ const ExpandedProductTemplate = () => {
         quantity={quantity}
         setQuantity={setQuantity}
         isWishlisted={isWishlisted}
-        // setIsWishlisted={setIsWishlisted}
         handleWishlist={handleWishlist}
         handleAddToCart={handleAddToCart}
+        onBack={() => navigate(-1)}
+        isWishLoading={isWishLoading}
+        isAddingToCart={isAddingToCart}
       />
-
-      <ProductDescription description={product.description} />
-
+      <ProductDescription description={product.description} image1={product.images[0]?.image_url} image2={product.images[1]?.image_url}/>
       <SimilarProducts categoryId={product.category_id} />
     </div>
-    </>
   );
 };
 
@@ -143,198 +187,236 @@ const ProductDetailSection = ({
   quantity,
   setQuantity,
   isWishlisted,
-  // setIsWishlisted,
   handleWishlist,
   handleAddToCart,
+  onBack,
+  isWishLoading,
+  isAddingToCart,
 }) => {
-  const handleQuantityChange = (increment) => {
-    setQuantity((prev) => Math.max(1, prev + increment));
-  };
-
-  const handleVariantSelect = (variant) => {
-    setSelectedVariant(variant);
-  };
-
-  const handleImageClick = (imageUrl) => {
-    setMainImage(imageUrl);
-  };
-
-
   const calculatePrice = () => {
     const basePrice = parseFloat(product.base_price);
     const modifier = parseFloat(selectedVariant?.price_modifier || 0);
     return (basePrice + modifier).toFixed(2);
   };
 
-  return (
-    <div className="flex flex-col md:flex-row gap-8 p-4 max-w-7xl mx-auto">
-      {/* Product Gallery */}
-      <div className="w-full md:w-1/2">
-        <div className="relative mb-4">
-          <img
-            src={mainImage}
-            alt={product.name}
-            className="w-full aspect-square object-cover rounded-lg"
-          />
-          <button
-            onClick={handleWishlist}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white"
-          >
-            <Heart
-              className={`w-6 h-6 ${
-                isWishlisted ? "fill-red-500 stroke-red-500" : "stroke-gray-600"
-              }`}
-            />
-          </button>
-        </div>
+  const formatMetadataValue = (value) => {
+    if (typeof value === "object") {
+      // If the value is an object, convert it to a string representation
+      return Object.entries(value)
+        .map(([key, val]) => `${key}: ${val}`)
+        .join(", ");
+    }
+    return value;
+  };
 
-        <div className="grid grid-cols-4 gap-2">
-          {product.images.map((image) => (
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <button
+        onClick={onBack}
+        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+      >
+        <ArrowLeft size={20} />
+        <span>Back</span>
+      </button>
+
+      <div className="flex flex-col lg:flex-row gap-12">
+        {/* Product Gallery */}
+        <div className="w-full lg:w-3/5">
+          <div className="relative aspect-square overflow-hidden rounded-2xl mb-4">
             <img
-              key={image.id}
-              src={image.image_url}
-              alt={`${product.name} ${image.display_order}`}
-              className="w-full aspect-square object-cover rounded cursor-pointer"
-              onClick={() => handleImageClick(image.image_url)}
+              src={mainImage}
+              alt={product.name}
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
-          ))}
-        </div>
-      </div>
+            <div className="absolute top-4 right-4 flex gap-2">
+              <Tooltip
+                content={
+                  isWishlisted ? "Remove from wishlist" : "Add to wishlist"
+                }
+              >
+                <button
+                  onClick={handleWishlist}
+                  disabled={isWishLoading}
+                  className="p-2 rounded-full bg-white/90 hover:bg-white shadow-lg transition-all"
+                >
+                  {isWishLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Heart
+                      className={`w-5 h-5 ${
+                        isWishlisted
+                          ? "fill-red-500 stroke-red-500"
+                          : "stroke-gray-700"
+                      }`}
+                    />
+                  )}
+                </button>
+              </Tooltip>
 
-      {/* Product Details */}
-      <div className="w-full md:w-1/2">
-        <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-        <p className="text-gray-600 mb-4">{product.brand}</p>
+              <Tooltip content="Share product">
+                <button
+                  onClick={() =>
+                    navigator.share({
+                      title: product.name,
+                      text: product.description,
+                      url: window.location.href,
+                    })
+                  }
+                  className="p-2 rounded-full bg-white/90 hover:bg-white shadow-lg transition-all"
+                >
+                  <Share2 className="w-5 h-5 stroke-gray-700" />
+                </button>
+              </Tooltip>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-4 mb-6">
-          <span className="text-2xl font-medium">Rs. {calculatePrice()}</span>
-        </div>
-
-        {/* Product Metadata */}
-        <div className="bg-gray-50 p-4 rounded-lg mb-6">
-          <h3 className="font-medium mb-2">Product Details</h3>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-gray-600">Material</p>
-              <p className="font-medium">
-                {product.product_metadata.material_type}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-600">Purity</p>
-              <p className="font-medium">
-                {product.product_metadata.metal_purity}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-600">Gemstone</p>
-              <p className="font-medium">
-                {product.product_metadata.gemstone_details}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-600">Weight</p>
-              <p className="font-medium">
-                {product.product_metadata.additional_attributes.weight}
-              </p>
-            </div>
+          <div className="grid grid-cols-4 gap-4">
+            {product.images.map((image) => (
+              <button
+                key={image.id}
+                className={`aspect-square rounded-lg overflow-hidden ${
+                  mainImage === image.image_url
+                    ? "ring-2 ring-primary ring-offset-2"
+                    : ""
+                }`}
+                onClick={() => setMainImage(image.image_url)}
+              >
+                <img
+                  src={image.image_url}
+                  alt={`${product.name} view`}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
           </div>
         </div>
 
-        <p className="text-gray-600 mb-8">{product.description}</p>
+        {/* Product Info */}
+        <div className="w-full lg:w-2/5">
+          <h1 className="text-4xl font-semibold mb-2">{product.name}</h1>
+          <p className="text-gray-600 text-lg mb-6">{product.brand}</p>
 
-        {/* Variants Selection */}
-        {product.variants && product.variants.length > 0 && (
-          <div className="space-y-6 mb-8">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span>Select Variant</span>
+          <div className="space-y-8">
+            <div>
+              <span className="text-3xl font-medium">₹{calculatePrice()}</span>
+            </div>
+
+            {/* Variants */}
+            {product.variants && product.variants.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="font-medium">Available Variants</h3>
+                <div className="flex flex-wrap gap-3">
+                  {product.variants.map((variant) => (
+                    <button
+                      key={variant.id}
+                      className={`px-4 py-2 rounded-full border-2 transition-all ${
+                        selectedVariant?.id === variant.id
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
+                      onClick={() => setSelectedVariant(variant)}
+                    >
+                      {variant.color} - {variant.weight}g
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="flex gap-2">
-                {product.variants.map((variant) => (
-                  <button
-                    key={variant.id}
-                    className={`px-4 py-2 border rounded ${
-                      selectedVariant?.id === variant.id
-                        ? "border-black bg-gray-200"
-                        : "border-gray-300 hover:border-gray-400"
-                    }`}
-                    onClick={() => handleVariantSelect(variant)}
-                  >
-                    Colour : {variant.color} | {variant.weight}g
-                  </button>
-                ))}
+            )}
+
+            {/* Quantity */}
+            <div className="space-y-4">
+              <h3 className="font-medium">Quantity</h3>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="p-2 rounded-full border hover:bg-gray-50"
+                >
+                  <Minus size={18} />
+                </button>
+                <span className="w-12 text-center text-lg">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="p-2 rounded-full border hover:bg-gray-50"
+                >
+                  <Plus size={18} />
+                </button>
               </div>
             </div>
-          </div>
-        )}
 
-        {/* Quantity Selector */}
-        <div className="mb-8">
-          <label className="block text-sm font-medium mb-2">Quantity</label>
-          <div className="inline-flex items-center border border-gray-300 rounded">
+            {/* Product Details */}
+            <div className="space-y-4">
+              <h3 className="font-medium">Product Details</h3>
+              <div className="grid grid-cols-2 gap-6">
+                {Object.entries(product.product_metadata).map(
+                  ([key, value]) => (
+                    <div key={key}>
+                      <p className="text-gray-500 capitalize">
+                        {key.replace(/_/g, " ")}
+                      </p>
+                      <p className="font-medium">
+                        {formatMetadataValue(value)}
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+
+            {/* Add to Cart */}
+
             <button
-              className="px-3 py-2 hover:bg-gray-100"
-              onClick={() => handleQuantityChange(-1)}
+              onClick={handleAddToCart}
+              disabled={isAddingToCart}
+              className="w-full bg-primary text-white py-4 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              -
-            </button>
-            <span className="px-4 py-2 border-x">{quantity}</span>
-            <button
-              className="px-3 py-2 hover:bg-gray-100"
-              onClick={() => handleQuantityChange(1)}
-            >
-              +
+              {isAddingToCart ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Adding to Cart...</span>
+                </>
+              ) : (
+                "Add to Cart"
+              )}
             </button>
           </div>
         </div>
-
-        <button
-          onClick={handleAddToCart}
-          className="w-full max-w-xs bg-black text-white py-3 px-6 rounded hover:bg-gray-800"
-        >
-          Add to Cart
-        </button>
       </div>
     </div>
   );
 };
 
-const ProductDescription = ({ description }) => {
-  return (
-    <div className="w-full bg-[#FCF8FC] p-10 min-h-[800px]">
-      <div className="flex gap-10">
-        <div className="w-[55%]">
-          <div className="w-[337px] h-[77px] flex items-center px-5">
-            <h1 className="text-3xl font-light text-gray-800">Description</h1>
-          </div>
-          <div className="px-5 max-w-[500px]">
-            <p className="text-base text-gray-600 leading-relaxed mb-4 mr-12">
-              {description}
-            </p>
-          </div>
+const ProductDescription = ({ description , image1 , image2 }) => (
+  <div className="bg-gray-50 py-16">
+    <div className="max-w-7xl mx-auto px-4">
+      <div className="grid lg:grid-cols-2 gap-12">
+        <div>
+          <h2 className="text-3xl font-medium mb-6">About the Product</h2>
+          <p className="text-gray-600 leading-relaxed">{description}</p>
         </div>
-
-        <div className="relative aspect-[100/85]">
-          <img
-            src="/api/placeholder/400/340"
-            alt="Model wearing jewelry"
-            className="absolute left-[20%] w-full h-[85%] object-cover"
-          />
-          {/* TODO get image from variant here  */}
-          <img
-            src="/api/placeholder/180/180"
-            alt="Close-up of jewelry"
-            className="absolute bottom-10 left-0 w-[45%] h-[45%] object-cover"
-          />
+        <div className="relative">
+          <div className="aspect-[4/3] rounded-2xl overflow-hidden">
+            <img
+              src={image1}
+              alt="Product lifestyle"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="absolute -bottom-6 -left-6 w-1/2 aspect-square rounded-xl overflow-hidden shadow-xl">
+            <img
+              src={image2}
+              alt="Product detail"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 const SimilarProducts = ({ categoryId }) => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSimilarProducts = async () => {
@@ -342,7 +424,9 @@ const SimilarProducts = ({ categoryId }) => {
         const response = await axios.get(
           `http://localhost:5000/v1/categories/${categoryId}`
         );
+        // console.log("response",response);
         setProducts(response.data.products.slice(0, 4));
+        console.log("Prod", products);
       } catch (error) {
         console.error("Error fetching similar products:", error);
       }
@@ -354,24 +438,30 @@ const SimilarProducts = ({ categoryId }) => {
   }, [categoryId]);
 
   return (
-    <div className="max-w-[1200px] mx-auto p-5">
-      <h1 className="text-center mb-8 font-normal text-2xl">
-        Similar Products
-      </h1>
-      <div className="flex overflow-x-auto gap-5 pb-2.5">
-        {products.map((product) => (
-          <SimilarProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
+    <div className="py-16 px-4">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-medium text-center mb-12">
+          You Might Also Like
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {products.map((product) => (
+            <SimilarProductCard
+              key={product.id}
+              product={product}
+              onNavigate={() => navigate(`/products/${product.id}`)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-const SimilarProductCard = ({ product }) => {
+const SimilarProductCard = ({ product, onNavigate }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const { addToast } = useToast();
 
   useEffect(() => {
     const checkWishlistStatus = async () => {
@@ -391,30 +481,40 @@ const SimilarProductCard = ({ product }) => {
     checkWishlistStatus();
   }, [product.id]);
 
-  const handleWishlist = async () => {
+  const handleWishlist = async (e) => {
+    e.stopPropagation();
+    setIsLoading(true);
     try {
       if (isWishlisted) {
         await axios.delete(`http://localhost:5000/v1/wishlist`, {
-          data: { productId : product.id },  // Request body needs to be in a 'data' property
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          data: { productId: product.id },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
-        
-        
+        addToast("Item removed from your wishlist");
       } else {
-        await axios.post(`http://localhost:5000/v1/wishlist`, {
-          data: { productId: product.id },  // Request body needs to be in a 'data' property
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        
-        
+        await axios.post(
+          `http://localhost:5000/v1/wishlist`,
+          { productId: product.id },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        addToast("Item added to your wishlist", "success");
       }
       setIsWishlisted(!isWishlisted);
     } catch (error) {
       console.error("Error updating wishlist:", error);
+      addToast("Failed to update wishlist. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (e) => {
+    e.stopPropagation();
+    setIsAddingToCart(true);
     try {
       await axios.post(
         "http://localhost:5000/v1/cart",
@@ -426,52 +526,82 @@ const SimilarProductCard = ({ product }) => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      // Show success message
+      addToast("Added to cart successfully", "success");
     } catch (error) {
       console.error("Error adding to cart:", error);
-      // Show error message
+      addToast("Failed to add to cart. Please try again.", "error");
+    } finally {
+      setIsAddingToCart(false);
     }
   };
 
+  const formattedPrice = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(product.base_price);
 
   return (
-    <div className="relative w-[300px] flex-shrink-0 flex flex-col">
-      <img
-        src={product.images?.[0]?.image_url}
-        alt={product.name}
-        className="w-full h-[300px] object-cover"
-      />
-      <button
-        onClick={handleWishlist}
-        className="absolute top-2.5 right-2.5 bg-transparent border-none cursor-pointer"
-      >
-        <div className="w-[30px] h-[30px] relative">
-          <div className="absolute inset-0 bg-white rounded-full" />
-          <Heart
-            className={`w-full h-full ${
-              isWishlisted ? "fill-red-500 stroke-red-500" : "stroke-black"
-            }`}
-          />
-        </div>
-      </button>
+    <div
+      onClick={onNavigate}
+      className="group relative w-full bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
+    >
+      {/* Image Container */}
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
+        <img
+          src={product.images?.[0]?.image_url}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
 
-      <div className="flex flex-col flex-grow mt-2.5 min-h-[80px] relative">
-        <div className="flex justify-between mb-2">
-          <div className="text-base font-semibold max-w-[65%]">
-            {product.name}
-          </div>
-          <div className="text-sm font-medium">Rs {product.base_price}</div>
-        </div>
+        {/* Wishlist Button */}
         <button
-          // onClick={() => onAddToCart?.(product.id)}
-          onClick={handleAddToCart}
-          className="absolute right-0 bottom-0 bg-black text-white px-4 py-2 text-xs hover:bg-gray-800"
+          onClick={handleWishlist}
+          disabled={isLoading}
+          className="absolute top-3 right-3 p-2 rounded-full bg-white/90 hover:bg-white shadow-lg transition-all"
         >
-          Add to Cart
+          {isLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Heart
+              className={`w-5 h-5 transition-colors ${
+                isWishlisted ? "fill-red-500 stroke-red-500" : "stroke-gray-700"
+              }`}
+            />
+          )}
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        <div className="space-y-2">
+          <h3 className="font-medium text-gray-900 line-clamp-2">
+            {product.name}
+          </h3>
+          <p className="text-lg font-semibold text-gray-900">
+            {formattedPrice}
+          </p>
+        </div>
+
+        {/* Add to Cart Button */}
+        <button
+          onClick={handleAddToCart}
+          disabled={isAddingToCart}
+          className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
+        >
+          {isAddingToCart ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <>
+              <Plus className="w-4 h-4" />
+              <span>Add to Cart</span>
+            </>
+          )}
         </button>
       </div>
     </div>
   );
 };
 
-export default ExpandedProductTemplate;
+export default ProductDetailWrapper;

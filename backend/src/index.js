@@ -57,6 +57,10 @@ app.use('/v1/users',userRoutes);
 app.use('/v1/wishlist',wishlistRoutes);
 app.use('/v1/sales', salesRoutes);
 app.use('/v1/orders', orderRoutes);
+app.use('/v1/search',searchRoutes);
+app.use("/v1/dashboard", dashboardRoutes);
+app.use("/v1/salestatistics", salesStatisticsRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

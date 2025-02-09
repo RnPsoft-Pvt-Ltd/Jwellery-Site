@@ -41,25 +41,21 @@ import Products from './components/Products.jsx';
 import Collections from './components/Collections.jsx';
 import CreateProduct from './components/CreateProduct.jsx';
 import CreateCoupon from './components/CreateCoupon.jsx';
-<<<<<<< HEAD
-
-
-=======
 import NewSale from './components/NewSale.jsx';
 import AdminSalesPage from './components/SalesList.jsx';
 // import Dashboard from '../components/dashboard.jsx';
->>>>>>> 013c0223e9799824db5cfd91203f458098ded2a3
+
+
 import CustomersTable from './components/CustomersTable.jsx';
 import Orders from './components/Orders.jsx';
 import Dashboard from './components/Dashboard.jsx';
+// import GridLayout from './components/layouts/GridLayout.jsx';
+// import { GlobalLoadingProvider } from './utils/GlobalLoadingManager';
 
-
-
-import CreateCategory from './components/CreateCategory.jsx';
-import CreateCollection from './components/CreateCollection.jsx';
-import UpdateCategory from './components/UpdateCategory.jsx';
+import UpdateCategory from './components/UpdateCategory.jsx'
 import UpdateCollection from './components/UpdateCollection.jsx';
-
+import CreateCategory from './components/CreateCategory.jsx'
+import CreateCollection from './components/CreateCollection.jsx'
 
 
 function App() {

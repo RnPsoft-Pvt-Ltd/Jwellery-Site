@@ -13,7 +13,6 @@ const CelebsChoice = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get("http://localhost:5000/v1/categories");
-        console.log("response", response.data.data);
         const ALLOWED_CATEGORIES = ["Bracelets", "Earrings", "Necklaces"];
   
         const filteredCategories = response.data.data.filter((collection) =>
@@ -58,17 +57,6 @@ const CelebsChoice = () => {
     ]);
   }, [categories]); // Runs when `categories` updates
   
-
-  
-  console.log(categories)
-  console.log(celebs)
-
-  
-
-    // Preload all images
-    // celebs.forEach((slide) => {
-    //   useImageLoader(slide.image);
-    // });
 
   const handleClick = (id) => {
     navigate(`/categories/${id}`);

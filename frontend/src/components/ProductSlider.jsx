@@ -1,37 +1,30 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useGlobalLoading } from '../utils/GlobalLoadingManager';
 
 const ProductSlider = () => {
   const galleryRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const [products, setProducts] = useState([]);
   const [wishlist, setWishlist] = useState([]);
-  const { registerImage, markImageLoaded } = useGlobalLoading();
 
   const navigate = useNavigate();
   const BASE_URL = "http://localhost:5000/v1";
 
   const fetchProducts = async () => {
     try {
-
-      // Register a loading state for the API call
-      const loadingKey = 'api-loading';
-      registerImage(loadingKey);
-
       const response = await axios.get(`${BASE_URL}/products`);
       setProducts(response.data.data);
-
-      // Mark API loading as complete
-      markImageLoaded(loadingKey);
-
     } catch (error) {
       console.error("Error fetching products:", error);
-      // Make sure to mark loading as complete even on error
-      markImageLoaded('api-loading');
     }
   };
 
+  console.log(products);
 
   const fetchWishlist = async () => {
     try {
@@ -106,63 +99,52 @@ const ProductSlider = () => {
   useEffect(() => {
     fetchProducts();
     fetchWishlist();
-  }, [registerImage, markImageLoaded]);
+  }, []);
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      
-
-      <div className="relative pb-8">
+  <div className="relative pb-0"> {/* Remove extra bottom padding */}
+    <div
+      ref={galleryRef}
+      className="w-full h-[380px] md:h-[360px] flex overflow-x-auto gap-5 p-2 scrollbar-thin scrollbar-thumb-black scrollbar-track-transparent"
+    >
+      {products.map((item) => (
         <div
-          ref={galleryRef}
-          className="w-full h-[400px] md:h-[450px] flex overflow-x-auto gap-5 p-2 scrollbar-thin scrollbar-thumb-black scrollbar-track-transparent"
+          key={item.id}
+          className="flex-none w-[250px] h-[330px] overflow-hidden relative bg-white"
         >
-          {products.map((item) => (
-            <div
-              key={item.id}
-              className="flex-none w-[250px] h-[350px] overflow-hidden relative bg-white"
-            >
-              <button
-                onClick={() => toggleWishlist(item.id)}
-                className="absolute top-2 right-2 bg-white rounded-full p-2 shadow"
-              >
-                {wishlist.some((wish) => wish.product_id === item.id) ? (
-                  "❤️"// Wishlisted (red)
-                ) : (
-                  "🤍" // Not wishlisted
-                )}
-              </button>
-              <img
-                src={
-                  item.images[0]?.image_url ||
-                  "https://via.placeholder.com/250x350"
-                }
-                alt={item.name}
-                className="w-full h-[75%] object-cover"
-                loading="lazy"
-              />
+          <button
+            onClick={() => toggleWishlist(item.id)}
+            className="absolute top-2 right-2 bg-white rounded-full p-2 shadow"
+          >
+            {wishlist.some((wish) => wish.product_id === item.id) ? "❤️" : "🤍"}
+          </button>
 
-              <div className="p-2 flex flex-col justify-between h-[30%]">
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-gray-700">
-                    {item.name}
-                  </span>
-                  <span className="font-semibold text-gray-800">
-                    Rs. {item.base_price}
-                  </span>
-                </div>
-                <button
-                  onClick={() => navigate(`/products/${item.id}`)}
-                  className="absolute bottom-5 right-1 py-1 bg-black text-white text-xs sm:text-sm uppercase hover:bg-gray-800 transition w-[100px] h-[30px]"
-                >
-                  Add to Cart
-                </button>
-              </div>
+          <img
+            src={item.images[0]?.image_url || "https://via.placeholder.com/250x350"}
+            alt={item.name}
+            className="w-full h-[75%] object-cover"
+            loading="lazy"
+          />
+
+          <div className="p-2 flex flex-col justify-between h-[25%]">
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-gray-700">{item.name}</span>
+              <span className="font-semibold text-gray-800">Rs. {item.base_price}</span>
             </div>
-          ))}
+            <button
+              onClick={() => navigate(`/products/${item.id}`)}
+              className="absolute bottom-5 right-1 py-1 bg-black text-white text-xs sm:text-sm uppercase hover:bg-gray-800 transition w-[100px] h-[30px]"
+            >
+              Add to Cart
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
+  </div>
+</section>
+
   );
 };
 

@@ -305,6 +305,7 @@ CREATE TABLE "Sale" (
     "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "thumbnail" TEXT,
 
     CONSTRAINT "Sale_pkey" PRIMARY KEY ("id")
 );

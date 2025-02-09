@@ -327,8 +327,10 @@ model Sale {
   start_date      DateTime
   end_date        DateTime
   is_active       Boolean  @default(true)
+  thumbnail       String?  // New field for storing image URL or file path
   sale_products   SaleProductMapping[]
 }
+
 // Reserved for future use
 model SaleProductMapping {
   sale_id         String

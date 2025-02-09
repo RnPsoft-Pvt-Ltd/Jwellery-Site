@@ -41,12 +41,24 @@ import Products from './components/Products.jsx';
 import Collections from './components/Collections.jsx';
 import CreateProduct from './components/CreateProduct.jsx';
 import CreateCoupon from './components/CreateCoupon.jsx';
+<<<<<<< HEAD
 
 
+=======
+import NewSale from './components/NewSale.jsx';
+import AdminSalesPage from './components/SalesList.jsx';
+// import Dashboard from '../components/dashboard.jsx';
+>>>>>>> 013c0223e9799824db5cfd91203f458098ded2a3
 import CustomersTable from './components/CustomersTable.jsx';
 import Orders from './components/Orders.jsx';
 import Dashboard from './components/Dashboard.jsx';
 
+
+
+import CreateCategory from './components/CreateCategory.jsx';
+import CreateCollection from './components/CreateCollection.jsx';
+import UpdateCategory from './components/UpdateCategory.jsx';
+import UpdateCollection from './components/UpdateCollection.jsx';
 
 
 
@@ -70,6 +82,12 @@ function App() {
         <Route path="/admin/orders" element={<Orders />} />
         <Route path="/admin/customers" element={<CustomersTable />} />
         <Route path="/admin/new-coupon" element={<CreateCoupon />} />
+        <Route path="/admin/new-sale" element={<NewSale />} />
+        <Route path="/admin/sales" element={<AdminSalesPage />} />
+        <Route path="/admin/new-category" element={<CreateCategory />} />
+        <Route path="/admin/new-collection" element={<CreateCollection />} />
+        <Route path="/admin/update-category" element={<UpdateCategory />} />
+        <Route path="/admin/update-collection" element={<UpdateCollection />} />
       </Route>
 
 

@@ -45,10 +45,13 @@ const CustomersTable = () => {
     fetchUsers();
   }, []);
 
+  // Fixed status filtering
   const filteredCustomers = customers.filter(
     (customer) =>
       customer.name.toLowerCase().includes(search.toLowerCase()) &&
-      (!status || customer.status === status)
+      (!status ||
+        (status === "Verified" && customer.is_verified) ||
+        (status === "Not Verified" && !customer.is_verified))
   );
 
   const totalPages = Math.ceil(filteredCustomers.length / rowsPerPage);
@@ -76,9 +79,9 @@ const CustomersTable = () => {
                 onChange={(e) => setStatus(e.target.value)}
                 className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="">All</option>
+                <option value="Verified">Verified</option>
+                <option value="Not Verified">Not Verified</option>
               </select>
               <button
                 onClick={() => {
@@ -135,13 +138,11 @@ const CustomersTable = () => {
                             {customer.email}
                           </td>
                           <td className="border border-gray-200 p-2">
-                          {customer.is_verified ? "Verified" : "Not Verified"}
-                        </td>
-
-                        <td className="border border-gray-200 p-2">
-                          {new Date(customer.created_at).toLocaleDateString()}
-                        </td>
-
+                            {customer.is_verified ? "Verified" : "Not Verified"}
+                          </td>
+                          <td className="border border-gray-200 p-2">
+                            {new Date(customer.created_at).toLocaleDateString()}
+                          </td>
                         </tr>
                       ))
                   ) : (

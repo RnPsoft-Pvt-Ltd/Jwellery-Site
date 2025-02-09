@@ -1,49 +1,81 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { useImageLoader } from "../utils/GlobalLoadingManager";
+import axios from "axios";
 
-const celebs = [
-  {
-    // Bracelet
-    id: "2b0ac489-0b34-493e-8016-d65c08e1c7ee",
-    image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb1.png",
-  },
-  {
-    // Earrings
-    id: "78f14e45-c25a-4abf-8a3e-718cc3d4b448",
-    image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb2.png",
-  },
-  {
-    // Earrings
-    id: "78f14e45-c25a-4abf-8a3e-718cc3d4b448",
-    image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb3.png",
-  },
-  {
-    // Necklace
-    id: "a353bdf4-56e5-4a07-86a9-c255785aaa9f",
-    image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb4.png",
-  },
-  {
-    // Necklaces
-    id: "a353bdf4-56e5-4a07-86a9-c255785aaa9f",
-    image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb5.png",
-  },
-];
 
 const CelebsChoice = () => {
+  const [categories, setCategories] = useState([]);
+  const [celebs, setCelebs] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/v1/categories");
+        console.log("response", response.data.data);
+        const ALLOWED_CATEGORIES = ["Bracelets", "Earrings", "Necklaces"];
+  
+        const filteredCategories = response.data.data.filter((collection) =>
+          ALLOWED_CATEGORIES.some((category) =>
+            collection.name.toLowerCase().includes(category.toLowerCase())
+          )
+        );
+        setCategories(filteredCategories);
+      } catch (err) {
+        console.error("Error fetching collections:", err);
+      }
+    };
+  
+    fetchCategories();
+  }, []);
+  
+  // Update `celebs` after `categories` is set
+  useEffect(() => {
+    if (categories.length < 3) return; // Ensure categories are available before setting celebs
+  
+    setCelebs([
+      {
+        id: categories[2].id, // Bracelets
+        image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb1.png",
+      },
+      {
+        id: categories[1].id, // Earrings
+        image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb2.png",
+      },
+      {
+        id: categories[1].id, // Earrings
+        image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb3.png",
+      },
+      {
+        id: categories[0].id, // Necklaces
+        image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb4.png",
+      },
+      {
+        id: categories[0].id, // Necklaces
+        image: "https://storage.googleapis.com/jwelleryrnpsoft/celeb5.png",
+      },
+    ]);
+  }, [categories]); // Runs when `categories` updates
+  
+
+  
+  console.log(categories)
+  console.log(celebs)
+
+  
+
     // Preload all images
-    celebs.forEach((slide) => {
-      useImageLoader(slide.image);
-    });
+    // celebs.forEach((slide) => {
+    //   useImageLoader(slide.image);
+    // });
 
   const handleClick = (id) => {
     navigate(`/categories/${id}`);
   };
   
   return (
-    <section className="w-[100%] h-[663px] bg-gray-100 flex flex-col items-center relative">
+    <section className="w-[100%] h-[663px] bg-white flex flex-col items-center relative">
       {/* Heading */}
       <div className="flex justify-center items-center h-[125px] text-4xl md:text-5xl font-light leading-[76.8px] font-['Albert_Sans']">
         Celebs Choice

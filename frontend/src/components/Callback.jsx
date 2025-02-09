@@ -22,7 +22,7 @@ const Callback = () => {
       <div
         className="flex flex-col md:flex-row gap-6 lg:gap-8 
                    max-w-7xl mx-auto 
-                   bg-gray-50 
+                   bg-white
                    rounded-[2rem] overflow-hidden 
                    shadow-lg hover:shadow-xl transition-shadow duration-300"
       >

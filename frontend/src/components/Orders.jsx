@@ -110,7 +110,7 @@ const Orders = () => {
 
       {error && <div className="text-red-500">{error}</div>}
 
-      <div className="overflow-x-auto border border-gray-300 rounded-lg w-auto">
+      <div className="overflow-x-auto border border-gray-300 rounded-lg w-[calc(100%-50px)] ml-auto">
         <table className="w-auto text-left border-collapse">
           <thead className="bg-gray-100 border-b">
             <tr>

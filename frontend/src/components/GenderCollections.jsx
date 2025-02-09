@@ -53,7 +53,7 @@ const GenderCollections = () => {
         const response = await axios.get(
           "http://localhost:5000/v1/collections"
         );
-        console.log("response", response.data.data);
+
         const ALLOWED_CATEGORIES = ["Men", "Women", "Kids"];
 
         const filteredCollections = response.data.data.filter((collection) =>

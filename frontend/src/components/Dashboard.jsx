@@ -102,7 +102,7 @@ export default function Dashboard() {
   // Fetch Lifetime Sales
   const fetchLifetimeSales = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/lifetime-sales");
+      const response = await fetch("http://localhost:5000/v1/dashboard/lifetime-sales");
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setLifetimeSales(data);
@@ -191,7 +191,7 @@ export default function Dashboard() {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-[#94e2cd]" />
-                    <span>${lifetimeSales.totalSales} lifetime sales</span>
+                    <span>Rs. {lifetimeSales.totalSales} lifetime sales</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-[#94e2cd]" />

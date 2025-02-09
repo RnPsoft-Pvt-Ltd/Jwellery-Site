@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Search } from "lucide-react";
+import {
+  Menu,
+  X,
+  Search,
+  ShoppingCart,
+  Heart,
+  User,
+  LogOut,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../utils/useSearch";
 
@@ -9,23 +17,23 @@ const Header = () => {
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
-  
+
   const {
     query,
     setQuery,
     results,
     loading: searchLoading,
-    error
-  } = useSearch('products');
+    error,
+  } = useSearch("products");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
-    
+
     if (token && storedUser) {
       setUser(JSON.parse(storedUser));
     }
-    
+
     setLoading(false);
   }, []);
 
@@ -38,130 +46,257 @@ const Header = () => {
 
   if (loading) return null;
 
-  const handleAddToCart = () => navigate("/cart");
-  const handleWishlist = () => navigate("/account/wishlist");
-  const handleUserProfile = () => navigate("/account");
-  const handleAboutUs = () => navigate("/aboutUs");
-  const handleCollection = () => navigate("/products");
-  const handleLogo = () => navigate("/");
+  const navigationLinks = {
+    collection: "/products",
+    aboutUs: "/aboutUs",
+    cart: "/cart",
+    wishlist: "/account/wishlist",
+    profile: "/account",
+    home: "/",
+  };
+
+  const handleNavigation = (path) => navigate(path);
 
   const handleProductClick = (productId) => {
     setShowSearch(false);
-    setQuery('');
+    setQuery("");
     navigate(`/products/${productId}`);
   };
 
+  const isAdmin = user?.role === "ADMIN";
+
   return (
-    <nav className="sticky top-0 z-50 w-full text-white px-5 py-3 flex items-center justify-between border-b border-gray-200 bg-black">
-      <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogo}>
-        <img
-          src="https://storage.googleapis.com/jwelleryrnpsoft/LogoWithName.png"
-          alt="Logo"
-          className="h-10 mr-2"
-        />
+    <nav className="sticky top-0 z-50 w-full bg-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <div
+            className="flex-shrink-0 cursor-pointer"
+            onClick={() => handleNavigation(navigationLinks.home)}
+          >
+            <img
+              src="https://storage.googleapis.com/jwelleryrnpsoft/LogoWithName.png"
+              alt="Logo"
+              className="h-10"
+            />
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex lg:hidden">
+            <button
+              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-gray-800"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Desktop navigation */}
+          <div className="hidden lg:flex lg:items-center lg:space-x-8">
+            <button
+              onClick={() => handleNavigation(navigationLinks.collection)}
+              className="text-white hover:text-gray-300 transition-colors"
+            >
+              Collection
+            </button>
+            <button
+              onClick={() => handleNavigation(navigationLinks.aboutUs)}
+              className="text-white hover:text-gray-300 transition-colors"
+            >
+              About Us
+            </button>
+            {isAdmin && (
+              <button
+                onClick={() => handleNavigation("/admin")}
+                className="text-white hover:text-gray-300 transition-colors"
+              >
+                Dashboard
+              </button>
+            )}
+          </div>
+
+          {/* User actions */}
+          {user ? (
+            <div className="hidden lg:flex lg:items-center lg:space-x-6">
+              {/* Search */}
+              <div className="relative">
+                <div className="flex items-center">
+                  <div
+                    className={`flex items-center ${
+                      showSearch ? "w-64" : "w-10"
+                    } transition-all duration-300`}
+                  >
+                    <button
+                      onClick={() => setShowSearch(!showSearch)}
+                      className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+                    >
+                      <Search className="text-white" size={20} />
+                    </button>
+                    {showSearch && (
+                      <input
+                        type="text"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Search products..."
+                        className="ml-2 w-full bg-transparent text-white border-b border-white focus:outline-none"
+                        autoFocus
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Search results dropdown */}
+                {showSearch && query && (
+                  <div className="absolute top-full right-0 w-96 bg-white shadow-lg rounded-lg mt-2">
+                    {searchLoading ? (
+                      <div className="p-4 text-gray-500">Loading...</div>
+                    ) : error ? (
+                      <div className="p-4 text-red-500">{error}</div>
+                    ) : results.length === 0 ? (
+                      <div className="p-4 text-gray-500">No results found</div>
+                    ) : (
+                      <div className="max-h-96 overflow-y-auto">
+                        {results.map((product) => (
+                          <div
+                            key={product.id}
+                            className="p-4 hover:bg-gray-50 cursor-pointer flex items-center gap-4 transition-colors"
+                            onClick={() => handleProductClick(product.id)}
+                          >
+                            {product.images?.[0]?.image_url && (
+                              <img
+                                src={product.images[0].image_url}
+                                alt={product.name}
+                                className="w-12 h-12 object-cover rounded"
+                              />
+                            )}
+                            <div>
+                              <h3 className="font-medium text-gray-900">
+                                {product.name}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                Rs. {product.base_price}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Action buttons */}
+              <button
+                onClick={() => handleNavigation(navigationLinks.cart)}
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+              >
+                <ShoppingCart className="text-white" size={20} />
+              </button>
+              <button
+                onClick={() => handleNavigation(navigationLinks.wishlist)}
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+              >
+                <Heart className="text-white" size={20} />
+              </button>
+              <button
+                onClick={() => handleNavigation(navigationLinks.profile)}
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+              >
+                <User className="text-white" size={20} />
+              </button>
+              <button
+                onClick={handleLogout}
+                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+              >
+                <LogOut className="text-white" size={20} />
+              </button>
+            </div>
+          ) : (
+            <div className="hidden lg:flex lg:items-center lg:space-x-6">
+              <a
+                href="/register"
+                className="text-white hover:text-gray-300 transition-colors"
+              >
+                Register
+              </a>
+              <a
+                href="/login"
+                className="text-white hover:text-gray-300 transition-colors"
+              >
+                Login
+              </a>
+            </div>
+          )}
+        </div>
       </div>
 
-      <button className="lg:hidden text-white text-2xl" onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? <X size={28} /> : <Menu size={28} />}
-      </button>
-
-      <div className={`absolute lg:static top-16 left-0 w-full lg:w-auto bg-black lg:bg-transparent p-5 lg:p-0 transition-transform ${isOpen ? "block" : "hidden"} lg:flex items-center gap-8`}>
-        <span onClick={handleCollection} className="text-white cursor-pointer">Collection</span>
-        <span onClick={handleAboutUs} className="text-white cursor-pointer">About Us</span>
-
-        {user ? (
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="flex items-center">
-                <div className={`flex items-center ${showSearch ? 'w-64' : 'w-10'} transition-all duration-300`}>
-                  <button
-                    onClick={() => setShowSearch(!showSearch)}
-                    className="p-2 hover:bg-gray-700 rounded-full"
-                  >
-                    <Search className="text-white" size={20} />
-                  </button>
-                  {showSearch && (
-                    <input
-                      type="text"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      placeholder="Search products..."
-                      className="ml-2 w-full bg-transparent text-white border-b border-white focus:outline-none"
-                      autoFocus
-                    />
-                  )}
-                </div>
-              </div>
-              
-              {showSearch && query && (
-                <div className="absolute top-full right-0 w-96 bg-white shadow-lg rounded-b-lg mt-1">
-                  {searchLoading ? (
-                    <div className="p-4 text-gray-500">Loading...</div>
-                  ) : error ? (
-                    <div className="p-4 text-red-500">{error}</div>
-                  ) : results.length === 0 ? (
-                    <div className="p-4 text-gray-500">No results found</div>
-                  ) : (
-                    <div className="max-h-96 overflow-y-auto">
-                      {results.map((product) => (
-                        <div
-                          key={product.id}
-                          className="p-4 hover:bg-gray-100 cursor-pointer flex items-center gap-4"
-                          onClick={() => handleProductClick(product.id)}
-                        >
-                          {product.images?.[0]?.image_url && (
-                            <img
-                              src={product.images[0].image_url}
-                              alt={product.name}
-                              className="w-12 h-12 object-cover rounded"
-                            />
-                          )}
-                          <div>
-                            <h3 className="font-medium text-gray-900">{product.name}</h3>
-                            <p className="text-sm font-medium text-gray-900">
-                              Rs. {product.base_price}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <button onClick={handleAddToCart} className="text-white">
-              <svg width="41" height="25" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.5 9.99967V8.33301C15.5 5.57159 17.7385 3.33301 20.5 3.33301C23.2615 3.33301 25.5 5.57159 25.5 8.33301V9.99967" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M15.7852 25C16.4715 26.942 18.3237 28.3333 20.5007 28.3333C22.6777 28.3333 24.5298 26.942 25.2162 25" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M34.2045 20.8762C33.229 15.6742 32.7413 13.0732 30.8898 11.5366C29.0383 10 26.3921 10 21.0995 10H19.8975C14.6049 10 11.9586 10 10.1071 11.5366C8.25555 13.0732 7.76787 15.6742 6.7925 20.8762C5.42095 28.191 4.73519 31.8485 6.73457 34.2575C8.73394 36.6667 12.4551 36.6667 19.8975 36.6667H21.0995C28.5418 36.6667 32.263 36.6667 34.2623 34.2575C35.4223 32.8598 35.6785 31.042 35.4213 28.3333" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
+      {/* Mobile menu */}
+      <div className={`lg:hidden ${isOpen ? "block" : "hidden"}`}>
+        <div className="px-2 pt-2 pb-3 space-y-1 bg-black">
+          <button
+            onClick={() => handleNavigation(navigationLinks.collection)}
+            className="block w-full text-left px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+          >
+            Collection
+          </button>
+          <button
+            onClick={() => handleNavigation(navigationLinks.aboutUs)}
+            className="block w-full text-left px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+          >
+            About Us
+          </button>
+          {isAdmin && (
+            <button
+              onClick={() => handleNavigation("/admin")}
+              className="block w-full text-left px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+            >
+              Dashboard
             </button>
-
-            <button onClick={handleWishlist} className="text-white">
-              <svg width="41" height="25" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M27.9987 5C33.0614 5 37.1654 9.16667 37.1654 15C37.1654 26.6667 24.6654 33.3333 20.4987 35.8333C16.332 33.3333 3.83203 26.6667 3.83203 15C3.83203 9.16667 7.9987 5 12.9987 5C16.0986 5 18.832 6.66667 20.4987 8.33333C22.1654 6.66667 24.8987 5 27.9987 5ZM22.0552 31.0063C23.5245 30.0808 24.8487 29.1592 26.0902 28.1715C31.0549 24.2217 33.832 19.9058 33.832 15C33.832 11.0679 31.2704 8.33333 27.9987 8.33333C26.2055 8.33333 24.2642 9.28185 22.8557 10.6904L20.4987 13.0474L18.1417 10.6904C16.7332 9.28185 14.7919 8.33333 12.9987 8.33333C9.7638 8.33333 7.16536 11.0942 7.16536 15C7.16536 19.9058 9.94248 24.2217 14.9073 28.1715C16.1487 29.1592 17.4729 30.0808 18.9422 31.0063C19.4397 31.3198 19.9339 31.6215 20.4987 31.9587C21.0635 31.6215 21.5577 31.3198 22.0552 31.0063Z" fill="white"/>
-              </svg>
-            </button>
-
-            <button onClick={handleUserProfile} className="text-white">
-              <svg width="41" height="25" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20.7018 21.2995C20.5852 21.2828 20.4352 21.2828 20.3018 21.2995C17.3685 21.1995 15.0352 18.7995 15.0352 15.8495C15.0352 12.8328 17.4685 10.3828 20.5018 10.3828C23.5185 10.3828 25.9685 12.8328 25.9685 15.8495C25.9518 18.7995 23.6352 21.1995 20.7018 21.2995Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M31.7323 32.3006C28.7657 35.0173 24.8323 36.6673 20.499 36.6673C16.1656 36.6673 12.2323 35.0173 9.26562 32.3006C9.43229 30.7339 10.4323 29.2006 12.2156 28.0006C16.7823 24.9673 24.249 24.9673 28.7823 28.0006C30.5657 29.2006 31.5657 30.7339 31.7323 32.3006Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M20.4987 36.6663C29.7034 36.6663 37.1654 29.2043 37.1654 19.9997C37.1654 10.7949 29.7034 3.33301 20.4987 3.33301C11.2939 3.33301 3.83203 10.7949 3.83203 19.9997C3.83203 29.2043 11.2939 36.6663 20.4987 36.6663Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-
-            <button onClick={handleLogout} className="text-white hover:text-gray-300">
-              Logout
-            </button>
-          </div>
-        ) : (
-          <div className="flex gap-4">
-            <a href="/register" className="text-white">Register</a>
-            <a href="/login" className="text-white">Login</a>
-          </div>
-        )}
+          )}
+          {user ? (
+            <>
+              <button
+                onClick={() => handleNavigation(navigationLinks.cart)}
+                className="block w-full text-left px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+              >
+                Cart
+              </button>
+              <button
+                onClick={() => handleNavigation(navigationLinks.wishlist)}
+                className="block w-full text-left px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+              >
+                Wishlist
+              </button>
+              <button
+                onClick={() => handleNavigation(navigationLinks.profile)}
+                className="block w-full text-left px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+              >
+                Profile
+              </button>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <a
+                href="/register"
+                className="block px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+              >
+                Register
+              </a>
+              <a
+                href="/login"
+                className="block px-3 py-2 text-white hover:bg-gray-800 rounded-md"
+              >
+                Login
+              </a>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

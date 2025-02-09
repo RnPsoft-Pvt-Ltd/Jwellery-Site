@@ -3,6 +3,7 @@ import { Heart, Minus, Plus, Share2, ArrowLeft, Loader2 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastProvider, useToast } from "../utils/toastContext";
+import { ProductReviews, WriteReview } from "./Review";
 
 // Custom tooltip component to replace shadcn/ui tooltip
 const Tooltip = ({ children, content }) => {
@@ -172,7 +173,26 @@ const ProductDetail = () => {
         isWishLoading={isWishLoading}
         isAddingToCart={isAddingToCart}
       />
-      <ProductDescription description={product.description} image1={product.images[0]?.image_url} image2={product.images[1]?.image_url}/>
+      <ProductDescription
+        description={product.description}
+        image1={product.images[0]?.image_url}
+        image2={product.images[1]?.image_url}
+      />
+      {/* <SimilarProducts categoryId={product.category_id} /> */}
+
+      <WriteReview
+        productId={productId}
+        onReviewSubmitted={() => {
+          // This will refresh the reviews when a new one is submitted
+          const reviewsComponent = document.getElementById("product-reviews");
+          if (reviewsComponent) {
+            reviewsComponent.scrollIntoView({ behavior: "smooth" });
+          }
+        }}
+      />
+      <div id="product-reviews">
+        <ProductReviews productId={productId} />
+      </div>
       <SimilarProducts categoryId={product.category_id} />
     </div>
   );
@@ -385,7 +405,7 @@ const ProductDetailSection = ({
   );
 };
 
-const ProductDescription = ({ description , image1 , image2 }) => (
+const ProductDescription = ({ description, image1, image2 }) => (
   <div className="bg-gray-50 py-16">
     <div className="max-w-7xl mx-auto px-4">
       <div className="grid lg:grid-cols-2 gap-12">
@@ -426,7 +446,6 @@ const SimilarProducts = ({ categoryId }) => {
         );
         // console.log("response",response);
         setProducts(response.data.products.slice(0, 4));
-        console.log("Prod", products);
       } catch (error) {
         console.error("Error fetching similar products:", error);
       }

@@ -60,7 +60,7 @@ import CreateCollection from './components/CreateCollection.jsx'
 
 function App() {
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
     <Routes>
       {/* Auth Routes */}
       <Route element={<AuthLayout />}>
@@ -114,7 +114,7 @@ function App() {
       </Route>
 
     </Routes>
-  </BrowserRouter>
+  // </BrowserRouter>
   );
 }
 

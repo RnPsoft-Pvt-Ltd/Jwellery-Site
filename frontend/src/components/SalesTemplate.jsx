@@ -41,9 +41,9 @@ const SalesTemplate = ({
       try {
         setLoading(true);
         const response = await axios.get(`http://localhost:5000/v1/sales/${salesId}`);
-        setCategory(response.data[0]);
+        setCategory(response.data);
         // Count total variants instead of products
-        const totalVariants = response.data[0].sale_products.reduce(
+        const totalVariants = response.data.sale_products.reduce(
             (acc, saleProduct) => acc + (saleProduct.product.variants?.length || 0),
             0
         );

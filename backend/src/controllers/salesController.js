@@ -25,26 +25,25 @@ class SalesController {
   async createSale(req, res) {
     try {
       const saleData = req.body;
-      console.log("Sale Data:", saleData); // Debugging log
+      console.log("Received Sale Data:", JSON.stringify(saleData, null, 2)); // Pretty-print for debugging
   
-      // Validate that products are provided
-      if (!saleData.products || !Array.isArray(saleData.products)) {
-        return res.status(400).json({ message: "Products array is required" });
+      if (!saleData.name || !saleData.start_date || !saleData.end_date) {
+        return res.status(400).json({ message: "Name, start_date, and end_date are required" });
+      }
+  
+      if (!saleData.products || !Array.isArray(saleData.products) || saleData.products.length === 0) {
+        return res.status(400).json({ message: "At least one product is required" });
       }
   
       const newSale = await salesService.createSale(saleData);
-      console.log("Created Sale:", newSale); // Debugging log
+      console.log("Created Sale:", JSON.stringify(newSale, null, 2));
       res.status(201).json(newSale);
     } catch (error) {
-      console.error("Error in salesController.createSale:", error.message);
-  
-      if (error.message.includes("does not exist")) {
-        return res.status(400).json({ message: error.message });
-      }
-  
+      console.error("Error in salesController.createSale:", error);
       res.status(500).json({ message: "Failed to create sale", error: error.message });
     }
   }
+  
 
 
   // Update a sale by ID

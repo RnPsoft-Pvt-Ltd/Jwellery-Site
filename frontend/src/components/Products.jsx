@@ -56,7 +56,7 @@ const Products = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Products</h1>
         <button
-          onClick={()=>navigate('/admin/new-product')}
+          onClick={()=>navigate('/admin/new-products')}
          className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700">
           New Product
         </button>

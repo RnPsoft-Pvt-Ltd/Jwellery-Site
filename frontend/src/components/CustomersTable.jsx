@@ -1,41 +1,35 @@
 import React, { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 const CustomersTable = () => {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
-  const [customers, setCustomers] = useState([]);  // Store fetched users
-  const [loading, setLoading] = useState(true); // Loading state
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 20;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("token"); // Ensure token exists
+        const token = localStorage.getItem("token");
         if (!token) {
           console.error("No auth token found!");
           return;
         }
 
-        const response = await fetch(
-          "http://localhost:5000/v1/users/filteruser",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch("http://localhost:5000/v1/users/filteruser", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
-        }
-
+        if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();
-        console.log("Fetched users:", data);
-        setCustomers(data); // Update state with fetched users
-        setLoading(false); // Stop loading
+        setCustomers(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching users:", error);
         setLoading(false);
@@ -45,7 +39,6 @@ const CustomersTable = () => {
     fetchUsers();
   }, []);
 
-  // Fixed status filtering
   const filteredCustomers = customers.filter(
     (customer) =>
       customer.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -57,66 +50,73 @@ const CustomersTable = () => {
   const totalPages = Math.ceil(filteredCustomers.length / rowsPerPage);
 
   return (
-    <div className="pl-60 py-10 bg-gray-100 min-h-screen">
-      <div className="bg-white rounded-lg shadow-lg p-4">
-        <h1 className="text-xl font-semibold mb-4">Customers</h1>
+    <div className="w-full p-6">
+      <div className="bg-white rounded-xl shadow-sm">
+        <div className="p-6 border-b border-gray-100">
+          <h2 className="text-2xl font-semibold text-gray-800">Customers</h2>
+        </div>
 
         {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
+          <div className="flex items-center justify-center p-8">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          </div>
         ) : (
-          <>
-            {/* Filter Section */}
-            <div className="flex flex-col md:flex-row md:items-center md:space-x-4 mb-4">
-              <input
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1"
-              />
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">All</option>
-                <option value="Verified">Verified</option>
-                <option value="Not Verified">Not Verified</option>
-              </select>
+          <div className="p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
+              <div className="flex flex-1 gap-4">
+                <input
+                  type="text"
+                  placeholder="Search customers..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">All Status</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Not Verified">Not Verified</option>
+                </select>
+              </div>
               <button
                 onClick={() => {
                   setSearch("");
                   setStatus("");
                 }}
-                className="text-blue-600 hover:underline mt-2 md:mt-0"
+                className="text-blue-600 hover:text-blue-700 font-medium"
               >
-                Clear filter
+                Clear filters
               </button>
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
-              <table className="table-auto w-full border-collapse border border-gray-200">
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
+              <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="border border-gray-200 p-2 text-left">
-                      <input type="checkbox" />
+                    <th className="p-4 text-left">
+                      <input
+                        type="checkbox"
+                        className="rounded border-gray-300"
+                      />
                     </th>
-                    <th className="border border-gray-200 p-2 text-left">
+                    <th className="p-4 text-left text-sm font-medium text-gray-600">
                       FULL NAME
                     </th>
-                    <th className="border border-gray-200 p-2 text-left">
+                    <th className="p-4 text-left text-sm font-medium text-gray-600">
                       EMAIL
                     </th>
-                    <th className="border border-gray-200 p-2 text-left">
+                    <th className="p-4 text-left text-sm font-medium text-gray-600">
                       STATUS
                     </th>
-                    <th className="border border-gray-200 p-2 text-left">
+                    <th className="p-4 text-left text-sm font-medium text-gray-600">
                       CREATED AT
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-gray-200">
                   {filteredCustomers.length > 0 ? (
                     filteredCustomers
                       .slice(
@@ -126,21 +126,34 @@ const CustomersTable = () => {
                       .map((customer, index) => (
                         <tr
                           key={index}
-                          className="hover:bg-gray-100 transition duration-150"
+                          className="hover:bg-gray-50 transition-colors"
                         >
-                          <td className="border border-gray-200 p-2">
-                            <input type="checkbox" />
+                          <td className="p-4">
+                            <input
+                              type="checkbox"
+                              className="rounded border-gray-300"
+                            />
                           </td>
-                          <td className="border border-gray-200 p-2">
+                          <td className="p-4 text-sm text-gray-900">
                             {customer.name}
                           </td>
-                          <td className="border border-gray-200 p-2">
+                          <td className="p-4 text-sm text-gray-600">
                             {customer.email}
                           </td>
-                          <td className="border border-gray-200 p-2">
-                            {customer.is_verified ? "Verified" : "Not Verified"}
+                          <td className="p-4">
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                customer.is_verified
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                              }`}
+                            >
+                              {customer.is_verified
+                                ? "Verified"
+                                : "Not Verified"}
+                            </span>
                           </td>
-                          <td className="border border-gray-200 p-2">
+                          <td className="p-4 text-sm text-gray-600">
                             {new Date(customer.created_at).toLocaleDateString()}
                           </td>
                         </tr>
@@ -149,7 +162,7 @@ const CustomersTable = () => {
                     <tr>
                       <td
                         colSpan="5"
-                        className="border border-gray-200 p-4 text-center text-gray-500"
+                        className="p-8 text-center text-gray-500"
                       >
                         No customers found
                       </td>
@@ -159,36 +172,33 @@ const CustomersTable = () => {
               </table>
             </div>
 
-            {/* Pagination */}
-            <div className="flex items-center justify-between mt-4">
-              <div className="text-sm text-gray-500">
-                Show {rowsPerPage} per page
+            <div className="flex items-center justify-between mt-6">
+              <div className="text-sm text-gray-600">
+                Showing {rowsPerPage} per page
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 disabled:opacity-50"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
                 >
-                  Prev
+                  Previous
                 </button>
-                <span>
+                <span className="text-sm text-gray-600">
                   Page {currentPage} of {totalPages || 1}
                 </span>
                 <button
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
-                  className="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 disabled:opacity-50"
                   disabled={currentPage === totalPages}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
                 >
                   Next
                 </button>
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

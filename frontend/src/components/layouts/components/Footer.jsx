@@ -1,8 +1,33 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 export default function Footer() {
   const navigate = useNavigate();
+  const [collections, setCollections] = useState([]);
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/v1/collections"
+        );
+        console.log("response", response.data.data);
+        const ALLOWED_CATEGORIES = ["Men", "Women", "Kids"];
+
+        const filteredCollections = response.data.data.filter((collection) =>
+          ALLOWED_CATEGORIES.some((category) =>
+            collection.name.toLowerCase().includes(category.toLowerCase())
+          )
+        );
+        setCollections(filteredCollections);
+      } catch (err) {
+        console.error("Error fetching collections:", err);
+      }
+    };
+    fetchCollections();
+  }, []);
+
   const handleClickMen = () => {
     navigate(`/collections/8d08f894-9c7a-4a57-8c64-b7d70dfd5848`);
   };
@@ -61,7 +86,21 @@ export default function Footer() {
                   Collection
                 </h2>
                 <ul className="space-y-3 text-center lg:text-left">
-                  <li>
+                  {collections.map((collection) => (
+                    <li>
+                      <span
+                        key={collection.id}
+                        onClick={() =>
+                          navigate(`/collections/${collection.id}`)
+                        }
+                        className="text-gray-300 cursor-pointer hover:text-white font-albert text-lg lg:text-xl"
+                      >
+                        {collection.name}
+                      </span>
+                    </li>
+                  ))}
+
+                  {/* <li>
                     <span
                       onClick={() => handleClickMen()}
                       className="text-gray-300 cursor-pointer hover:text-white font-albert text-lg lg:text-xl"
@@ -84,7 +123,7 @@ export default function Footer() {
                     >
                       Kids Jewelry
                     </span>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
 
@@ -103,9 +142,10 @@ export default function Footer() {
                     </span>
                   </li>
                   <li>
-                    <span 
+                    <span
                       onClick={() => handleReviews()}
-                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer">
+                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
+                    >
                       Reviews
                     </span>
                   </li>

@@ -50,7 +50,7 @@ const Orders = () => {
 
     if (searchQuery.trim() !== "") {
       filtered = filtered.filter((order) =>
-        order.order_number?.toLowerCase().includes(searchQuery.toLowerCase())
+        order.customer_email?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -89,7 +89,7 @@ const Orders = () => {
             <div className="flex flex-1 gap-4">
               <input
                 type="text"
-                placeholder="Search order number..."
+                placeholder="Search customer email..."
                 className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

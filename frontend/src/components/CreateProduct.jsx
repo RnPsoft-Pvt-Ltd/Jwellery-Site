@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ArrowLeft, Camera, Plus, X } from "lucide-react";
-import {  useToast } from "../utils/toastContext";
-
+import { useToast } from "../utils/toastContext";
 
 const CreateProduct = () => {
   const { addToast } = useToast();
@@ -464,7 +463,6 @@ const CreateProduct = () => {
               </div>
             </div>
 
-
             {/* Product Metadata - Restored */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-lg font-semibold mb-4">Product Metadata</h2>
@@ -499,6 +497,7 @@ const CreateProduct = () => {
                   </label>
                   <textarea
                     name="gemstone_details"
+                    maxlength="250"
                     value={formData.metadata.gemstone_details}
                     onChange={handleMetadataChange}
                     rows={4}
@@ -507,7 +506,7 @@ const CreateProduct = () => {
                 </div>
               </div>
             </div>
-          
+
             {/* Media Section */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-lg font-semibold mb-4">Media</h2>
@@ -542,10 +541,10 @@ const CreateProduct = () => {
                 ))}
               </div>
             </div>
-        </div>
+          </div>
 
-                  {/* Right Sidebar - Restored */}
-                  <div className="space-y-6">
+          {/* Right Sidebar - Restored */}
+          <div className="space-y-6">
             {/* Categories and Collections */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-lg font-semibold mb-4">
@@ -563,7 +562,7 @@ const CreateProduct = () => {
                     className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Select Category</option>
-                    {categories.map(category => (
+                    {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.name}
                       </option>
@@ -581,7 +580,7 @@ const CreateProduct = () => {
                     className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Select Collection</option>
-                    {collections.map(collection => (
+                    {collections.map((collection) => (
                       <option key={collection.id} value={collection.id}>
                         {collection.name}
                       </option>
@@ -605,7 +604,7 @@ const CreateProduct = () => {
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">Select Tax Category</option>
-                  {taxCategories.map(tax => (
+                  {taxCategories.map((tax) => (
                     <option key={tax.id} value={tax.id}>
                       {tax.name} - ({tax.standard_rate}%)
                     </option>
@@ -614,8 +613,8 @@ const CreateProduct = () => {
               </div>
             </div>
           </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

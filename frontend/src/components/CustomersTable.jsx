@@ -41,7 +41,7 @@ const CustomersTable = () => {
 
   const filteredCustomers = customers.filter(
     (customer) =>
-      customer.name.toLowerCase().includes(search.toLowerCase()) &&
+      customer.email.toLowerCase().includes(search.toLowerCase()) &&
       (!status ||
         (status === "Verified" && customer.is_verified) ||
         (status === "Not Verified" && !customer.is_verified))

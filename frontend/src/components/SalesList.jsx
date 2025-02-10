@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 const AdminSalesPage = () => {
   const [sales, setSales] = useState([]);
@@ -23,13 +24,20 @@ const AdminSalesPage = () => {
     fetchSales();
   }, []);
 
-  if (loading) return <p className="text-center">Loading sales...</p>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4">
-        <Link to="/admin" className="text-blue-500">← Back to Dashboard</Link>
+        <Link to="/admin" className="text-blue-500">
+          ← Back to Dashboard
+        </Link>
       </div>
       <h1 className="text-2xl font-bold mb-4">All Sales</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -45,7 +53,7 @@ const AdminSalesPage = () => {
             <h2 className="text-xl font-semibold mt-2">{sale.name}</h2>
             <p className="text-gray-600">{sale.description}</p>
             <p className="text-sm text-gray-500">
-              {new Date(sale.start_date).toLocaleDateString()} - {" "}
+              {new Date(sale.start_date).toLocaleDateString()} -{" "}
               {new Date(sale.end_date).toLocaleDateString()}
             </p>
             <h3 className="font-bold mt-2">Products:</h3>

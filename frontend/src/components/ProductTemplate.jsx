@@ -1,38 +1,57 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { Navigate, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { Heart, Plus, Loader2, Sliders, X} from "lucide-react";
+import { useToast } from "../utils/toastContext";
 
 const ProductTemplate = ({ 
   title, 
   defaultFilters = {
-    color: ["Gold", "Silver"],
-    occasion: ["Party", "Formal", "Traditional"],
-    type: ["Modern", "Ethnic"]
+    color: ["Gold", "Silver", "Platinum", "Rose Gold", "White Gold", "Diamond", "Pearl", "Black" , "Ruby", "Emerald", "Sapphire", "Solitare"],
+    // occasion: ["Party", "Formal", "Traditional"],
+    // type: ["Modern", "Ethnic"]
   }
 }) => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeFilters, setActiveFilters] = useState({
     color: [],
-    occasion: [],
-    type: [],
+    // occasion: [],
+    // type: [],
   });
-  const [wishlist, setWishlist] = useState([]);
+
+  const [showFilters, setShowFilters] = useState(false);
   const [sort, setSort] = useState("default");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 60000 });
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     total: 0,
-    perPage: 10
+    perPage: 12
   });
 
   const calculateVariantPrice = (basePrice, priceModifier) => {
     return parseFloat(basePrice) + parseFloat(priceModifier || 0);
+  };
+
+   // Transform products into variant-based format
+   const transformProductsToVariants = (products) => {
+    return products?.data?.flatMap(product => 
+      product.variants?.map(variant => ({
+        ...variant,
+        productId: product.id,
+        productName: product.name,
+        brand: product.brand,
+        description: product.description,
+        basePrice: parseFloat(product.base_price),
+        totalPrice: calculateVariantPrice(product.base_price, variant.price_modifier),
+        images: product.images,
+        category: product.category
+      })) || []
+    ) || [];
   };
 
   useEffect(() => {
@@ -80,23 +99,23 @@ const ProductTemplate = ({
     }));
   };
 
-  const toggleWishlist = async (productId, variantId) => {
-    try {
-      if (wishlist.includes(`${productId}-${variantId}`)) {
-        await axios.delete(`http://localhost:5000/v1/wishlist/${productId}`, { data: { variantId } });
-      } else {
-        await axios.post('http://localhost:5000/v1/wishlist', { productId, variantId });
-      }
+  // const toggleWishlist = async (productId, variantId) => {
+  //   try {
+  //     if (wishlist.includes(`${productId}-${variantId}`)) {
+  //       await axios.delete(`http://localhost:5000/v1/wishlist/${productId}`, { data: { variantId } });
+  //     } else {
+  //       await axios.post('http://localhost:5000/v1/wishlist', { productId, variantId });
+  //     }
       
-      setWishlist(prev =>
-        prev.includes(`${productId}-${variantId}`) 
-          ? prev.filter(id => id !== `${productId}-${variantId}`)
-          : [...prev, `${productId}-${variantId}`]
-      );
-    } catch (error) {
-      console.error('Error updating wishlist:', error);
-    }
-  };
+  //     setWishlist(prev =>
+  //       prev.includes(`${productId}-${variantId}`) 
+  //         ? prev.filter(id => id !== `${productId}-${variantId}`)
+  //         : [...prev, `${productId}-${variantId}`]
+  //     );
+  //   } catch (error) {
+  //     console.error('Error updating wishlist:', error);
+  //   }
+  // };
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
@@ -106,7 +125,7 @@ const ProductTemplate = ({
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent"/>
+        <Loader2 className="w-12 h-12 animate-spin" />
       </div>
     );
   }
@@ -119,19 +138,8 @@ const ProductTemplate = ({
     );
   }
 
-  const allVariants = products?.data?.flatMap(product => 
-    product.variants?.map(variant => ({
-      ...variant,
-      productId: product.id,
-      productName: product.name,
-      basePrice: product.base_price,
-      totalPrice: calculateVariantPrice(product.base_price, variant.price_modifier),
-      description: product.description,
-      images: product.images
-    })) || []
-  ) || [];
-
-  const filteredVariants = allVariants
+const allVariants = transformProductsToVariants(products);
+  const filteredVariants =allVariants
     .filter((variant) => {
       const matchesPrice = variant.totalPrice >= priceRange.min && 
                           variant.totalPrice <= priceRange.max;
@@ -147,128 +155,305 @@ const ProductTemplate = ({
     });
 
   return (
-    <div className="min-h-screen bg-gray-100">
-
-      <div className="text-center py-8">
-        <h1 className="text-4xl font-bold">{title}</h1>
-      </div>
-
-      <div className="flex px-10 gap-8">
-        <div className="w-1/4 bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-bold mb-4">Shop By</h2>
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700">Price</h3>
-            <input
-              type="range"
-              min="0"
-              max="60000"
-              value={priceRange.max}
-              onChange={handlePriceRangeChange}
-              className="w-full mt-2"
-            />
-            <div className="flex justify-between text-sm mt-1 text-gray-500">
-              <span>Rs. {priceRange.min}</span>
-              <span>Rs. {priceRange.max}</span>
-            </div>
-          </div>
-          
-          {Object.entries(defaultFilters).map(([category, options]) => (
-            <div key={category} className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 capitalize">{category}</h3>
-              <div className="mt-2 space-y-2">
-                {options.map((option) => (
-                  <label key={option} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox"
-                      checked={activeFilters[category].includes(option)}
-                      onChange={() => handleFilterChange(category, option)}
-                    />
-                    <span>{option}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          ))}
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900">{products?.name || title}</h1>
+          {products?.description && (
+            <p className="mt-4 text-gray-600">{products?.description}</p>
+          )}
         </div>
 
-        <div className="w-3/4">
-          <div className="flex justify-between items-center mb-4">
-            <div className="text-gray-600">
-              Showing {filteredVariants.length} of {allVariants.length} variants
-            </div>
-            <select 
-              className="border border-gray-300 rounded px-4 py-2"
-              value={sort}
-              onChange={handleSortChange}
-            >
-              <option value="default">Sort By</option>
-              <option value="price-low-high">Price: Low to High</option>
-              <option value="price-high-low">Price: High to Low</option>
-            </select>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredVariants.map((variant) => (
-              console.log("Variant", variant),
-              <div
-                key={`${variant.productId}-${variant.id}`}
-                className="bg-white rounded-lg shadow p-4 flex flex-col"
-                onClick={() => navigate(`/products/${variant.productId}`)}
-              >
-                <div className="relative">
-                  <img
-                    src={variant.image_url || variant.images?.find(img => img.is_primary)?.image_url || '/placeholder.jpg'}
-                    alt={`${variant.productName} - ${variant.color} ${variant.size}`}
-                    className="rounded-lg w-full h-48 object-cover"
-                  />
-                  <button
-                    onClick={() => toggleWishlist(variant.productId, variant.id)}
-                    className="absolute top-2 right-2 bg-white rounded-full p-2 shadow"
-                  >
-                    {wishlist.includes(`${variant.productId}-${variant.id}`) ? "❤️" : "🤍"}
-                  </button>
-                </div>
-                <h3 className="mt-4 text-lg font-semibold">{variant.productName}</h3>
-                <p className="text-gray-600">{variant.color} - {variant.size}</p>
-                <p className="text-gray-500">Rs. {variant.totalPrice}</p>
-                <button className="mt-auto bg-black text-white py-2 px-4 rounded hover:bg-gray-800">
-                  Add to Cart
-                </button>
-              </div>
-            ))}
-          </div>
+        <div className="lg:hidden mb-6">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="w-full flex items-center justify-center gap-2 bg-white border border-gray-200 px-4 py-3 rounded-lg hover:bg-gray-50"
+          >
+            <Sliders className="w-5 h-5" />
+            <span>Filters</span>
+          </button>
+        </div>
 
-          {pagination.totalPages > 1 && (
-            <div className="mt-8 flex justify-center space-x-2">
-              {Array.from({ length: pagination.totalPages }, (_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => setPagination(prev => ({ ...prev, currentPage: i + 1 }))}
-                  className={`px-4 py-2 rounded ${
-                    pagination.currentPage === i + 1
-                      ? 'bg-black text-white'
-                      : 'bg-white text-black border'
-                  }`}
-                >
-                  {i + 1}
-                </button>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Filters Section */}
+          <div className={`
+            lg:w-1/4 bg-white p-6 rounded-lg shadow-md h-fit
+            ${showFilters ? 'fixed inset-0 z-50 overflow-auto' : 'hidden lg:block'}
+          `}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+              {showFilters && (
+                <X 
+                  className="lg:hidden w-6 h-6 cursor-pointer" 
+                  onClick={() => setShowFilters(false)}
+                />
+              )}
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-medium text-gray-900">Price Range</h3>
+                <input
+                  type="range"
+                  min="0"
+                  max="60000"
+                  value={priceRange.max}
+                  onChange={handlePriceRangeChange}
+                  className="w-full mt-2"
+                />
+                <div className="flex justify-between text-sm mt-1 text-gray-500">
+                  <span>₹{priceRange.min}</span>
+                  <span>₹{priceRange.max}</span>
+                </div>
+              </div>
+              
+              {Object.entries(defaultFilters).map(([category, options]) => (
+                <div key={category}>
+                  <h3 className="text-sm font-medium text-gray-900 capitalize mb-3">
+                    {category}
+                  </h3>
+                  <div className="space-y-2">
+                    {options.map((option) => (
+                      <label key={option} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300 text-primary focus:ring-primary"
+                          checked={activeFilters[category].includes(option)}
+                          onChange={() => handleFilterChange(category, option)}
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
-          )}
+          </div>
+
+          {/* Products Grid Section */}
+          <div className="lg:w-3/4">
+            <div className="flex justify-between items-center mb-6">
+              <p className="text-gray-600">
+                Showing {filteredVariants?.length} of {allVariants.length} variants
+              </p>
+              <select 
+                className="border border-gray-300 rounded-md px-4 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                value={sort}
+                onChange={handleSortChange}
+              >
+                <option value="default">Sort By</option>
+                <option value="price-low-high">Price: Low to High</option>
+                <option value="price-high-low">Price: High to Low</option>
+              </select>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredVariants?.map((variant) => (
+                <VariantCard key={`${variant.productId}-${variant.id}`} variant={variant} />
+              ))}
+            </div>
+
+            {pagination.totalPages > 1 && (
+              <div className="mt-8 flex justify-center gap-2">
+                {Array.from({ length: pagination.totalPages }, (_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => setPagination(prev => ({ ...prev, currentPage: i + 1 }))}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      pagination.currentPage === i + 1
+                        ? 'bg-primary text-white'
+                        : 'bg-white text-gray-700 border hover:bg-gray-50'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
+
+const VariantCard = ({ variant }) => {
+  const navigate = useNavigate();
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const checkWishlistStatus = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/v1/wishlist", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setIsWishlisted(response.data.some(item => item.product_id === variant.productId));
+      } catch (error) {
+        console.error("Error checking wishlist status:", error);
+      }
+    };
+
+    checkWishlistStatus();
+  }, [variant.productId]);
+
+  const handleWishlist = async (e) => {
+    e.stopPropagation();
+    setIsLoading(true);
+    try {
+      if (isWishlisted) {
+        await axios.delete(`http://localhost:5000/v1/wishlist`, {
+          data: { productId: variant.productId },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        toast({
+          description: "Item removed from your wishlist",
+        });
+      } else {
+        await axios.post(
+          `http://localhost:5000/v1/wishlist`,
+          { productId: variant.productId },
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          }
+        );
+        toast({
+          description: "Item added to your wishlist",
+        });
+      }
+      setIsWishlisted(!isWishlisted);
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
+      toast({
+        variant: "destructive",
+        description: "Failed to update wishlist. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddToCart = async (e) => {
+    e.stopPropagation();
+    setIsAddingToCart(true);
+    try {
+      await axios.post(
+        "http://localhost:5000/v1/cart",
+        {
+          productVariantId: variant.id,
+          quantity: 1,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      toast({
+        description: "Added to cart successfully",
+      });
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      toast({
+        variant: "destructive",
+        description: "Failed to add to cart. Please try again.",
+      });
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
+  const formattedPrice = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(variant.totalPrice);
+
+  return (
+    <div
+      onClick={() => navigate(`/products/${variant.productId}`)}
+      className="group relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
+    >
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
+        <img
+          src={variant.images?.[0]?.image_url}
+          alt={variant.productName}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        
+        <button
+          onClick={handleWishlist}
+          disabled={isLoading}
+          className="absolute top-3 right-3 p-2 rounded-full bg-white/90 hover:bg-white shadow-lg transition-all"
+        >
+          {isLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Heart
+              className={`w-5 h-5 transition-colors ${
+                isWishlisted ? "fill-red-500 stroke-red-500" : "stroke-gray-700"
+              }`}
+            />
+          )}
+        </button>
+      </div>
+
+      <div className="p-4">
+        <div className="space-y-2">
+          <h3 className="font-medium text-gray-900 line-clamp-2">
+            {variant.productName} - {variant.color} ({variant.size})
+          </h3>
+          <p className="text-lg font-semibold text-gray-900">
+            {formattedPrice}
+          </p>
+        </div>
+
+        <button
+          onClick={handleAddToCart}
+          disabled={isAddingToCart}
+          className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
+        >
+          {isAddingToCart ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <>
+              <Plus className="w-4 h-4" />
+              <span>Add to Cart</span>
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+
 ProductTemplate.propTypes = {
   title: PropTypes.string.isRequired,
   defaultFilters: PropTypes.shape({
     color: PropTypes.arrayOf(PropTypes.string),
-    occasion: PropTypes.arrayOf(PropTypes.string),
-    type: PropTypes.arrayOf(PropTypes.string),
+    // occasion: PropTypes.arrayOf(PropTypes.string),
+    // type: PropTypes.arrayOf(PropTypes.string),
   }),
+};
+
+
+VariantCard.propTypes = {
+  variant: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    productId: PropTypes.string.isRequired,
+    productName: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
+    size: PropTypes.string.isRequired,
+    totalPrice: PropTypes.number.isRequired,
+    images: PropTypes.arrayOf(
+      PropTypes.shape({
+        image_url: PropTypes.string.isRequired
+      })
+    ),
+  }).isRequired,
 };
 
 export default ProductTemplate;

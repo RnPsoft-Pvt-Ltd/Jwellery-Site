@@ -6,9 +6,9 @@ const ProductGrid = () => {
   const [error, setError] = useState(null);
 
   const defaultFilters = {
-    color: ["Gold", "Silver"],
-    occasion: ["Party", "Formal", "Traditional"],
-    type: ["Modern", "Ethnic"]
+    color: ["Gold", "Silver", "Platinum", "Rose Gold", "White Gold", "Diamond", "Pearl", "Black", "Ruby", "Emerald", "Sapphire", "Solitare"],
+    // occasion: ["Party", "Formal", "Traditional"],
+    // type: ["Modern", "Ethnic"]
   };
 
   useEffect(() => {

@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // const API_URL = import.meta.env.VITE_API_URL;
-const API_URL = 'http://54.206.185.32';
+const API_URL = 'https://api.shopevella.com';
 
 class SearchService {
   constructor() {

@@ -52,7 +52,7 @@ const CreateCoupon = () => {
     };
 
     try {
-      const response = await axios.post('http://54.206.185.32/v1/coupons', couponData, {
+      const response = await axios.post('https://api.shopevella.com/v1/coupons', couponData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

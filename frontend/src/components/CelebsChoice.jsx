@@ -12,7 +12,7 @@ const CelebsChoice = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://54.206.185.32/v1/categories");
+        const response = await axios.get("https://api.shopevella.com/v1/categories");
         const ALLOWED_CATEGORIES = ["Bracelets", "Earrings", "Necklaces"];
   
         const filteredCategories = response.data.data.filter((collection) =>

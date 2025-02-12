@@ -22,7 +22,7 @@ const GenderCollections = () => {
           registerImage(loadingKey);
 
         const response = await axios.get(
-          "http://54.206.185.32/v1/collections"
+          "https://api.shopevella.com/v1/collections"
         );
         const ALLOWED_CATEGORIES = ["Men", "Women", "Kids"];
 

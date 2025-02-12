@@ -18,7 +18,7 @@ const Orders = () => {
 
       try {
         const response = await axios.get(
-          "http://54.206.185.32/v1/orders/admin/all",
+          "https://api.shopevella.com/v1/orders/admin/all",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

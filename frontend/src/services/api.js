@@ -1,7 +1,7 @@
 // services/api.js
 import axios from 'axios';
 
-const API_BASE_URL = 'http://54.206.185.32/v1';
+const API_BASE_URL = 'https://api.shopevella.com/v1';
 
 export const collectionService = {
   async getCollections(params = {}) {

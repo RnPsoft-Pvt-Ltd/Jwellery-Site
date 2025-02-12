@@ -13,8 +13,9 @@ const Products = () => {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://54.206.185.32/v1/products");
+      const response = await axios.get("https://api.shopevella.com/v1/products");
       const formattedProducts = response.data.data.map((product) => {
+        console.log(products.id)
         const totalStock =
           product.variants?.reduce((sum, variant) => {
             return sum + (variant.inventory?.total_quantity || 0);
@@ -46,7 +47,7 @@ const Products = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://54.206.185.32/v1/products/${id}`);
+      await axios.delete(`https://api.shopevella.com/v1/products/${id}`);
       setProducts(products.filter((product) => product.ID !== id));
     } catch (error) {
       console.error("Error deleting product:", error);

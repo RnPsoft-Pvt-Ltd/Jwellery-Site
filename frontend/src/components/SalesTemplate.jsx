@@ -40,7 +40,7 @@ const SalesTemplate = ({
     const fetchCategory = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://54.206.185.32/v1/sales/${salesId}`);
+        const response = await axios.get(`https://api.shopevella.com/v1/sales/${salesId}`);
         setCategory(response.data);
         // Count total variants instead of products
         const totalVariants = response.data.sale_products.reduce(
@@ -88,9 +88,9 @@ const SalesTemplate = ({
   const toggleWishlist = async (productId, variantId) => {
     try {
       if (wishlist.includes(`${productId}-${variantId}`)) {
-        await axios.delete(`http://54.206.185.32/v1/wishlist/${productId}`, { data: { variantId } });
+        await axios.delete(`https://api.shopevella.com/v1/wishlist/${productId}`, { data: { variantId } });
       } else {
-        await axios.post('http://54.206.185.32/v1/wishlist', { productId, variantId });
+        await axios.post('https://api.shopevella.com/v1/wishlist', { productId, variantId });
       }
       
       setWishlist(prev =>

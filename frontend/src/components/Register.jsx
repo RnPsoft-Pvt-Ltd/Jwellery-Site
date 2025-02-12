@@ -33,7 +33,7 @@ const RegisterUser = () => {
 
     try {
       const response = await axios.post(
-        "http://54.206.185.32/v1/auth/register",
+        "https://api.shopevella.com/v1/auth/register",
         formData,
         {
           headers: { "Content-Type": "application/json" },

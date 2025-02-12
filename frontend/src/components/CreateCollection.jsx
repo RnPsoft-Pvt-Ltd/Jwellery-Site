@@ -16,7 +16,7 @@ const CreateCollection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://54.206.185.32/v1/collections", formData);
+      await axios.post("https://api.shopevella.com/v1/collections", formData);
       alert("Collection created successfully!");
       setFormData({ name: "", description: "", thumbnail: "" });
     } catch (error) {

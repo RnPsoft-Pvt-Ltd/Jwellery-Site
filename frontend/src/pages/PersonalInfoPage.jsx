@@ -21,7 +21,7 @@ function PersonalInfoPage() {
           return;
         }
 
-        const response = await fetch('http://54.206.185.32/v1/users/me', {
+        const response = await fetch('https://api.shopevella.com/v1/users/me', {
           headers: { Authorization: `Bearer ${token}` },
         });
 

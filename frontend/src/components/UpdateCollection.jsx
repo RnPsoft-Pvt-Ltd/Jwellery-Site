@@ -16,7 +16,7 @@ const UpdateCollection = ({name, description, thumbnail, id}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://54.206.185.32/v1/collections/${id}`, formData);
+      await axios.put(`https://api.shopevella.com/v1/collections/${id}`, formData);
       alert("Category updated successfully!");
       setFormData({ name: name, description: description, thumbnail: thumbnail});
     } catch (error) {

@@ -10,7 +10,7 @@ export default function ReviewsPage() {
     const fetchReviews = async () => {
       try {
         const response = await axios.get(
-          "http://54.206.185.32/v1/reviews/all"
+          "https://api.shopevella.com/v1/reviews/all"
         );
 
         const selectedReviews = response.data.data.reviews;

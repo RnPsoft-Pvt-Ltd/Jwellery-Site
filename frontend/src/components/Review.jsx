@@ -19,7 +19,7 @@ const ProductReviews = ({ productId }) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://54.206.185.32/v1/reviews?productId=${productId}&page=${page}&limit=${limit}`
+        `https://api.shopevella.com/v1/reviews?productId=${productId}&page=${page}&limit=${limit}`
       );
       setReviews(response.data.data.reviews);
       setPagination(response.data.data.pagination);
@@ -136,7 +136,7 @@ const WriteReview = ({ productId, onReviewSubmitted }) => {
     try {
       setIsSubmitting(true);
       await axios.post(
-        "http://54.206.185.32/v1/reviews",
+        "https://api.shopevella.com/v1/reviews",
         {
           productId,
           rating,

@@ -53,8 +53,8 @@ const ProductDetail = () => {
       try {
         setLoading(true);
         const [productResponse, wishlistResponse] = await Promise.all([
-          axios.get(`http://54.206.185.32/v1/products/${productId}`),
-          axios.get("http://54.206.185.32/v1/wishlist", {
+          axios.get(`https://api.shopevella.com/v1/products/${productId}`),
+          axios.get("https://api.shopevella.com/v1/wishlist", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -91,7 +91,7 @@ const ProductDetail = () => {
       if (!selectedVariant) return;
 
       await axios.post(
-        "http://54.206.185.32/v1/cart",
+        "https://api.shopevella.com/v1/cart",
         {
           productVariantId: selectedVariant.id,
           quantity,
@@ -116,14 +116,14 @@ const ProductDetail = () => {
     setIsWishLoading(true);
     try {
       if (isWishlisted) {
-        await axios.delete(`http://54.206.185.32/v1/wishlist`, {
+        await axios.delete(`https://api.shopevella.com/v1/wishlist`, {
           data: { productId },
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         addToast("Item removed from your wishlist");
       } else {
         await axios.post(
-          `http://54.206.185.32/v1/wishlist`,
+          `https://api.shopevella.com/v1/wishlist`,
           { productId },
           {
             headers: {
@@ -442,7 +442,7 @@ const SimilarProducts = ({ categoryId }) => {
     const fetchSimilarProducts = async () => {
       try {
         const response = await axios.get(
-          `http://54.206.185.32/v1/categories/${categoryId}`
+          `https://api.shopevella.com/v1/categories/${categoryId}`
         );
         // console.log("response",response);
         setProducts(response.data.products.slice(0, 4));
@@ -485,7 +485,7 @@ const SimilarProductCard = ({ product, onNavigate }) => {
   useEffect(() => {
     const checkWishlistStatus = async () => {
       try {
-        const response = await axios.get("http://54.206.185.32/v1/wishlist", {
+        const response = await axios.get("https://api.shopevella.com/v1/wishlist", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         const isInWishlist = response.data.some(
@@ -505,14 +505,14 @@ const SimilarProductCard = ({ product, onNavigate }) => {
     setIsLoading(true);
     try {
       if (isWishlisted) {
-        await axios.delete(`http://54.206.185.32/v1/wishlist`, {
+        await axios.delete(`https://api.shopevella.com/v1/wishlist`, {
           data: { productId: product.id },
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         addToast("Item removed from your wishlist");
       } else {
         await axios.post(
-          `http://54.206.185.32/v1/wishlist`,
+          `https://api.shopevella.com/v1/wishlist`,
           { productId: product.id },
           {
             headers: {
@@ -536,7 +536,7 @@ const SimilarProductCard = ({ product, onNavigate }) => {
     setIsAddingToCart(true);
     try {
       await axios.post(
-        "http://54.206.185.32/v1/cart",
+        "https://api.shopevella.com/v1/cart",
         {
           productVariantId: product.variants[0].id,
           quantity: 1,

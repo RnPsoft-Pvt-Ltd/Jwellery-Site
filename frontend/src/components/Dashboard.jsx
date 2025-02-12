@@ -102,7 +102,7 @@ export default function Dashboard() {
   // Fetch Lifetime Sales
   const fetchLifetimeSales = async () => {
     try {
-      const response = await fetch("http://54.206.185.32/v1/dashboard/lifetime-sales");
+      const response = await fetch("https://api.shopevella.com/v1/dashboard/lifetime-sales");
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setLifetimeSales(data);
@@ -115,9 +115,9 @@ export default function Dashboard() {
   const fetchSalesData = async (period) => {
     try {
       const urlMap = {
-        daily: "http://54.206.185.32/v1/salestatistics/sales/daily",
-        weekly: "http://54.206.185.32/v1/salestatistics/sales/weekly",
-        monthly: "http://54.206.185.32/v1/salestatistics/sales/monthly",
+        daily: "https://api.shopevella.com/v1/salestatistics/sales/daily",
+        weekly: "https://api.shopevella.com/v1/salestatistics/sales/weekly",
+        monthly: "https://api.shopevella.com/v1/salestatistics/sales/monthly",
       };
 
       const response = await fetch(urlMap[period]);

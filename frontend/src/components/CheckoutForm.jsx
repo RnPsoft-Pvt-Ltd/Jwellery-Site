@@ -29,7 +29,7 @@ export default function CheckoutForm() {
     };
 
     try {
-      const response = await fetch("http://54.206.185.32/api/checkout", {
+      const response = await fetch("https://api.shopevella.com/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderDetails),

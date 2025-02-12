@@ -29,7 +29,7 @@ function AccountPage() {
         return;
       }
 
-      const response = await fetch('http://54.206.185.32/v1/users/me', {
+      const response = await fetch('https://api.shopevella.com/v1/users/me', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -84,7 +84,7 @@ function AccountPage() {
         return;
       }
 
-      const response = await fetch('http://54.206.185.32/v1/users/me', {
+      const response = await fetch('https://api.shopevella.com/v1/users/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

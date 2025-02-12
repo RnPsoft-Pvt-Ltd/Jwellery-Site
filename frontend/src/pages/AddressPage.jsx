@@ -75,7 +75,7 @@
 //     try {
 //       console.log('fetching addresses');
 //       const token = localStorage.getItem('token');
-//       const response = await axios.get('http://54.206.185.32/v1/users/me', {
+//       const response = await axios.get('https://api.shopevella.com/v1/users/me', {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
       
@@ -95,7 +95,7 @@
     
 //     try {
 //       const token = localStorage.getItem('token');
-//       const response = await fetch(`http://54.206.185.32/v1/addresses/${addressToDelete}`, {
+//       const response = await fetch(`https://api.shopevella.com/v1/addresses/${addressToDelete}`, {
 //         method: 'DELETE',
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
@@ -229,7 +229,7 @@ function AddressPage() {
     try {
       console.log('Fetching addresses...');
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://54.206.185.32/v1/users/me', {
+      const response = await axios.get('https://api.shopevella.com/v1/users/me', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -248,7 +248,7 @@ function AddressPage() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://54.206.185.32/v1/address/${addressToDelete}`, {
+      await axios.delete(`https://api.shopevella.com/v1/address/${addressToDelete}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

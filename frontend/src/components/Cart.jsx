@@ -17,7 +17,7 @@ export default function Cart() {
       try {
         const token = localStorage.getItem("token"); // Retrieve token from localStorage
 
-        const response = await fetch("http://54.206.185.32/v1/cart", {
+        const response = await fetch("https://api.shopevella.com/v1/cart", {
           method: "GET",
           credentials: "include",
           headers: {

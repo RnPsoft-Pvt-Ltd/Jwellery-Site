@@ -10,7 +10,7 @@ const ProductSlider = () => {
   const [loading, setLoading] = useState(true);
   const [wishloadingStates, setWishLoadingStates] = useState({});
   const navigate = useNavigate();
-  const BASE_URL = "http://54.206.185.32/v1";
+  const BASE_URL = "https://api.shopevella.com/v1";
 
   const scroll = (direction) => {
     if (sliderRef.current) {

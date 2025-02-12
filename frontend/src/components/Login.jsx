@@ -12,7 +12,7 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://54.206.185.32/v1/auth/login",
+        "https://api.shopevella.com/v1/auth/login",
         { email, password },
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );

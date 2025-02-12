@@ -17,7 +17,7 @@ const Collections = ({
   const fetchCollections = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/v1/collections");
+      const response = await axios.get("http://54.206.185.32/v1/collections");
       const formattedProducts = response.data.data.map((collection) => ({
         ID: collection.id,
         name: collection.name,
@@ -39,7 +39,7 @@ const Collections = ({
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/v1/collections/${id}`);
+      await axios.delete(`http://54.206.185.32/v1/collections/${id}`);
       setCollections(collections.filter((collection) => collection.ID !== id));
     } catch (error) {
       console.error("Error deleting collection:", error);

@@ -10,7 +10,7 @@ const Sales = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/v1/sales");
+        const response = await axios.get("http://54.206.185.32/v1/sales");
         console.log("Slides Data from API:", response.data);
 
         const formattedSlides = response.data.map((item) => ({

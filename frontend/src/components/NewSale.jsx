@@ -76,7 +76,7 @@ const NewSale = () => {
     console.log("Sending data:", formattedData); // Debugging: See what is sent
   
     try {
-      await axios.post('http://localhost:5000/v1/sales', formattedData, {
+      await axios.post('http://54.206.185.32/v1/sales', formattedData, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure token is included

@@ -22,7 +22,7 @@ const GenderCollections = () => {
           registerImage(loadingKey);
 
         const response = await axios.get(
-          "http://localhost:5000/v1/collections"
+          "http://54.206.185.32/v1/collections"
         );
         const ALLOWED_CATEGORIES = ["Men", "Women", "Kids"];
 

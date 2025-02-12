@@ -33,7 +33,7 @@ const RegisterUser = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/v1/auth/register",
+        "http://54.206.185.32/v1/auth/register",
         formData,
         {
           headers: { "Content-Type": "application/json" },

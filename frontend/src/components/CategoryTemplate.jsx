@@ -57,7 +57,7 @@ const CategoryTemplate = ({
     const fetchCategory = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:5000/v1/categories/${categoryId}`);
+        const response = await axios.get(`http://54.206.185.32/v1/categories/${categoryId}`);
         setCategory(response.data);
         
         const totalProducts = response.data.products.length;
@@ -100,9 +100,9 @@ const CategoryTemplate = ({
   // const toggleWishlist = async (productId, variantId) => {
   //   try {
   //     if (wishlist.includes(`${productId}-${variantId}`)) {
-  //       await axios.delete(`http://localhost:5000/v1/wishlist/${productId}`, { data: { variantId } });
+  //       await axios.delete(`http://54.206.185.32/v1/wishlist/${productId}`, { data: { variantId } });
   //     } else {
-  //       await axios.post('http://localhost:5000/v1/wishlist', { productId, variantId });
+  //       await axios.post('http://54.206.185.32/v1/wishlist', { productId, variantId });
   //     }
       
   //     setWishlist(prev =>
@@ -291,7 +291,7 @@ const VariantCard = ({ variant }) => {
   useEffect(() => {
     const checkWishlistStatus = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/v1/wishlist", {
+        const response = await axios.get("http://54.206.185.32/v1/wishlist", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         setIsWishlisted(response.data.some(item => item.product_id === variant.productId));
@@ -308,7 +308,7 @@ const VariantCard = ({ variant }) => {
     setIsLoading(true);
     try {
       if (isWishlisted) {
-        await axios.delete(`http://localhost:5000/v1/wishlist`, {
+        await axios.delete(`http://54.206.185.32/v1/wishlist`, {
           data: { productId: variant.productId },
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
@@ -317,7 +317,7 @@ const VariantCard = ({ variant }) => {
         });
       } else {
         await axios.post(
-          `http://localhost:5000/v1/wishlist`,
+          `http://54.206.185.32/v1/wishlist`,
           { productId: variant.productId },
           {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -344,7 +344,7 @@ const VariantCard = ({ variant }) => {
     setIsAddingToCart(true);
     try {
       await axios.post(
-        "http://localhost:5000/v1/cart",
+        "http://54.206.185.32/v1/cart",
         {
           productVariantId: variant.id,
           quantity: 1,

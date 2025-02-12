@@ -16,7 +16,7 @@ const CreateCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/v1/categories", formData);
+      await axios.post("http://54.206.185.32/v1/categories", formData);
       alert("Category created successfully!");
       setFormData({ name: "", description: "", thumbnail: "" });
     } catch (error) {

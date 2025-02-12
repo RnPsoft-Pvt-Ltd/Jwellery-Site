@@ -9,7 +9,7 @@ export default function Testimonials() {
     const fetchTestimonials = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/v1/reviews/all"
+          "http://54.206.185.32/v1/reviews/all"
         );
 
         // Get the first 5 reviews

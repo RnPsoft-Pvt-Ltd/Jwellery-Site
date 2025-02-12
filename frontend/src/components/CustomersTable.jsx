@@ -18,7 +18,7 @@ const CustomersTable = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:5000/v1/users/filteruser", {
+        const response = await fetch("http://54.206.185.32/v1/users/filteruser", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

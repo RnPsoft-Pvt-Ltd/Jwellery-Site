@@ -17,7 +17,7 @@ const Categories = ({
   const fetchCategories = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/v1/categories");
+      const response = await axios.get("http://54.206.185.32/v1/categories");
       const formattedCategories = response.data.data.map((category) => ({
         ID: category.id,
         name: category.name,
@@ -39,7 +39,7 @@ const Categories = ({
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/v1/categories/${id}`);
+      await axios.delete(`http://54.206.185.32/v1/categories/${id}`);
       setCategories(categories.filter((category) => category.ID !== id));
     } catch (error) {
       console.error("Error deleting category:", error);

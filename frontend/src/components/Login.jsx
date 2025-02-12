@@ -12,7 +12,7 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/v1/auth/login",
+        "http://54.206.185.32/v1/auth/login",
         { email, password },
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );

@@ -7,7 +7,7 @@
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState(null);
 
-//   const BASE_URL = 'http://localhost:5000/v1/wishlist';
+//   const BASE_URL = 'http://54.206.185.32/v1/wishlist';
 
 //   useEffect(() => {
 //     const fetchWishlistItems = async () => {
@@ -105,8 +105,8 @@ function WishlistPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const BASE_URL = 'http://localhost:5000/v1/wishlist';
-  const CART_URL = 'http://localhost:5000/v1/cart';
+  const BASE_URL = 'http://54.206.185.32/v1/wishlist';
+  const CART_URL = 'http://54.206.185.32/v1/cart';
 
   useEffect(() => {
     const fetchWishlistItems = async () => {

@@ -12,7 +12,7 @@ const AdminSalesPage = () => {
   useEffect(() => {
     const fetchSales = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/v1/sales"); // Adjust API URL
+        const response = await axios.get("http://54.206.185.32/v1/sales"); // Adjust API URL
         setSales(response.data);
       } catch (err) {
         setError("Failed to load sales");

@@ -48,9 +48,9 @@ const CreateProduct = () => {
       try {
         const [categoriesRes, collectionsRes, taxCategoriesRes] =
           await Promise.all([
-            fetch("http://localhost:5000/v1/categories"),
-            fetch("http://localhost:5000/v1/collections"),
-            fetch("http://localhost:5000/v1/tax-categories", {
+            fetch("http://54.206.185.32/v1/categories"),
+            fetch("http://54.206.185.32/v1/collections"),
+            fetch("http://54.206.185.32/v1/tax-categories", {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
@@ -190,7 +190,7 @@ const CreateProduct = () => {
         })),
       };
 
-      const response = await fetch("http://localhost:5000/v1/products", {
+      const response = await fetch("http://54.206.185.32/v1/products", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

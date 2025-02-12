@@ -13,7 +13,7 @@ const Products = () => {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/v1/products");
+      const response = await axios.get("http://54.206.185.32/v1/products");
       const formattedProducts = response.data.data.map((product) => {
         const totalStock =
           product.variants?.reduce((sum, variant) => {
@@ -46,7 +46,7 @@ const Products = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/v1/products/${id}`);
+      await axios.delete(`http://54.206.185.32/v1/products/${id}`);
       setProducts(products.filter((product) => product.ID !== id));
     } catch (error) {
       console.error("Error deleting product:", error);

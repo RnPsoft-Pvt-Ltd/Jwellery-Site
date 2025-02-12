@@ -45,7 +45,7 @@ function EditAddressPage() {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/v1/users/me`, {
+      const response = await fetch(`http://54.206.185.32/v1/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -120,7 +120,7 @@ function EditAddressPage() {
         }
       };
 
-      const response = await fetch('http://localhost:5000/v1/users/me', {
+      const response = await fetch('http://54.206.185.32/v1/users/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

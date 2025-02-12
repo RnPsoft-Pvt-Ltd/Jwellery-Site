@@ -60,10 +60,7 @@ export default function Footer() {
                 </div>
                 <div className="text-center lg:text-left ml-0 sm:ml-4">
                   <div className="font-italiana text-3xl lg:text-[50px] font-normal">
-                    Cresthaven
-                  </div>
-                  <div className="font-italiana text-2xl lg:text-[37px] font-normal tracking-wider">
-                    Venture LLP
+                    Evella
                   </div>
                 </div>
               </div>

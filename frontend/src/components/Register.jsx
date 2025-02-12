@@ -65,7 +65,7 @@ const RegisterUser = () => {
         <div className="md:w-1/2 p-8">
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">Create an Account</h1>
-            <p className="mt-2 text-sm text-gray-600">Join Cresthaven today</p>
+            <p className="mt-2 text-sm text-gray-600">Join Evella today</p>
           </div>
 
           {error && (

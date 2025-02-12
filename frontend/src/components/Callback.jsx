@@ -64,13 +64,12 @@ const Callback = () => {
                   className="font-italiana text-3xl sm:text-[50px] font-normal 
                              leading-tight text-gray-900"
                 >
-                  Cresthaven
+                  Evella
                 </h1>
                 <h2
                   className="font-italiana text-2xl sm:text-[40px] font-normal 
                              tracking-[0.2rem] text-gray-800"
                 >
-                  Venture LLP
                 </h2>
               </div>
             </div>

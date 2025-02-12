@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../../utils/useSearch";
-
+import logo from "../../logo.png"
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
@@ -75,7 +75,7 @@ const Header = () => {
             onClick={() => handleNavigation(navigationLinks.home)}
           >
             <img
-              src="https://storage.googleapis.com/jwelleryrnpsoft/LogoWithName.png"
+              src={logo}
               alt="Logo"
               className="h-10"
             />

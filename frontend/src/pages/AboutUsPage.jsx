@@ -18,7 +18,7 @@ function AboutUs() {
       <div className="text-center md:text-left">
         <h2 className="text-3xl mb-4 font-semibold">Our Heritage of Excellence</h2>
         <p className="text-gray-700 text-lg font-medium leading-relaxed">
-          At Cresthaven, we believe that every piece of jewelry tells a unique story. Founded with a passion for craftsmanship and an eye for timeless design, we have established ourselves as a premier destination for fine jewelry that celebrates life's most precious moments. Our commitment to excellence is reflected in every piece we create, from stunning rings and necklaces to elegant bracelets and earrings, offering a wide range of collections for women, men, and children.
+          At Evella, we believe that every piece of jewelry tells a unique story. Founded with a passion for craftsmanship and an eye for timeless design, we have established ourselves as a premier destination for fine jewelry that celebrates life's most precious moments. Our commitment to excellence is reflected in every piece we create, from stunning rings and necklaces to elegant bracelets and earrings, offering a wide range of collections for women, men, and children.
         </p>
       </div>
 

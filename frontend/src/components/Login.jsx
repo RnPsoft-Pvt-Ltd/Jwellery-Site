@@ -43,7 +43,7 @@ const Login = () => {
         {/* Form Section */}
         <div className="md:w-1/2 p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Welcome to Cresthaven</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Welcome to Evella</h1>
             <p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
           </div>
 

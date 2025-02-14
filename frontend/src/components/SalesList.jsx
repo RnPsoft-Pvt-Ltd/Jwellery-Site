@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2, Plus } from "lucide-react";
 
 const AdminSalesPage = () => {
   const [sales, setSales] = useState([]);
@@ -10,19 +10,50 @@ const AdminSalesPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchSales = async () => {
-      try {
-        const response = await axios.get("https://api.shopevella.com/v1/sales"); // Adjust API URL
-        setSales(response.data);
-      } catch (err) {
-        setError("Failed to load sales");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSales();
   }, []);
+
+  const fetchSales = async () => {
+    try {
+      const response = await axios.get("https://api.shopevella.com/v1/sales"); // Adjust API URL
+      setSales(response.data);
+    } catch (err) {
+      setError("Failed to load sales");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const handleAddProduct = async (saleId) => {
+    const productId = prompt("Enter Product ID:");
+    if (!productId) return;
+    const discountPercent = prompt("Enter Discount Percentage:");
+    const convertedDiscountDecimal = (parseFloat(discountPercent)).toFixed(4);
+
+    try {
+      await axios.post(`http://api.shopevella.com/v1/sales/${saleId}/add-product`, {
+        productId: productId,
+        discountPercent:  convertedDiscountDecimal || 0,
+      });
+      fetchSales();
+    } catch (error) {
+      // alert("Failed to add product");
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async (saleId, productId) => {
+    if (!window.confirm("Are you sure you want to remove this product?")) return;
+
+    try {
+      await axios.delete(`http://api.shopevella.com/v1/sales/${saleId}/remove-product/${productId}`);
+      fetchSales();
+    } catch (error) {
+      alert("Failed to remove product");
+    }
+  };
+
 
   if (loading)
     return (
@@ -56,11 +87,24 @@ const AdminSalesPage = () => {
               {new Date(sale.start_date).toLocaleDateString()} -{" "}
               {new Date(sale.end_date).toLocaleDateString()}
             </p>
+            <button
+              onClick={() => handleAddProduct(sale.id)}
+              className="bg-green-200 text-center text-green-800 flex py-2 px-3 font-bold cursor-pointer rounded-2xl hover:bg-green-300 text-[11px]"
+            >
+              <Plus size={16}></Plus>
+              Add Product
+            </button>
             <h3 className="font-bold mt-2">Products:</h3>
             <ul>
               {sale.sale_products.map((sp) => (
-                <li key={sp.product_id} className="text-sm text-gray-700">
+                <li key={sp.product_id} className="text-sm text-gray-700 flex justify-between">
                   {sp.product.name} - {sp.discount_percent}% off
+                  <div
+                    onClick={() => handleDelete(sale.id, sp.product_id)}
+                    className="text-red-500 cursor-pointer"
+                  >
+                    <Trash2 size={16} />
+                  </div>
                 </li>
               ))}
             </ul>

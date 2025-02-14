@@ -4,17 +4,17 @@ import { authenticate, isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// Get all active sales (accessible by everyone)
+// Public Routes - Accessible by everyone
 router.get('/', salesController.getActiveSales);
 router.get('/:id', salesController.getActiveSalesById);
-router.post('/', salesController.createSale);
+
+// Admin Only Routes
+router.post('/',  salesController.createSale);
 router.put('/:id', salesController.updateSale);
 router.delete('/:id', salesController.deleteSale);
 
-
-// Admin only routes
-// router.post('/', authenticate, isAdmin, salesController.createSale);
-// router.put('/:id', authenticate, isAdmin, salesController.updateSale);
-// router.delete('/:id', authenticate, isAdmin, salesController.deleteSale);
+// Routes for Adding/Removing Products in Sales
+router.post('/:saleId/add-product', salesController.addProductToSale);
+router.delete('/:saleId/remove-product/:productId', salesController.removeProductFromSale);
 
 export default router;

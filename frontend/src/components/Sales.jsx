@@ -29,7 +29,7 @@ const Sales = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Updated Slides:", slides);
+    // console.log("Updated Slides:", slides);
   }, [slides]); // Logs slides whenever updated
 
   const nextSlide = () => {

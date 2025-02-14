@@ -4,7 +4,7 @@ class SalesController {
   // Get all active sales
   async getActiveSales(req, res) {
     try {
-      const sales = await salesService.getActiveSales();
+      const sales = await salesService.getActiveSales(req.query);
       res.status(200).json(sales);
     } catch (error) {
       res.status(500).json({ message: "Error fetching sales", error: error.message });
@@ -68,6 +68,40 @@ class SalesController {
       res.status(500).json({ message: "Error deleting sale", error: error.message });
     }
   }
+
+  // Add a product to a sale
+  async addProductToSale(req, res) {
+    try {
+      const { saleId } = req.params;  // Extract saleId from URL parameters
+      const { productId, discountPercent } = req.body;  // Extract productId and discountPercent from the body
+  
+      if (!productId) {
+        return res.status(400).json({ message: "Product ID is required" });
+      }
+  
+      // Call the service to add the product to the sale
+      const saleProduct = await salesService.addProductToSale(saleId, productId, discountPercent);
+  
+      // Respond with the created SaleProductMapping record
+      res.status(201).json(saleProduct);
+    } catch (error) {
+      // Send a generic error response if anything goes wrong
+      res.status(500).json({ message: "Error adding product to sale", error: error.message });
+    }
+  }
+
+  // Remove a product from a sale
+  async removeProductFromSale(req, res) {
+    try {
+      const { saleId, productId } = req.params;
+      await salesService.removeProductFromSale(saleId, productId);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Error removing product from sale", error: error.message });
+    }
+  }
+
+
 }
 
 export default new SalesController();

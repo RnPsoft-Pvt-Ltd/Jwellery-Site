@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import logo from "../logo.png";
 const Callback = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const Callback = () => {
                             hover:scale-105"
               >
                 <img
-                  src="https://storage.googleapis.com/jwelleryrnpsoft/logo.png"
+                  src={logo}
                   alt="Cresthaven Logo"
                   className="w-full h-full object-contain"
                   loading="lazy"

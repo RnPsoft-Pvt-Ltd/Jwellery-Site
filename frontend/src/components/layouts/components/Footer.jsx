@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-
+import logo from '../../logo1.png';
 export default function Footer() {
   const navigate = useNavigate();
   const [collections, setCollections] = useState([]);
@@ -53,7 +53,7 @@ export default function Footer() {
               <div className="flex flex-col sm:flex-row items-center">
                 <div className="w-24 h-24 lg:w-32 lg:h-32">
                   <img
-                    src="https://storage.googleapis.com/jwelleryrnpsoft/logo.png"
+                    src={logo}
                     alt="Logo"
                     className="w-full h-full object-contain"
                   />
@@ -66,10 +66,10 @@ export default function Footer() {
               </div>
               <div className="mt-4 text-center lg:text-left">
                 <div className="text-lg lg:text-[23px] text-gray-300 font-albert">
-                  Always Enhancing What's
+                  TIMELESS ELEGANCE
                 </div>
                 <div className="text-lg lg:text-[23px] text-gray-300 font-albert">
-                  Already Beautiful
+                  FOR THE CONFIDENT YOU
                 </div>
               </div>
             </div>

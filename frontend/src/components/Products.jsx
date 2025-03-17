@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Search, Plus, Trash2 } from "lucide-react";
+import { Search, Plus, Trash2, Pencil } from "lucide-react";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -53,6 +53,29 @@ const Products = () => {
       console.error("Error deleting product:", error);
     }
   };
+
+  const handleUpdate = async (id, n, d, b) => {
+    const name = prompt("Update name:");
+    const desc = prompt("Update description:");
+    const bp = prompt("Update base price:");
+    if (!name && !desc && !bp){
+      alert("Nothing to update");
+      return;
+    }
+    const convertedBp = bp? (parseFloat(bp)).toFixed(4) : b;
+
+    try {
+      await axios.put(`http://api.shopevella.com/v1/products/${id}`, {
+        name: name || n,
+        description: desc || d,
+        base_price: convertedBp || b
+      });
+      fetchProducts();
+    } catch (error) {
+      alert("Failed to update product");
+    }
+  };
+
 
   // Filter products based on search term
   const filteredProducts = products.filter((product) => {
@@ -122,6 +145,9 @@ const Products = () => {
                     SKU
                   </th>
                   <th className="text-right px-6 py-4 text-sm font-semibold text-gray-600">
+                    UPDATE
+                  </th>
+                  <th className="text-right px-6 py-4 text-sm font-semibold text-gray-600">
                     DELETE
                   </th>
                 </tr>
@@ -163,6 +189,15 @@ const Products = () => {
                       <div className="text-gray-600 max-w-md truncate">
                         {product.sku}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => handleUpdate(product.ID, product.name, product.description, product.base_price)}
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <Pencil size={16} />
+                        Update
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button

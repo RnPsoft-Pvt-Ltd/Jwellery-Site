@@ -8,10 +8,11 @@ const router = express.Router();
 router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getProductById);
 router.get("/:id/variants", productController.getProductVariants);
+router.put("/:id", productController.updateProduct);
 
 // Admin routes
 router.post("/", authenticate, isAdmin, productController.createProduct);
-router.put("/:id", authenticate, isAdmin, productController.updateProduct);
+// router.put("/:id", authenticate, isAdmin, productController.updateProduct);
 router.delete("/:id", authenticate, isAdmin, productController.deleteProduct);
 
 export default router;

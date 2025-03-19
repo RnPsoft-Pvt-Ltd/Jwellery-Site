@@ -39,7 +39,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
+// https://api.shopevella.com
+// https://api.shopevella.com
 // Routes
 app.use('/v1/products', productRoutes);
 app.use('/v1/reviews', reviewRoutes);

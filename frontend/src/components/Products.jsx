@@ -54,28 +54,32 @@ const Products = () => {
     }
   };
 
-  const handleUpdate = async (id, n, d, b) => {
-    const name = prompt("Update name:");
-    const desc = prompt("Update description:");
-    const bp = prompt("Update base price:");
-    if (!name && !desc && !bp){
-      alert("Nothing to update");
-      return;
-    }
-    const convertedBp = bp? (parseFloat(bp)).toFixed(4) : b;
+  // const handleUpdate = async (id, n, d, b) => {
+  //   const name = prompt("Update name:");
+  //   const desc = prompt("Update description:");
+  //   const bp = prompt("Update base price:");
+  //   if (!name && !desc && !bp){
+  //     alert("Nothing to update");
+  //     return;
+  //   }
+  //   const convertedBp = bp? (parseFloat(bp)).toFixed(4) : b;
 
-    try {
-      await axios.put(`https://api.shopevella.com/v1/products/${id}`, {
-        name: name || n,
-        description: desc || d,
-        base_price: convertedBp || b
-      });
-      fetchProducts();
-    } catch (error) {
-      alert("Failed to update product");
-    }
-  };
+  //   try {
+  //     await axios.put(`https://api.shopevella.com/v1/products/${id}`, {
+  //       name: name || n,
+  //       description: desc || d,
+  //       base_price: convertedBp || b
+  //     });
+  //     fetchProducts();
+  //   } catch (error) {
+  //     alert("Failed to update product");
+  //   }
+  // };
 
+  const handleUpdate = async(product)=>{
+    console.log(product);
+    navigate("/admin/update-product", { state: { product } });
+  }
 
   // Filter products based on search term
   const filteredProducts = products.filter((product) => {
@@ -192,7 +196,7 @@ const Products = () => {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button
-                        onClick={() => handleUpdate(product.ID, product.name, product.description, product.base_price)}
+                        onClick={() => handleUpdate(product)}
                         className="inline-flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                       >
                         <Pencil size={16} />

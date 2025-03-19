@@ -32,7 +32,7 @@ const AdminSalesPage = () => {
     const convertedDiscountDecimal = (parseFloat(discountPercent)).toFixed(4);
 
     try {
-      await axios.post(`http://api.shopevella.com/v1/sales/${saleId}/add-product`, {
+      await axios.post(`https://api.shopevella.com/v1/sales/${saleId}/add-product`, {
         productId: productId,
         discountPercent:  convertedDiscountDecimal || 0,
       });
@@ -47,7 +47,7 @@ const AdminSalesPage = () => {
     if (!window.confirm("Are you sure you want to remove this product?")) return;
 
     try {
-      await axios.delete(`http://api.shopevella.com/v1/sales/${saleId}/remove-product/${productId}`);
+      await axios.delete(`https://api.shopevella.com/v1/sales/${saleId}/remove-product/${productId}`);
       fetchSales();
     } catch (error) {
       alert("Failed to remove product");

@@ -65,7 +65,7 @@ const Products = () => {
     const convertedBp = bp? (parseFloat(bp)).toFixed(4) : b;
 
     try {
-      await axios.put(`http://api.shopevella.com/v1/products/${id}`, {
+      await axios.put(`https://api.shopevella.com/v1/products/${id}`, {
         name: name || n,
         description: desc || d,
         base_price: convertedBp || b

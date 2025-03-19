@@ -56,6 +56,7 @@ import UpdateCategory from './components/UpdateCategory.jsx'
 import UpdateCollection from './components/UpdateCollection.jsx';
 import CreateCategory from './components/CreateCategory.jsx'
 import CreateCollection from './components/CreateCollection.jsx'
+import UpdateProduct from './pages/UpdateProduct.jsx';
 
 
 function App() {
@@ -84,6 +85,7 @@ function App() {
         <Route path="/admin/new-collection" element={<CreateCollection />} />
         <Route path="/admin/update-category" element={<UpdateCategory />} />
         <Route path="/admin/update-collection" element={<UpdateCollection />} />
+        <Route path="/admin/update-product" element={<UpdateProduct />} />
       </Route>
 
 

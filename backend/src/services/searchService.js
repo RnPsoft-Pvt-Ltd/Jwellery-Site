@@ -23,7 +23,7 @@ class SearchService {
       minPrice,
       maxPrice,
       page = 1,
-      limit = 10,
+      limit = 10000,
     } = searchParams;
 
     const where = {};
@@ -114,7 +114,7 @@ class SearchService {
       startDate,
       endDate,
       page = 1,
-      limit = 10,
+      limit = 10000,
     } = searchParams;
 
     const where = {};
@@ -169,7 +169,7 @@ class SearchService {
 
   // Categories search
   async searchCategories(searchParams) {
-    const { query, page = 1, limit = 10 } = searchParams;
+    const { query, page = 1, limit = 1000 } = searchParams;
 
     const where = query
       ? this.createSearchQuery(query, ["name", "description"])

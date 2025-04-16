@@ -9,7 +9,7 @@ class ProductService {
       maxPrice,
       search,
       page = 1,
-      limit = 10,
+      limit = 100,
     } = filters;
 
     // Ensure page and limit are valid numbers

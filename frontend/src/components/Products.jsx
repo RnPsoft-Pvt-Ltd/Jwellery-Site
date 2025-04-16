@@ -7,15 +7,18 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const navigate = useNavigate();
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page) => {
     setIsLoading(true);
     try {
-      const response = await axios.get("https://api.shopevella.com/v1/products");
+      const response = await axios.get(
+        `https://api.shopevella.com/v1/products?page=${page}&limit=10`
+      );
       const formattedProducts = response.data.data.map((product) => {
-        console.log(products.id)
         const totalStock =
           product.variants?.reduce((sum, variant) => {
             return sum + (variant.inventory?.total_quantity || 0);
@@ -31,9 +34,14 @@ const Products = () => {
             product.images.find((img) => img.is_primary)?.image_url ||
             product.images[0]?.image_url ||
             "",
+          brand: product.brand,
+          description: product.description,
+          variants: product.variants,
+          categories: product.categories
         };
       });
       setProducts(formattedProducts);
+      setTotalPages(response.data.pagination.totalPages); // Assuming the API provides total pages
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -42,8 +50,8 @@ const Products = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []); // Remove products dependency to prevent infinite loop
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
   const handleDelete = async (id) => {
     try {
@@ -54,34 +62,11 @@ const Products = () => {
     }
   };
 
-  // const handleUpdate = async (id, n, d, b) => {
-  //   const name = prompt("Update name:");
-  //   const desc = prompt("Update description:");
-  //   const bp = prompt("Update base price:");
-  //   if (!name && !desc && !bp){
-  //     alert("Nothing to update");
-  //     return;
-  //   }
-  //   const convertedBp = bp? (parseFloat(bp)).toFixed(4) : b;
-
-  //   try {
-  //     await axios.put(`https://api.shopevella.com/v1/products/${id}`, {
-  //       name: name || n,
-  //       description: desc || d,
-  //       base_price: convertedBp || b
-  //     });
-  //     fetchProducts();
-  //   } catch (error) {
-  //     alert("Failed to update product");
-  //   }
-  // };
-
-  const handleUpdate = async(product)=>{
+  const handleUpdate = async (product) => {
     console.log(product);
     navigate("/admin/update-product", { state: { product } });
-  }
+  };
 
-  // Filter products based on search term
   const filteredProducts = products.filter((product) => {
     const searchString = searchTerm.toLowerCase();
     return (
@@ -90,6 +75,12 @@ const Products = () => {
       product.price.toString().includes(searchString)
     );
   });
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -220,10 +211,25 @@ const Products = () => {
         )}
 
         <div className="p-5 border-t bg-gray-50">
-          <div className="text-sm text-gray-600">
-            Showing{" "}
-            <span className="font-medium">{filteredProducts.length}</span> of{" "}
-            <span className="font-medium">{products.length}</span> collections
+          <div className="flex justify-between items-center">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <div className="text-sm text-gray-600">
+              Page <span className="font-medium">{currentPage}</span> of{" "}
+              <span className="font-medium">{totalPages}</span>
+            </div>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg disabled:opacity-50"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

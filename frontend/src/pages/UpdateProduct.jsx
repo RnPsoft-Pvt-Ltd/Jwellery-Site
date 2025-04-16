@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -7,9 +7,12 @@ const UpdateProduct = () => {
   const navigate = useNavigate();
   const { product } = location.state || {};
 
+useEffect(() => {
+  console.log(product);
+}, [product]);
   const [name, setName] = useState(product?.name || "");
   const [basePrice, setBasePrice] = useState(product?.price || "");
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -266,14 +266,9 @@ async function createTaxCategories() {
     data: [
       {
         name: "Standard Rate",
-        standard_rate: 0.2,
+        standard_rate: 3,
         description: "Standard tax rate for most items",
-      },
-      {
-        name: "Reduced Rate",
-        standard_rate: 0.1,
-        description: "Reduced tax rate for selected items",
-      },
+      }
     ],
   });
 

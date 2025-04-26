@@ -10,7 +10,6 @@ import Category from '../components/Category'
 import SpecialProducts from '../components/SpecialProducts'
 import StyledPicks from '../components/StyledPicks'
 import ThemeCollection from '../components/ThemeCollection'
-
 import CelebsChoice from '../components/CelebsChoice'
 import Callback from '../components/Callback'
 import Sales from '../components/Sales'
@@ -27,7 +26,6 @@ export default function Homepage() {
         <GenderCollections />
         <ImageSlider/>
         <ProductSlider/> 
-
         <MetalCollection/>
         <Category/>
         <SpecialProducts/>
@@ -36,7 +34,6 @@ export default function Homepage() {
         
         <CelebsChoice/>
         <Callback/>
-        <Sales/>
         <Testimonials/>
     </div>
     </GlobalLoadingProvider>

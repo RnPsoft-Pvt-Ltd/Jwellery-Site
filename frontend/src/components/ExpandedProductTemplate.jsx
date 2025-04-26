@@ -242,8 +242,8 @@ const ProductDetailSection = ({
 
       <div className="flex flex-col lg:flex-row gap-12">
         {/* Product Gallery */}
-        <div className="w-full lg:w-3/5">
-          <div className="relative aspect-square overflow-hidden rounded-2xl mb-4">
+        <div className="w-full lg:w-3/5 p-4">
+          <div className="relative aspect-square overflow-hidden rounded-2xl mb-2 w-9/12 mx-auto">
             <img
               src={mainImage}
               alt={product.name}
@@ -291,7 +291,7 @@ const ProductDetailSection = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4 mt-8">
             {product.images.map((image) => (
               <button
                 key={image.id}
@@ -322,27 +322,6 @@ const ProductDetailSection = ({
               <span className="text-3xl font-medium">₹{calculatePrice()}</span>
             </div>
 
-            {/* Variants */}
-            {product.variants && product.variants.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="font-medium">Available Variants</h3>
-                <div className="flex flex-wrap gap-3">
-                  {product.variants.map((variant) => (
-                    <button
-                      key={variant.id}
-                      className={`px-4 py-2 rounded-full border-2 transition-all ${
-                        selectedVariant?.id === variant.id
-                          ? "border-primary bg-primary/10 text-primary"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedVariant(variant)}
-                    >
-                      {variant.color} - {variant.weight}g
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* Quantity */}
             <div className="space-y-4">
@@ -368,18 +347,20 @@ const ProductDetailSection = ({
             <div className="space-y-4">
               <h3 className="font-medium">Product Details</h3>
               <div className="grid grid-cols-2 gap-6">
-                {Object.entries(product.product_metadata).map(
-                  ([key, value]) => (
-                    <div key={key}>
-                      <p className="text-gray-500 capitalize">
-                        {key.replace(/_/g, " ")}
-                      </p>
-                      <p className="font-medium">
-                        {formatMetadataValue(value)}
-                      </p>
-                    </div>
-                  )
-                )}
+{Object.entries(product.product_metadata).map(
+  ([key, value]) => {
+    if(key === "product_id"){value=product.SKU;key="SKU"}
+    return(
+    <div key={key}>
+      <p className="text-gray-500 capitalize">
+        {key.replace(/_/g, " ")}
+      </p>
+      <p className="font-medium">
+        {formatMetadataValue(value)}
+      </p>
+    </div>
+  )}
+)}
               </div>
             </div>
 
@@ -422,6 +403,7 @@ const ProductDescription = ({ description, image1, image2 }) => (
               className="w-full h-full object-cover"
             />
           </div>
+          {image2 && (
           <div className="absolute -bottom-6 -left-6 w-1/2 aspect-square rounded-xl overflow-hidden shadow-xl">
             <img
               src={image2}
@@ -429,6 +411,7 @@ const ProductDescription = ({ description, image1, image2 }) => (
               className="w-full h-full object-cover"
             />
           </div>
+          )}
         </div>
       </div>
     </div>

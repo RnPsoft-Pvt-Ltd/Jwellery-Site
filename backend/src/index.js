@@ -21,7 +21,38 @@ import salesStatisticsRoutes from './routes/salestatisticsRoutes.js'
 import searchRoutes from './routes/searchRoutes.js';
 
 import { connectDB } from './config/db.js';
+import fs from "fs/promises"; // Use Promises to avoid blocking
+import AWS from "aws-sdk";
+const s3 = new AWS.S3({
+    accessKeyId: "AKIASKQ3XSHCBFBO72PS",
+    secretAccessKey: "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",
+    region: "eu-north-1",
+});
+import multer from 'multer';
+const upload = multer({ dest: 'uploads/' }); // Save files to 'uploads' folder
 
+export const uploadFileToS3 = async (file) => {
+    try {
+        const fileContent = await fs.readFile(file.path);
+
+        const params = {
+            Bucket: "ideaverse-1",
+            Key: `uploads/${file.originalname}`,
+            Body: fileContent,
+            ContentType: file.mimetype,
+        };
+
+        const data = await s3.upload(params).promise();
+        console.log(`✅ File uploaded successfully: ${data.Location}`);
+
+        await fs.unlink(file.path);
+
+        return data.Location;
+    } catch (error) {
+        console.error("❌ Error uploading file:", error);
+        throw error;
+    }
+};
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -61,7 +92,20 @@ app.use('/v1/orders', orderRoutes);
 app.use('/v1/search',searchRoutes);
 app.use("/v1/dashboard", dashboardRoutes);
 app.use("/v1/salestatistics", salesStatisticsRoutes);
+app.post('/v1/upload', upload.single('file'), async (req, res) => {
+    try {
+        const file = req.file;
+        if (!file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
 
+        const fileUrl = await uploadFileToS3(file);
+        res.status(200).json({ fileUrl });
+    } catch (error) {
+        res.status(500).json({ message: 'Error uploading file', error });
+    }
+}
+);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

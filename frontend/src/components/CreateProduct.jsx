@@ -511,7 +511,55 @@ const CreateProduct = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-lg font-semibold mb-4">Media</h2>
               <button
-                onClick={handleImageURLAdd}
+                onClick={() => {
+                  const fileInput = document.createElement("input");
+                  fileInput.type = "file";
+                  fileInput.accept = "image/*";
+                  fileInput.onchange = (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        const formData = new FormData();
+                        formData.append("file", file);
+                  
+                        fetch("https://api.shopevella.com/v1/upload", {
+                          method: "POST",
+                          headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            // Notice: Don't manually set Content-Type for FormData
+                          },
+                          body: formData,
+                        })
+                          .then((response) => response.json())
+                          .then((data) => {
+                            if (data.fileUrl) {
+                              setFormData((prev) => ({
+                                ...prev,
+                                images: [
+                                  ...prev.images,
+                                  {
+                                    url: data.fileUrl,
+                                    is_primary: prev.images.length === 0,
+                                    display_order: prev.images.length === 0 ? 1 : 2,
+                                  },
+                                ],
+                              }));
+                            } else {
+                              throw new Error("Failed to upload image");
+                            }
+                          })
+                          .catch((err) => {
+                            console.error("Error uploading image:", err);
+                            alert("Failed to upload image. Please try again.");
+                          });
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  };
+                  fileInput.click();
+                  
+                }}
                 className="inline-flex items-center px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
               >
                 <Camera className="h-4 w-4 mr-2" />

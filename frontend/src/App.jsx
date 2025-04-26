@@ -57,7 +57,8 @@ import UpdateCollection from './components/UpdateCollection.jsx';
 import CreateCategory from './components/CreateCategory.jsx'
 import CreateCollection from './components/CreateCollection.jsx'
 import UpdateProduct from './pages/UpdateProduct.jsx';
-
+import UpdateProduct2 from './pages/UpdateProduct2.jsx';
+import UpdateProduct3 from './pages/UpdateProduct3.jsx';
 
 function App() {
   return (
@@ -86,6 +87,8 @@ function App() {
         <Route path="/admin/update-category" element={<UpdateCategory />} />
         <Route path="/admin/update-collection" element={<UpdateCollection />} />
         <Route path="/admin/update-product" element={<UpdateProduct />} />
+        <Route path="/admin/update-product2" element={<UpdateProduct2 />} />
+        <Route path="/admin/update-product3" element={<UpdateProduct3 />} />
       </Route>
 
 

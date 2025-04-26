@@ -12,6 +12,7 @@ useEffect(() => {
 }, [product]);
   const [name, setName] = useState(product?.name || "");
   const [basePrice, setBasePrice] = useState(product?.price || "");
+  const [description, setDescription] = useState(product?.description || "");
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ useEffect(() => {
     const originalBasePrice = parseFloat(product.price).toFixed(4);
 
     // Check if name & price are unchanged and only then prevent update
-    if (name === product.name && formattedBasePrice === originalBasePrice) {
+    if (name === product.name && formattedBasePrice === originalBasePrice && description === product.description) {
       alert("Product Unchanged");
       return navigate("/admin/products"); // Redirect without making an API call
     }
@@ -29,6 +30,7 @@ useEffect(() => {
       await axios.put(`https://api.shopevella.com/v1/products/${product.ID}`, {
         name,
         base_price: formattedBasePrice,
+        description,
       });
 
       alert("Product updated successfully");
@@ -63,6 +65,19 @@ useEffect(() => {
             className="w-full p-2 border rounded"
             value={basePrice}
             onChange={(e) => setBasePrice(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">
+            Description
+          </label>
+          <input
+            type="text"
+            className="w-full p-2 border rounded"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>

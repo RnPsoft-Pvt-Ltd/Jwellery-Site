@@ -59,6 +59,15 @@ class ProductService {
         images: {
           where: { is_primary: true },
         },
+           // Fetch the default tax category info
+      tax_category: true,
+
+      // Fetch any special tax mappings
+      product_tax_mappings: {
+        include: {
+          tax_category: true,
+        },
+      },
         variants: {
           select: {
             id: true,
@@ -104,6 +113,15 @@ class ProductService {
         variants: true,
         // attributes: true,
         product_metadata: true,
+         // Fetch the default tax category info
+         tax_category: true,
+
+         // Fetch any special tax mappings
+         product_tax_mappings: {
+           include: {
+             tax_category: true,
+           },
+         },
       },
     });
   }
@@ -116,6 +134,39 @@ class ProductService {
       },
     });
   }
+
+  async updateProductVariants(variantId, variantData) {
+    const { inventory, ...variantFields } = variantData;
+  
+    return prisma.$transaction(async (tx) => {
+      // Update the variant itself
+      const updatedVariant = await tx.productVariant.update({
+        where: { id: variantId },
+        data: variantFields,
+      });
+  
+      // Update or create inventory for the variant
+      if (inventory) {
+        await tx.inventory.upsert({
+          where: { product_variant_id: variantId },
+          update: inventory,
+          create: {
+            ...inventory,
+            product_variant_id: variantId,
+          },
+        });
+      }
+  
+      // Return the updated variant with inventory
+      return tx.productVariant.findUnique({
+        where: { id: variantId },
+        include: {
+          inventory: true,
+        },
+      });
+    });
+  }
+  
 
   async createProduct(productData) {
     // const { variants, images, attributes, metadata, ...productDetails } =
@@ -194,102 +245,61 @@ class ProductService {
   }
 
   async updateProduct(id, updateData) {
-    // const { variants, images, attributes, metadata, ...productDetails } =
-    const { variants, images, metadata, ...productDetails } =
-      updateData;
+    try {
+      return await prisma.$transaction(async (tx) => {
+        const existingProduct = await tx.product.findUnique({ where: { id } });
+        if (!existingProduct) {
+          throw new Error('Product not found');
+        }
 
-    return prisma.$transaction(async (tx) => {
-      const product = await tx.product.update({
-        where: { id },
-        data: {
-          ...productDetails,
-          variants: variants
-            ? {
-                upsert: variants.map((variant) => {
-                  const { inventory, ...variantDetails } = variant;
-                  return {
-                    where: { id: variant.id || "new" },
-                    create: {
-                      ...variantDetails,
-                      inventory: inventory
-                        ? {
-                            create: {
-                              total_quantity: inventory.total_quantity || 0,
-                              reserved_quantity:
-                                inventory.reserved_quantity || 0,
-                              minimum_stock_alert:
-                                inventory.minimum_stock_alert || 5,
-                            },
-                          }
-                        : undefined,
-                    },
-                    update: {
-                      ...variantDetails,
-                      inventory: inventory
-                        ? {
-                            upsert: {
-                              create: {
-                                total_quantity: inventory.total_quantity || 0,
-                                reserved_quantity:
-                                  inventory.reserved_quantity || 0,
-                                minimum_stock_alert:
-                                  inventory.minimum_stock_alert || 5,
-                              },
-                              update: {
-                                total_quantity: inventory.total_quantity || 0,
-                                reserved_quantity:
-                                  inventory.reserved_quantity || 0,
-                                minimum_stock_alert:
-                                  inventory.minimum_stock_alert || 5,
-                              },
-                            },
-                          }
-                        : undefined,
-                    },
-                  };
-                }),
-              }
-            : undefined,
-          images: images
-            ? {
-                upsert: images.map((image) => ({
-                  where: { id: image.id || "new" },
-                  create: image,
-                  update: image,
-                })),
-              }
-            : undefined,
-          // attributes: attributes
-          //   ? {
-          //       upsert: attributes.map((attr) => ({
-          //         where: { id: attr.id || "new" },
-          //         create: attr,
-          //         update: attr,
-          //       })),
-          //     }
-          //   : undefined,
-          product_metadata: metadata
-            ? {
-                update: metadata,
-              }
-            : undefined,
-        },
-        include: {
-          variants: {
-            include: {
-              inventory: true,
-            },
+        const updatedProduct = await tx.product.update({
+          where: { id },
+          data: {
+            name: updateData.name,
+            description: updateData.description,
+            base_price: updateData.base_price,
+            sale_price: updateData.sale_price,
+            SKU: updateData.SKU,
+            stock_quantity: updateData.stock_quantity,
+            weight: updateData.weight,
+            width: updateData.width,
+            height: updateData.height,
+            length: updateData.length,
+            images: updateData.images,
+            category: { connect: { id: updateData.category } },
+            collection: { connect: { id: updateData.collection } },
+            tax_category: { connect: { id: updateData.tax_category } },
           },
-          images: true,
-          // attributes: true,
-          product_metadata: true,
-        },
-      });
+        });
 
-      return product;
-    });
+        await tx.variant.deleteMany({ where: { product_id: id } });
+
+        const variants = await Promise.all(updateData.variants.map((variant) =>
+          tx.variant.create({
+            data: {
+              color: variant.color,
+              size: variant.size,
+              price_modifier: variant.price_modifier,
+              inventory: {
+                create: {
+                  quantity: variant.inventory.quantity,
+                  low_stock_threshold: variant.inventory.low_stock_threshold,
+                },
+              },
+              product: { connect: { id: updatedProduct.id } },
+            },
+          })
+        ));
+
+        return { ...updatedProduct, variants };
+      });
+    } catch (error) {
+      console.error('Error in ProductService.updateProduct:', error.message);
+      throw new Error(`Failed to update product: ${error.message}`);
+    }
   }
 
+  
   async deleteProduct(id) {
     try {
       // Fetch related ProductVariant IDs
@@ -327,12 +337,3 @@ class ProductService {
 }
 
 export default new ProductService();
-
-
-
-
-
-
-
-
-

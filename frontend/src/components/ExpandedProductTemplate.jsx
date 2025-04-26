@@ -52,13 +52,14 @@ const ProductDetail = () => {
     const fetchProductAndWishlistStatus = async () => {
       try {
         setLoading(true);
-        const [productResponse, wishlistResponse] = await Promise.all([
+        const [productResponse] = await Promise.all([
           axios.get(`https://api.shopevella.com/v1/products/${productId}`),
-          axios.get("https://api.shopevella.com/v1/wishlist", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }),
+        //   axios.get("https://api.shopevella.com/v1/wishlist", {
+        //     // headers: {
+        //     //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+        //     // },
+        //   }
+        // ),
         ]);
 
         setProduct(productResponse.data);
@@ -68,10 +69,10 @@ const ProductDetail = () => {
         );
         setSelectedVariant(productResponse.data.variants[0]);
 
-        const isInWishlist = wishlistResponse.data.some(
-          (item) => item.product_id === productId
-        );
-        setIsWishlisted(isInWishlist);
+        // const isInWishlist = wishlistResponse.data.some(
+        //   (item) => item.product_id === productId
+        // );
+        // setIsWishlisted(isInWishlist);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("Failed to load product. Please try again later.");

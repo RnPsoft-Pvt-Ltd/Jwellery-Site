@@ -58,15 +58,59 @@ class ProductController {
 
   async updateProduct(req, res) {
     try {
-      const product = await productService.updateProduct(
-        req.params.id,
-        req.body
-      );
-      res.json(product);
+      const { id } = req.params;
+      const {
+        name, description, base_price, sale_price, SKU,
+        stock_quantity, weight, width, height, length,
+        images, variants, collection, category, tax_category
+      } = req.body;
+
+      if (!Array.isArray(variants)) {
+        return res.status(400).json({ message: 'Variants must be an array.' });
+      }
+
+      const sanitizedVariants = variants.map((variant) => {
+        if (
+          !variant.color ||
+          !variant.size ||
+          variant.price_modifier == null ||
+          !variant.inventory ||
+          variant.inventory.quantity == null ||
+          variant.inventory.low_stock_threshold == null
+        ) {
+          throw new Error('Each variant must have color, size, price_modifier, and inventory details.');
+        }
+
+        return {
+          color: variant.color,
+          size: variant.size,
+          price_modifier: parseFloat(variant.price_modifier),
+          inventory: {
+            quantity: parseInt(variant.inventory.quantity, 10),
+            low_stock_threshold: parseInt(variant.inventory.low_stock_threshold, 10),
+          },
+        };
+      });
+
+      const updateData = {
+        name, description, base_price, sale_price, SKU,
+        stock_quantity, weight, width, height, length,
+        images, variants: sanitizedVariants,
+        collection, category, tax_category,
+      };
+
+      const updatedProduct = await ProductService.updateProduct(id, updateData);
+      res.json(updatedProduct);
+
     } catch (error) {
-      errorHandler(error, req, res);
+      console.error('Error updating product:', error.message);
+      if (error.message.includes("Each variant")) {
+        return res.status(400).json({ message: error.message });
+      }
+      res.status(500).json({ message: 'Internal server error', error: error.message });
     }
   }
+  
 
   async deleteProduct(req, res) {
     try {

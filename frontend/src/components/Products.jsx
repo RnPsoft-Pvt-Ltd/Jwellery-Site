@@ -18,26 +18,21 @@ const Products = () => {
       const response = await axios.get(
         `https://api.shopevella.com/v1/products?page=${page}&limit=10`
       );
+      // console.log(response.data.data[0]);
       const formattedProducts = response.data.data.map((product) => {
         const totalStock =
           product.variants?.reduce((sum, variant) => {
             return sum + (variant.inventory?.total_quantity || 0);
           }, 0) || 0;
-
+      
         return {
+          ...product, // <-- Spread the whole product object to retain all original fields
           ID: product.id,
-          name: product.name,
-          price: product.base_price,
-          sku: product.SKU,
           stock: totalStock,
           thumbnail:
             product.images.find((img) => img.is_primary)?.image_url ||
             product.images[0]?.image_url ||
             "",
-          brand: product.brand,
-          description: product.description,
-          variants: product.variants,
-          categories: product.categories
         };
       });
       setProducts(formattedProducts);
@@ -172,7 +167,7 @@ const Products = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">
-                        {product.price}
+                        {product.base_price}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -182,7 +177,7 @@ const Products = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-gray-600 max-w-md truncate">
-                        {product.sku}
+                        {product.SKU}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">

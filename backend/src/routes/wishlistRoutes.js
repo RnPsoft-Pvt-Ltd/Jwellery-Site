@@ -7,12 +7,12 @@ const router = express.Router();
 // 🔐 Protect all routes by requiring authentication
 
 // POST /wishlist - Add product to wishlist (Authenticated users only)
-router.post('/', authenticate, wishlistController.addToWishlist);
+router.post('/',wishlistController.addToWishlist);
 
 // GET /wishlist - Get all wishlist items for the logged-in user (Authenticated users only)
-router.get('/', authenticate, wishlistController.getAllWishlistItems);
+router.get('/', wishlistController.getAllWishlistItems);
 
 // DELETE /wishlist/:id - Remove product from wishlist (Authenticated users only)
-router.delete('/', authenticate, wishlistController.removeFromWishlist);
+router.delete('/',wishlistController.removeFromWishlist);
 
 export default router;

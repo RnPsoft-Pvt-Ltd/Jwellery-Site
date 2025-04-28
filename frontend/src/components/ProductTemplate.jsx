@@ -30,7 +30,7 @@ const ProductTemplate = ({
     currentPage: 1,
     totalPages: 1,
     total: 0,
-    perPage: 12
+    perPage: 10
   });
 
   const calculateVariantPrice = (basePrice, priceModifier) => {
@@ -158,7 +158,7 @@ const allVariants = transformProductsToVariants(products);
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900">{products?.name || title}</h1>
+          <h1 className="text-4xl font-bold text-gray-900">{products?.name|| title}</h1>
           {products?.description && (
             <p className="mt-4 text-gray-600">{products?.description}</p>
           )}
@@ -256,17 +256,19 @@ const allVariants = transformProductsToVariants(products);
             {pagination.totalPages > 1 && (
               <div className="mt-8 flex justify-center gap-2">
                 {Array.from({ length: pagination.totalPages }, (_, i) => (
-                  <button
-                    key={i + 1}
-                    onClick={() => setPagination(prev => ({ ...prev, currentPage: i + 1 }))}
-                    className={`px-4 py-2 rounded-md transition-colors ${
-                      pagination.currentPage === i + 1
-                        ? 'bg-primary text-white'
-                        : 'bg-white text-gray-700 border hover:bg-gray-50'
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
+             <button
+             key={i + 1}
+             onClick={() => setPagination(prev => ({ ...prev, currentPage: i + 1 }))}
+             disabled={pagination.currentPage === i + 1}
+             className={`px-4 py-2 rounded-md transition-colors ${
+               pagination.currentPage === i + 1
+                 ? 'bg-primary text-white'
+                 : 'bg-white text-gray-700 border hover:bg-gray-50'
+             } ${pagination.currentPage === i + 1 ? 'cursor-not-allowed' : ''}`}
+           >
+             {i + 1}
+           </button>
+           
                 ))}
               </div>
             )}
@@ -403,7 +405,7 @@ const VariantCard = ({ variant }) => {
       <div className="p-4">
         <div className="space-y-2">
           <h3 className="font-medium text-gray-900 line-clamp-2">
-            {variant.productName} - {variant.color} ({variant.size})
+            {variant.productName} - {variant.color} {variant.size}
           </h3>
           <p className="text-lg font-semibold text-gray-900">
             {formattedPrice}

@@ -143,6 +143,22 @@ export default function Footer() {
                       Reviews
                     </span>
                   </li>
+                  <li>
+                    <span
+                      onClick={() => navigate("/terms")}
+                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
+                    >
+                      Terms & Conditions
+                    </span>
+                  </li>
+                  <li>
+                    <span
+                      onClick={() => navigate("/refundpolicy")}
+                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
+                    >
+                      Refund Policy
+                    </span>
+                  </li>
                 </ul>
               </div>
             </div>

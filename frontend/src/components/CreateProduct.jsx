@@ -66,6 +66,7 @@ const CreateProduct = () => {
 
         setCategories(categoriesData.data || []);
         setCollections(collectionsData.data || []);
+        console.log("taxCategoriesRes", taxCategoriesData)
         setTaxCategories(taxCategoriesData || []);
       } catch (err) {
         setError("Failed to load required data");
@@ -643,7 +644,7 @@ const CreateProduct = () => {
               <h2 className="text-lg font-semibold mb-4">Tax Settings</h2>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tax Category
+                  GST Category
                 </label>
                 <select
                   name="tax_category_id"
@@ -651,8 +652,9 @@ const CreateProduct = () => {
                   onChange={handleInputChange}
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Select Tax Category</option>
-                  {taxCategories.map((tax) => (
+                  <option value="">Select GST Category</option>
+
+                  {taxCategories?.map((tax) => (
                     <option key={tax.id} value={tax.id}>
                       {tax.name} - ({tax.standard_rate}%)
                     </option>

@@ -59,7 +59,8 @@ import CreateCollection from './components/CreateCollection.jsx'
 import UpdateProduct from './pages/UpdateProduct.jsx';
 import UpdateProduct2 from './pages/UpdateProduct2.jsx';
 import UpdateProduct3 from './pages/UpdateProduct3.jsx';
-
+import Terms from './pages/TermsPage.jsx';
+import RefundPolicy from './pages/RefundPolicy.jsx';
 function App() {
   return (
     // <BrowserRouter>
@@ -107,6 +108,8 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/products/:productId" element={<ExpandedProduct />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/refundpolicy" element={<RefundPolicy />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="/aboutUs" element={<AboutUs />} />

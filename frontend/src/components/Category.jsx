@@ -101,7 +101,7 @@ const CategoryCarousal = () => {
               <img
                 src={category.image}
                 alt={category.title}
-                className="w-full h-full object-cover"
+                className="w-[300px] h-full object-cover"
                 onError={(e) => {
                   e.target.src =
                     "https://storage.googleapis.com/jwelleryrnpsoft/placeholder.png";

@@ -70,18 +70,18 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div
-            className="flex-shrink-0 cursor-pointer"
-            onClick={() => handleNavigation(navigationLinks.home)}
-          >
-            <img
-              src={logo}
-              alt="Logo"
-              className="h-10"
-            />
-          </div>
+                <div
+                className="flex-shrink-0 cursor-pointer font-bold"
+                onClick={() => handleNavigation(navigationLinks.home)}
+                >
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="h-10"
+                />
+                </div>
 
-          {/* Mobile menu button */}
+                {/* Mobile menu button */}
           <div className="flex lg:hidden">
             <button
               className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-gray-800"

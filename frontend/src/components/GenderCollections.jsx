@@ -66,7 +66,7 @@ const GenderCollections = () => {
           >
             {/* Image with hover effect */}
             <img
-              src={collection.thumbnail}
+              src={collection.name.toLowerCase().includes("women")?"https://media-hosting.imagekit.io/34db6bfb3c4c411e/image.jpg?Expires=1840451818&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=leSo6TFWWD8q63O-WwWYwS5hKmiTu5qqYl25BtHLvZMxTNqu7nrGeZRNqyxzQ-VQ6KlkDOg-eqvKDqGoIz~-WM1iWw4iiP2JRcilqzCxMyusJ-RH3g2QPodY7K6Y2l9BnLcWjycsXfpfJsH90mpVz4qcUrwuqZJ6sB5fCjwClYiTY~T-tjQn6LgXsNzTE8e4dzqUmYEa9ofpQ3-UacQ2~gwUESJVbyFXcIVIKCSNY35N3qGLlme0y1OhC32CkuTe2yV4YtGB-zRx27CbOUErqo9V7St9bl6tdKpUb2SEvH-SIXVJ7i8v9QwkPcqRCO~Qibn3GunC90OdL-pm9EIjRg__":collection.thumbnail}
               alt={collection.name}
               loading="eager"
               className="w-full h-full object-cover rounded-md brightness-75 hover:brightness-100 transition-all duration-300"

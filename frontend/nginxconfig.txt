@@ -37,7 +37,7 @@ http {
        server {
     listen       80;
     listen       [::]:80;
-    server_name  13.210.132.253 shopevella.com www.shopevella.com;
+    server_name  51.21.246.250 shopevella.com www.shopevella.com;
 
     root         /home/ec2-user/Jwellery-Site/frontend/dist;
     index        index.html;

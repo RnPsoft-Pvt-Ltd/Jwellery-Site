@@ -94,7 +94,7 @@ const Callback = () => {
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
             <button
-              onClick={() => handleCallbackClick()}
+              onClick={() => window.open("https://wa.me/919124230952", "_blank")}
               className="bg-black text-white text-lg sm:text-2xl 
                          py-2 px-6 rounded-lg
                          hover:bg-gray-800 active:bg-gray-900
@@ -103,7 +103,7 @@ const Callback = () => {
                          focus:outline-none focus:ring-2 focus:ring-gray-400
                          font-albert text-center"
             >
-              Arrange a Callback
+              Whatsapp Chat
             </button>
             <button
               onClick={() => handleExploreClick()}

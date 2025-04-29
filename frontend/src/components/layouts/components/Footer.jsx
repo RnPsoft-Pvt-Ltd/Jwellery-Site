@@ -127,14 +127,7 @@ export default function Footer() {
                   About Us
                 </h2>
                 <ul className="space-y-3 text-center lg:text-left">
-                  <li>
-                    <span
-                      onClick={() => handleAboutUs()}
-                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
-                    >
-                      Our Story
-                    </span>
-                  </li>
+                  
                   <li>
                     <span
                       onClick={() => handleReviews()}

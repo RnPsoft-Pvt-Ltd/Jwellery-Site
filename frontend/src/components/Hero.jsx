@@ -4,19 +4,13 @@ import { useImageLoader } from "../utils/GlobalLoadingManager";
 
 const slides = [
   {
-    image: "https://storage.googleapis.com/jwelleryrnpsoft/image.png",
+    image: "https://media-hosting.imagekit.io/6f90e8fee5d94736/00.jpg?Expires=1840457286&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=kjf--kbKW~SoV1gikcp1zH7ccR7dcK3P5AukOkKkC2GCea4LCIAyYAe2aNWdnEQQYrN-ShI6qk6I7hkdszTTqEdy3wyk0q30TvXQf5twvmVN6oxNzT2dA2AWQCqjCIaTCjaZ9UpSBiN0HiofW~IpgDCHFhkbi-Xxz4N-TzQchkp3nKj8cUWcVyPGo9I~HY3K8hE5jvrRe0geTIRoi8mx~uur7TlvvWp0~cid7Ipds91dunqzYKnctiSKgI2Sp1R5LxwHGbk1I9ks1EK4kd7YdImKI7Iotme1j1GIfF0qmzUUiwNiGebTj0hCiiH8Y7-d71dEQil5r4wghyoCPORp0g__",
     heading: "Discover the Beauty",
     text: "Always Enhancing What's Already Beautiful",
     textPosition: "left-16 top-1/3",
     contentPosition: "right-16 bottom-32 text-left",
   },
-  {
-    image: "https://storage.googleapis.com/jwelleryrnpsoft/hero.png",
-    heading: "Grace in Every Detail",
-    text: "Always Enhancing What's Already Beautiful",
-    textPosition: "center top-1/4",
-    contentPosition: "left-16 bottom-32 text-right",
-  },
+  
 ];
 
 const Hero = () => {

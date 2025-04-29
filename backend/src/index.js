@@ -19,7 +19,8 @@ import orderRoutes from './routes/orderRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import salesStatisticsRoutes from './routes/salestatisticsRoutes.js'
 import searchRoutes from './routes/searchRoutes.js';
-
+import dotenv from 'dotenv';
+dotenv.config();
 import { connectDB } from './config/db.js';
 import fs from "fs/promises"; // Use Promises to avoid blocking
 import AWS from "aws-sdk";

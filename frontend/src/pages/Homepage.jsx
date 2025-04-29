@@ -24,15 +24,8 @@ export default function Homepage() {
     <div>
         <Hero/>
         <GenderCollections />
-        <ImageSlider/>
         <ProductSlider/> 
-        <MetalCollection/>
         <Category/>
-        <SpecialProducts/>
-        <StyledPicks/>
-        <ThemeCollection/>
-        
-        <CelebsChoice/>
         <Callback/>
         <Testimonials/>
     </div>

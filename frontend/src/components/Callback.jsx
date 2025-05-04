@@ -32,7 +32,7 @@ const Callback = () => {
             <div className="absolute inset-0 bg-gray-200 animate-pulse" />
           )}
           <img
-            src="https://storage.googleapis.com/jwelleryrnpsoft/callbackImage.png"
+            src="https://ideaverse-1.s3.eu-north-1.amazonaws.com/uploads/SKU0024.jpg"
             alt="Jewelry showcase"
             className={`object-cover w-full h-full transition-opacity duration-300
                       ${imageLoaded ? "opacity-100" : "opacity-0"}`}
@@ -81,14 +81,13 @@ const Callback = () => {
               className="text-2xl sm:text-[220%] text-gray-700 font-albert 
                          leading-tight"
             >
-              Imagine gifting something truly unique and meaningful.
-            </p>
+“Timeless Elegance, For the Confident You.”       </p>
             <p
               className="text-xl sm:text-[170%] text-gray-600 font-albert 
                          max-w-[450px] leading-snug"
             >
-              custom jewelry crafted especially for your loved ones.
-            </p>
+              Evella was born from a belief that beauty should feel personal, timeless, and true.<br/><br/>
+Each piece carries a touch of tradition, a hint of modernity, and a lot of love.            </p>
           </div>
 
           {/* Buttons */}

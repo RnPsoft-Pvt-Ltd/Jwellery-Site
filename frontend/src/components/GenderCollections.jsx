@@ -74,7 +74,7 @@ const GenderCollections = () => {
 
             {/* Collection Name */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-xl font-normal tracking-wide text-center transition-all duration-300 group-hover:text-2xl group-hover:font-bold">
-              {collection.name}
+              {collection.name.replace("Mens","Men's").replace("Women","Women's").replace("Kids","Kids'")}
             </div>
           </button>
         ))}

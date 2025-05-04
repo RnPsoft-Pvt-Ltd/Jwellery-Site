@@ -68,10 +68,10 @@ function AboutUs() {
             <section>
               <h2 className="text-2xl font-semibold mb-2">Contact Us</h2>
               <p><strong>Address:</strong> CRESTHAVEN VENTURES LLP<br />
-                C/O PRATAP SINGH, AT GANESWARPUR, PO JANUGANJ, INDUSTRIAL, Januganj, Remuna Police Station, Remuna,<br />
+                 AT GANESWARPUR, PO JANUGANJ, INDUSTRIAL Police Station, Remuna,<br />
                 Baleswar- 756019, Orissa, India
               </p>
-              <p><strong>Phone:</strong> 9867705056</p>
+              <p><strong>Phone:</strong> 9867705056/9124230952 </p>
               <p><strong>Email:</strong> evella.two@gmail.com</p>
               <p><strong>Website:</strong> shopevella.com</p>
             </section>

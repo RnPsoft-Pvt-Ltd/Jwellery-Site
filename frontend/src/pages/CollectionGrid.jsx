@@ -42,7 +42,7 @@ const CollectionGrid = () => {
 
   return collectionId ? (
     <CollectionTemplate 
-      title="Men"
+      title="Mens"
       collectionId={collectionId} // This should be the UUID string
       defaultFilters={defaultFilters}
     />

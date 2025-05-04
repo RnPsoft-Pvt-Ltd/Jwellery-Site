@@ -1,87 +1,107 @@
 import React from 'react';
 import Footer from '../components/layouts/components/Footer';
 
-function AboutUs() {
-return (
-    <>
-        <main className="flex-grow px-4 py-12 bg-white">
-            <div className="container mx-auto max-w-4xl">
-                <h1 className="text-2xl font-bold mb-4">Terms & Conditions</h1>
-                <p className="text-sm text-gray-500 mb-2">Last updated on 27-04-2025 17:03:06</p>
-                <p className="mb-4">
-                    These Terms and Conditions, along with the privacy policy or other terms (“Terms”), constitute a binding
-                    agreement by and between CRESTHAVEN VENTURES LLP (“Website Owner” or “we” or “us” or “our”) and you
-                    (“you” or “your”) and relate to your use of our website, goods (as applicable), or services (as applicable)
-                    (collectively, “Services”).
-                </p>
-                <p className="mb-4">
-                    By using our website and availing the Services, you agree that you have read and accepted these Terms
-                    (including the Privacy Policy). We reserve the right to modify these Terms at any time and without
-                    assigning any reason. It is your responsibility to periodically review these Terms to stay informed of
-                    updates.
-                </p>
-                <h2 className="text-xl font-semibold mt-6 mb-2">Terms of Use</h2>
-                <ul className="list-disc list-inside mb-4">
-                    <li>
-                        To access and use the Services, you agree to provide true, accurate, and complete information to us
-                        during and after registration, and you shall be responsible for all acts done through the use of your
-                        registered account.
-                    </li>
-                    <li>
-                        Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness,
-                        performance, completeness, or suitability of the information and materials offered on this website
-                        or through the Services, for any specific purpose.
-                    </li>
-                    <li>
-                        Your use of our Services and the website is solely at your own risk and discretion. You are required
-                        to independently assess and ensure that the Services meet your requirements.
-                    </li>
-                    <li>
-                        The contents of the Website and the Services are proprietary to us, and you will not have any
-                        authority to claim any intellectual property rights, title, or interest in its contents.
-                    </li>
-                    <li>
-                        Unauthorized use of the Website or the Services may lead to action against you as per these Terms
-                        or applicable laws.
-                    </li>
-                    <li>You agree to pay us the charges associated with availing the Services.</li>
-                    <li>
-                        You agree not to use the website and/or Services for any purpose that is unlawful, illegal, or
-                        forbidden by these Terms, or Indian or local laws that might apply to you.
-                    </li>
-                    <li>
-                        You agree and acknowledge that the website and the Services may contain links to other third-party
-                        websites. On accessing these links, you will be governed by the terms of use, privacy policy, and
-                        such other policies of such third-party websites.
-                    </li>
-                </ul>
-                <h2 className="text-xl font-semibold mt-6 mb-2">Refund Policy</h2>
-                <p className="mb-4">
-                    You shall be entitled to claim a refund of the payment made by you in case we are not able to provide
-                    the Service. The timelines for such return and refund will be according to the specific Service you have
-                    availed or within the time period provided in our policies (as applicable). In case you do not raise a
-                    refund claim within the stipulated time, then this would make you ineligible for a refund.
-                </p>
-                <h2 className="text-xl font-semibold mt-6 mb-2">Force Majeure</h2>
-                <p className="mb-4">
-                    Notwithstanding anything contained in these Terms, the parties shall not be liable for any failure to
-                    perform an obligation under these Terms if performance is prevented or delayed by a force majeure
-                    event.
-                </p>
-                <h2 className="text-xl font-semibold mt-6 mb-2">Governing Law</h2>
-                <p className="mb-4">
-                    These Terms and any dispute or claim relating to it, or its enforceability, shall be governed by and
-                    construed in accordance with the laws of India. All disputes arising out of or in connection with these
-                    Terms shall be subject to the exclusive jurisdiction of the courts in GANESWARPUR, ODISHA.
-                </p>
-                <h2 className="text-xl font-semibold mt-6 mb-2">Contact Information</h2>
-                <p className="mb-4">
-                    All concerns or communications relating to these Terms must be communicated to us using the contact
-                    information provided on this website.
-                </p>
-            </div>
-        </main>
-    </>
-);
+function TermsPage() {
+    return (
+        <>
+            <main className="flex-grow px-4 py-12 bg-gray-50">
+                <div className="container mx-auto max-w-4xl bg-white shadow-md rounded-lg p-8">
+                    <h1 className="text-2xl font-bold mb-6 text-center">Terms of Use</h1>
+                    <p className="text-sm text-gray-500 mb-4 text-center">Effective Date: 1st of May 2025</p>
+                    <p className="text-sm text-gray-500 mb-8 text-center">Website: www.shopevella.com</p>
+                    <p className="text-sm text-gray-500 mb-8 text-center">Brand Owner: CrestHaven Ventures LLP</p>
+                    <div className="text-gray-700 space-y-6">
+                        <h2 className="text-lg font-semibold">Welcome to Evella</h2>
+                        <p>
+                            By accessing or using this website, you agree to comply with and be bound by the following Terms of Use. If you do not agree with any of these terms, please do not use our website.
+                        </p>
+                        <h3 className="text-md font-semibold">1. General</h3>
+                        <p>
+                            This website is owned and operated by CrestHaven Ventures LLP, an Indian entity operating under applicable laws of India. The term "you" refers to the user or viewer of this website, and "we", "our", or "Evella" refers to the brand.
+                        </p>
+                        <h3 className="text-md font-semibold">2. Use of Website</h3>
+                        <ul className="list-disc pl-6">
+                            <li>Use the site for lawful purposes only.</li>
+                            <li>Not engage in any activity that disrupts or interferes with the website’s functionality.</li>
+                            <li>Not attempt to gain unauthorized access to any part of the website or its systems.</li>
+                            <li>Provide accurate and current information during registration or purchase.</li>
+                            <li>We reserve the right to terminate your access to the website if you violate any terms herein.</li>
+                        </ul>
+                        <h3 className="text-md font-semibold">3. Products & Pricing</h3>
+                        <p>
+                            All products listed are subject to availability. We reserve the right to modify prices, product details, or discontinue items at any time without prior notice. While we strive for accuracy, typographical errors or inaccuracies in pricing or descriptions may occur. We reserve the right to correct such errors.
+                        </p>
+                        <h3 className="text-md font-semibold">4. Intellectual Property</h3>
+                        <p>
+                            All content on this site — including text, images, product designs, logos, graphics, and layout — is the intellectual property of Evella or its content suppliers, and is protected under Indian copyright, trademark, and intellectual property laws.
+                        </p>
+                        <ul className="list-disc pl-6">
+                            <li>Reproduce, distribute, or use any content from the site without our written permission.</li>
+                            <li>Use any logo, trademark, or proprietary information without express consent.</li>
+                        </ul>
+                        <h3 className="text-md font-semibold">5. Account Responsibility</h3>
+                        <p>
+                            If you create an account with us:
+                        </p>
+                        <ul className="list-disc pl-6">
+                            <li>You are responsible for maintaining confidentiality of your account details and restricting access to your device.</li>
+                            <li>You agree to accept responsibility for all activities under your account.</li>
+                        </ul>
+                        <h3 className="text-md font-semibold">6. User-Generated Content</h3>
+                        <p>
+                            If you post reviews, comments, photos, or other content:
+                        </p>
+                        <ul className="list-disc pl-6">
+                            <li>It must not be illegal, obscene, abusive, or infringe any third-party rights.</li>
+                            <li>By submitting, you grant Evella the right to use, reproduce, and display such content across platforms.</li>
+                            <li>We reserve the right to remove or modify any content at our sole discretion.</li>
+                        </ul>
+                        <h3 className="text-md font-semibold">7. Payments</h3>
+                        <p>
+                            We use secure third-party payment gateways. By placing an order, you agree to the terms and conditions of the respective payment service providers. Evella is not liable for any payment failures or breaches at the payment gateway’s end.
+                        </p>
+                        <h3 className="text-md font-semibold">8. Shipping & Returns</h3>
+                        <p>
+                            Please refer to our Shipping Policy and Return & Refund Policy available on the website for detailed terms regarding delivery, return, and cancellations.
+                        </p>
+                        <h3 className="text-md font-semibold">9. Limitation of Liability</h3>
+                        <p>
+                            Evella shall not be liable for any:
+                        </p>
+                        <ul className="list-disc pl-6">
+                            <li>Indirect, incidental, or consequential damages arising from the use of this website.</li>
+                            <li>Loss or damage arising from reliance on product listings, delays in delivery, or technical disruptions.</li>
+                            <li>Our liability shall be limited to the value of the goods purchased.</li>
+                        </ul>
+                        <h3 className="text-md font-semibold">10. Privacy Policy</h3>
+                        <p>
+                            Your use of this website is also governed by our Privacy Policy, which outlines how we collect, use, and protect your personal data.
+                        </p>
+                        <h3 className="text-md font-semibold">11. Governing Law & Jurisdiction</h3>
+                        <p>
+                            These Terms shall be governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in [Odisha].
+                        </p>
+                        <h3 className="text-md font-semibold">12. Changes to Terms</h3>
+                        <p>
+                            We reserve the right to update or modify these Terms at any time without prior notice. Continued use of the site after changes implies acceptance.
+                        </p>
+                        <h3 className="text-md font-semibold">13. Contact Us</h3>
+                        <p>
+                            If you have any questions about these Terms, please contact:
+                        </p>
+                        <ul className="list-disc pl-6">
+                            <li>Email: bizz@shopevella,com</li>
+                            <li>Phone / WhatsApp: +91-9124230952 / 9867705056</li>
+                            <li>Registered Address: CrestHaven Ventures LLP, PO. Januganj, Golaichawk, Ganeswarpur, Dist-Balasore, Odisha- 757019</li>
+                        </ul>
+                        <p className="text-sm text-gray-500 mt-4">
+                            *We reserve the right to update or modify these Terms at any time without prior notice. Continued use of the site after changes implies acceptance.
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </>
+    );
 }
-export default AboutUs;
+
+export default TermsPage;

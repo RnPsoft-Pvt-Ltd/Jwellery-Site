@@ -613,7 +613,7 @@ const CreateProduct = () => {
                     <option value="">Select Category</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
-                        {category.name}
+                        {category.name.replace("Jwellery", "Jewellery").replace("Mens","Men's").replace("Women","Women's").replace("Kids","Kids'").replace("Pendant&","Pendant &").replace("Earring&","Earring &").replace("Necklace&","Necklace &").replace("Bracelet&","Bracelet &").replace("Ring&","Ring &").replace("Ear rings","Earrings").replace("Ring set","Ring's set")}
                       </option>
                     ))}
                   </select>
@@ -631,7 +631,7 @@ const CreateProduct = () => {
                     <option value="">Select Collection</option>
                     {collections.map((collection) => (
                       <option key={collection.id} value={collection.id}>
-                        {collection.name}
+                        {collection.name.replace("Jwellery", "Jewellery").replace("Mens","Men's").replace("Women","Women's").replace("Kids","Kids'")} 
                       </option>
                     ))}
                   </select>

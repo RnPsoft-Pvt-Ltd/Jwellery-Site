@@ -9,35 +9,33 @@ class ProductService {
       maxPrice,
       search,
       page = 1,
-      limit = 100,
+      limit = 10,
     } = filters;
-
+  
     // Ensure page and limit are valid numbers
     const validPage = Math.max(1, Number(page));
-    const validLimit = Math.max(1, Math.min(100, Number(limit))); // Add maximum limit of 100
-
+    const validLimit = Math.max(1, Math.min(100, Number(limit))); // Max 100
+  
     const where = {
       AND: [],
     };
-
-    // Only add conditions if they exist
+  
+    // Apply filters
     if (categoryId) {
       where.AND.push({ category_id: categoryId });
     }
-
-    if(collectionId) {
+  
+    if (collectionId) {
       where.AND.push({ collection_id: collectionId });
     }
-
+  
     if (minPrice || maxPrice) {
-      const priceFilter = {
-        base_price: {},
-      };
+      const priceFilter = { base_price: {} };
       if (minPrice) priceFilter.base_price.gte = parseFloat(minPrice);
       if (maxPrice) priceFilter.base_price.lte = parseFloat(maxPrice);
       where.AND.push(priceFilter);
     }
-
+  
     if (search) {
       where.AND.push({
         OR: [
@@ -46,28 +44,48 @@ class ProductService {
         ],
       });
     }
-
-    // If no filters are applied, remove the AND array
+  
     if (where.AND.length === 0) {
       delete where.AND;
     }
-
-    const products = await prisma.product.findMany({
+  
+    // Step 1: Fetch product IDs with pagination
+    const baseProducts = await prisma.product.findMany({
       where,
+      select: { id: true },
+      skip: (validPage - 1) * validLimit,
+      take: validLimit,
+      orderBy: { name: "asc" },
+    });
+  
+    const productIds = baseProducts.map((p) => p.id);
+  
+    if (productIds.length === 0) {
+      return {
+        data: [],
+        pagination: {
+          total: 0,
+          totalPages: 0,
+          currentPage: validPage,
+          perPage: validLimit,
+        },
+      };
+    }
+  
+    // Step 2: Fetch full product details for selected IDs
+    const detailedProducts = await prisma.product.findMany({
+      where: { id: { in: productIds } },
       include: {
         category: true,
         images: {
           where: { is_primary: true },
         },
-           // Fetch the default tax category info
-      tax_category: true,
-
-      // Fetch any special tax mappings
-      product_tax_mappings: {
-        include: {
-          tax_category: true,
+        tax_category: true,
+        product_tax_mappings: {
+          include: {
+            tax_category: true,
+          },
         },
-      },
         variants: {
           select: {
             id: true,
@@ -83,17 +101,14 @@ class ProductService {
           },
         },
       },
-      skip: (validPage - 1) * validLimit,
-      take: validLimit,
-      orderBy: {
-        name: "asc", // Changed from created_at to name
-      },
+      orderBy: { name: "asc" },
     });
-
+  
+    // Step 3: Get total count for pagination
     const total = await prisma.product.count({ where });
-
+  
     return {
-      data: products,
+      data: detailedProducts,
       pagination: {
         total,
         totalPages: Math.ceil(total / validLimit),
@@ -102,6 +117,7 @@ class ProductService {
       },
     };
   }
+  
 
   async getProductById(id) {
     return prisma.product.findUnique({

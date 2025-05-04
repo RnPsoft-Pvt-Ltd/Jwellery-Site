@@ -48,24 +48,26 @@ const FilterSidebar = ({
           <div key={category} className="border-b pb-6 last:border-b-0">
             <h3 className="font-medium capitalize mb-4">{category}</h3>
             <div className="space-y-3">
-              {options.map((option) => (
-                <label key={option} className="flex items-center gap-3 group cursor-pointer">
-                  <div className="relative flex items-center">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 border-2 border-gray-300 rounded appearance-none checked:bg-black checked:border-black transition-colors cursor-pointer"
-                      checked={activeFilters[category].includes(option)}
-                      onChange={() => onFilterChange(category, option)}
-                    />
-                    <div className="absolute text-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 check-icon checked:opacity-100">
-                      ✓
+              {options
+                .filter((option) => !option.toLowerCase().includes('gold'))
+                .map((option) => (
+                  <label key={option} className="flex items-center gap-3 group cursor-pointer">
+                    <div className="relative flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 border-2 border-gray-300 rounded appearance-none checked:bg-black checked:border-black transition-colors cursor-pointer"
+                        checked={activeFilters[category].includes(option)}
+                        onChange={() => onFilterChange(category, option)}
+                      />
+                      <div className="absolute text-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 check-icon checked:opacity-100">
+                        ✓
+                      </div>
                     </div>
-                  </div>
-                  <span className="text-gray-600 group-hover:text-black transition-colors">
-                    {option}
-                  </span>
-                </label>
-              ))}
+                    <span className="text-gray-600 group-hover:text-black transition-colors">
+                      {option}
+                    </span>
+                  </label>
+                ))}
             </div>
           </div>
         ))}

@@ -66,11 +66,9 @@ export default function Footer() {
               </div>
               <div className="mt-4 text-center lg:text-left">
                 <div className="text-lg lg:text-[23px] text-gray-300 font-albert">
-                  TIMELESS ELEGANCE
-                </div>
+                “Timeless Elegance.                   </div>
                 <div className="text-lg lg:text-[23px] text-gray-300 font-albert">
-                  FOR THE CONFIDENT YOU
-                </div>
+                For the Confident You.”                 </div>
               </div>
             </div>
 
@@ -88,7 +86,7 @@ export default function Footer() {
                         onClick={() => navigate(`/collections/${collection.id}`)}
                         className="text-gray-300 cursor-pointer hover:text-white font-albert text-lg lg:text-xl"
                       >
-                        {collection.name}
+                        {collection.name.replace("Mens","Men's").replace("Women","Women's").replace("Kids","Kids'")}
                       </span>
                     </li>
                   ))}
@@ -123,7 +121,7 @@ export default function Footer() {
 
               {/* About Us Section */}
               <div className="space-y-4">
-                <h2 className="text-xl lg:text-2xl font-normal font-albert text-center lg:text-left">
+                <h2 className="text-xl lg:text-2xl hover:text-white font-normal font-albert text-center lg:text-left" onClick={handleAboutUs}>
                   About Us
                 </h2>
                 <ul className="space-y-3 text-center lg:text-left">

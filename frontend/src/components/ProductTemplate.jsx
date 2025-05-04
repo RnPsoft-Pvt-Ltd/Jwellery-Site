@@ -53,20 +53,37 @@ const ProductTemplate = ({
       })) || []
     ) || [];
   };
-
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `https://api.shopevella.com/v1/products?page=${pagination.currentPage}&limit=${pagination.perPage}`
-        );
-        setProducts(response.data);
+        const firstPage = await axios.get(`https://api.shopevella.com/v1/products?page=1&limit=${pagination.perPage}`);
         
+        const { totalPages } = firstPage.data.pagination;
+        let allData = [...firstPage.data.data];
+  
+        const requests = [];
+        for (let i = 2; i <= totalPages; i++) {
+          requests.push(axios.get(`https://api.shopevella.com/v1/products?page=${i}&limit=${pagination.perPage}`));
+        }
+        const responses = await Promise.all(requests);
+        responses.forEach(res => {
+          allData = [...allData, ...res.data.data];
+        });
+  allData=allData.sort((a, b) => {  
+    if(sort === "price-low-high") {
+      return parseFloat(a.base_price) - parseFloat(b.base_price);
+    } else if(sort === "price-high-low") {
+      return parseFloat(b.base_price) - parseFloat(a.base_price);
+    } else {
+      return 0;
+    }
+  });
+        setProducts({ data: allData.slice((pagination.currentPage-1)*10,pagination.currentPage*10) });
         setPagination(prev => ({
           ...prev,
-          total: response.data.pagination.total,
-          totalPages: response.data.pagination.totalPages
+          total: firstPage.data.pagination.total,
+          totalPages
         }));
       } catch (err) {
         console.error('Error fetching products:', err);
@@ -75,9 +92,10 @@ const ProductTemplate = ({
         setLoading(false);
       }
     };
-
+  
     fetchAllProducts();
-  }, [pagination.currentPage, pagination.perPage]);
+  }, [pagination.currentPage, pagination.perPage,sort]);
+
 
   const handleFilterChange = (category, value) => {
     setActiveFilters((prev) => {
@@ -208,25 +226,32 @@ const allVariants = transformProductsToVariants(products);
               </div>
               
               {Object.entries(defaultFilters).map(([category, options]) => (
-                <div key={category}>
-                  <h3 className="text-sm font-medium text-gray-900 capitalize mb-3">
-                    {category}
-                  </h3>
-                  <div className="space-y-2">
-                    {options.map((option) => (
-                      <label key={option} className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          className="rounded border-gray-300 text-primary focus:ring-primary"
-                          checked={activeFilters[category].includes(option)}
-                          onChange={() => handleFilterChange(category, option)}
-                        />
-                        <span className="text-sm text-gray-700">{option}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
+          <div key={category} className="border-b pb-6 last:border-b-0">
+            <h3 className="font-medium capitalize mb-4">Categories</h3>
+            <div className="space-y-3">
+              {options
+                .filter((option) => !option.toLowerCase().includes('gold')&& !option.toLowerCase().includes('diamond')&&!option.toLowerCase().includes('solitare') && !option.toLowerCase().includes('black') && !option.toLowerCase().includes("platinum"))
+                .map((option) => (
+                  <label key={option} className="flex items-center gap-3 group cursor-pointer">
+                    <div className="relative flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 border-2 border-gray-300 rounded appearance-none checked:bg-black checked:border-black transition-colors cursor-pointer"
+                        checked={activeFilters[category].includes(option)}
+                        onChange={() => onFilterChange(category, option)}
+                      />
+                      <div className="absolute text-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 check-icon checked:opacity-100">
+                        ✓
+                      </div>
+                    </div>
+                    <span className="text-gray-600 group-hover:text-black transition-colors">
+                      {option}
+                    </span>
+                  </label>
+                ))}
+            </div>
+          </div>
+        ))}
             </div>
           </div>
 
@@ -234,7 +259,7 @@ const allVariants = transformProductsToVariants(products);
           <div className="lg:w-3/4">
             <div className="flex justify-between items-center mb-6">
               <p className="text-gray-600">
-                Showing {filteredVariants?.length} of {allVariants.length} variants
+                Showing {filteredVariants?.length} of {allVariants.length} items
               </p>
               <select 
                 className="border border-gray-300 rounded-md px-4 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"

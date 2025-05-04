@@ -35,6 +35,8 @@ const Products = () => {
             "",
         };
       });
+       formattedProducts.map((product) => {
+        console.log(product.SKU)});
       setProducts(formattedProducts);
       setTotalPages(response.data.pagination.totalPages); // Assuming the API provides total pages
     } catch (error) {
@@ -58,16 +60,17 @@ const Products = () => {
   };
 
   const handleUpdate = async (product) => {
-    console.log(product);
     navigate("/admin/update-product", { state: { product } });
   };
 
   const filteredProducts = products.filter((product) => {
-    const searchString = searchTerm.toLowerCase();
+    
+    
+    const searchString = searchTerm?.toLowerCase();
     return (
-      product.name.toLowerCase().includes(searchString) ||
-      product.sku.toLowerCase().includes(searchString) ||
-      product.price.toString().includes(searchString)
+      product?.name?.toLowerCase().includes(searchString) ||
+      product?.SKU?.toLowerCase().includes(searchString) ||
+      product?.base_price?.toString().includes(searchString)
     );
   });
 

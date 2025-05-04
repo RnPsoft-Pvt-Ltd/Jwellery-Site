@@ -158,6 +158,22 @@ export default function Cart() {
 
   const handleRemove = (id) => {
     setItems(items.filter((item) => item.id !== id));
+    fetch(`https://api.shopevella.com/v1/cart/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ itemId: id }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          console.log("Item removed from cart");
+        }
+      })
+      .catch((error) => console.error("Error removing item:", error));
   };
 
   const applyPromoCode = () => {

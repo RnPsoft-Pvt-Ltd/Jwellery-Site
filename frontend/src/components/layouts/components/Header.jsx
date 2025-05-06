@@ -192,12 +192,7 @@ const Header = () => {
               >
                 <ShoppingCart className="text-white" size={20} />
               </button>
-              <button
-                onClick={() => handleNavigation(navigationLinks.wishlist)}
-                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
-              >
-                <Heart className="text-white" size={20} />
-              </button>
+
               <button
                 onClick={() => handleNavigation(navigationLinks.profile)}
                 className="p-2 hover:bg-gray-800 rounded-full transition-colors"

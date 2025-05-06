@@ -22,6 +22,7 @@ class WishlistController {
   // Get all wishlist items for a user
   async getAllWishlistItems(req, res, next) {
     try {
+      console.log(req.user)
       const userId = req.user.id; // Assuming user ID is stored in `req.user` (e.g., from authentication middleware)
       const wishlistItems = await wishlistService.getAllWishlistItems(userId);
       res.json(wishlistItems);

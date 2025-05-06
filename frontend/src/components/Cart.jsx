@@ -3,7 +3,131 @@ import { useNavigate } from "react-router-dom";
 import CartItem from "./CartItem";
 import { load } from "@cashfreepayments/cashfree-js";
 import axios from "axios";
+//     export default WishlistPage;
+import React from 'react';
+import { Heart,Loader2 } from 'lucide-react';
+function WishlistPage() {
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  const BASE_URL = 'https://api.shopevella.com/v1/wishlist';
+  const CART_URL = 'https://api.shopevella.com/v1/cart';
+  const PRODUCT_URL='https://api.shopevella.com/v1/products';
+
+  useEffect(() => {
+    const fetchWishlistItems = async () => {
+      try {
+        const response = await axios.get(BASE_URL, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setWishlistItems(response.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWishlistItems();
+  }, []);
+
+  const handleRemoveFromWishlist = async (productId) => {
+    try {
+      await axios.delete(BASE_URL, {
+        data: { productId },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setWishlistItems(wishlistItems.filter(item => item.product.id !== productId));
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+    }
+  };
+
+  const handleAddToCart = async (productId) => {
+    let product = null;
+    const res=await axios.get(`${PRODUCT_URL}/${productId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
+   const response=res.data.variants[0].id;
+    console.log(response);
+    try {
+      console.log(product)
+      alert('Adding to cart...',productId);
+      console.log('Adding to cart...',productId);
+      // Add the product to the cart
+      await axios.post(CART_URL,  {
+        productVariantId: response,
+        quantity: 1,
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      alert('Added to cart successfully!');
+      handleRemoveFromWishlist(productId);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
+  };
+
+  // if (loading) return <div className="flex items-center justify-center h-screen text-lg">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+  if (error) return <div className="flex items-center justify-center h-screen text-red-500">Error: {error}</div>;
+
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Main Content */}
+      <div className="flex-1 p-6 bg-white">
+        <h2 className="text-xl font-semibold mb-6">Wishlist</h2>
+
+        {wishlistItems.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-64">
+            {wishlistItems.map((item) => (
+              <div 
+                key={item.id} 
+                className="group relative bg-gray-100 p-2 rounded-lg shadow-md flex flex-col items-center"
+              >
+                <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 overflow-hidden rounded-lg">
+                <img
+  src={item.product.images.length > 0 ? item.product.images[0].image_url : '/placeholder.svg'}
+  alt={item.product.name}
+  className="w-full h-full object-cover rounded-lg"
+/>
+
+                </div>
+                <button
+                  className="absolute top-2 right-2 p-2 rounded-full bg-white shadow-md"
+                  onClick={() => handleRemoveFromWishlist(item.product.id)}
+                >
+                  <Heart className="w-5 h-5 text-red-500 fill-red-500" />
+                </button>
+                <div className="mt-4 text-center">
+                  <h3 className="text-sm font-medium">{item.product.name}</h3>
+                  <p className="text-sm text-gray-600">{item.product.price}</p> {/* Removed $ symbol */}
+                  <button
+                    className="mt-2 px-4 py-2 bg-black text-white text-xs rounded hover:bg-gray-800 transition"
+                    onClick={() => handleAddToCart(item.product.id,item.product.variants)}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500">Your wishlist is empty.</p>
+        )}
+      </div>
+    </div>
+  );
+}
 const SHIPPING_COST = 99;
 
 export default function Cart() {
@@ -201,6 +325,8 @@ export default function Cart() {
         >
           Continue Shopping
         </button>
+        <WishlistPage/>
+
       </div>
     );
   }
@@ -267,7 +393,11 @@ export default function Cart() {
         >
           Proceed to Checkout
         </button>
+        
       </div>
+      <WishlistPage/>
+
+
     </div>
   );
 }

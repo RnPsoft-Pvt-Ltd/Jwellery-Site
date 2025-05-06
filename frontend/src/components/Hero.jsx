@@ -6,7 +6,7 @@ const slides = [
   {
     image: "https://media-hosting.imagekit.io/6f90e8fee5d94736/00.jpg?Expires=1840457286&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=kjf--kbKW~SoV1gikcp1zH7ccR7dcK3P5AukOkKkC2GCea4LCIAyYAe2aNWdnEQQYrN-ShI6qk6I7hkdszTTqEdy3wyk0q30TvXQf5twvmVN6oxNzT2dA2AWQCqjCIaTCjaZ9UpSBiN0HiofW~IpgDCHFhkbi-Xxz4N-TzQchkp3nKj8cUWcVyPGo9I~HY3K8hE5jvrRe0geTIRoi8mx~uur7TlvvWp0~cid7Ipds91dunqzYKnctiSKgI2Sp1R5LxwHGbk1I9ks1EK4kd7YdImKI7Iotme1j1GIfF0qmzUUiwNiGebTj0hCiiH8Y7-d71dEQil5r4wghyoCPORp0g__",
     heading: "Timeless Pearl and Silver Crafted for You",
-    text: "Always Enhancing What's Already Beautiful",
+    text: "",
     textPosition: "left-8 bottom-16",
     contentPosition: "right-16 bottom-32 text-left",
   },
@@ -55,12 +55,7 @@ const Hero = () => {
             className={`absolute text-white transition-opacity duration-1000 ${slide.contentPosition}`}
           >
             <p className="text-lg font-light mb-4">{slide.text}</p>
-            <button
-              onClick={() => navigate("/products")}
-              className="px-6 py-3 border-2 border-white text-white text-lg hover:bg-white hover:text-black transition"
-            >
-              Explore Now
-            </button>
+            
           </div>
         </div>
       ))}

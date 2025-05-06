@@ -81,7 +81,7 @@ const Callback = () => {
               className="text-2xl sm:text-[220%] text-gray-700 font-albert 
                          leading-tight"
             >
-“Timeless Elegance, For the Confident You.”       </p>
+Timeless Elegance. <br></br>For the Confident You.       </p>
             <p
               className="text-xl sm:text-[170%] text-gray-600 font-albert 
                          max-w-[450px] leading-snug"

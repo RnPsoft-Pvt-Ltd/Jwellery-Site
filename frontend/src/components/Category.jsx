@@ -99,8 +99,8 @@ const CategoryCarousal = () => {
           >
             <div className="relative h-full">
               <img
-                src={category.image}
-                alt={category.title}
+                src={category.title=="Rings"?"https://media-hosting.imagekit.io/814be5a513af4bdd/WhatsApp%20Image%202025-05-05%20at%2012.25.36%20PM.jpeg?Expires=1841036183&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=dBsGkpH6Ws5UqhP3rLkDgWvLWV1i~8f252x1X67MwqOY8hs8ea3qu6UFVaxDQ0e4q~SoQXODhnrqOq9PwhtESiHnjaWLYqNQbb1istuOU4BuwpN6YgkMYQeE6yqnggMTt8-K4ZXEZn0cSriEV~oBC0ky8Rm4OtoMZaflfhv0UVPr7ewnNY67Q3JgO5dysVWkjHKymXjJUALpfb3NxkATN6CmW4Lhkr1XZ6q1XfefMmfHEr294y8SoEmsfZqCbnwndLP9tmKfBHlZ~gQCYlJqj8Ea2j3DPLO5hlNvYfrlkRilIC0-~yP60nJ4y6z6SwhZEEEJHDobVN1jvVEPqpkCKw__":category.image}
+                alt={category.title=="Pendant& Earrings set"?"Pendant & Earrings set":category.title}
                 className="w-[300px] h-full object-cover"
                 onError={(e) => {
                   e.target.src =
@@ -109,7 +109,7 @@ const CategoryCarousal = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 z-[1]" />
               <div className="absolute bottom-[10%] left-0 w-full text-center text-white text-2xl font-normal font-['Arial'] drop-shadow-lg z-[2]">
-                {category.title}
+                {category.title=="Pendant& Earrings set"?"Pendant & Earrings set":category.title=="Pendant"?"Pendants":category.title=="Ear rings and Ring set"?"Earrings & Ring set":category.title}
               </div>
             </div>
           </div>

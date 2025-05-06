@@ -9,9 +9,7 @@ const Products = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
   const navigate = useNavigate();
-
   const fetchProducts = async (page) => {
     setIsLoading(true);
     try {

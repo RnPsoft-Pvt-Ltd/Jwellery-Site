@@ -22,6 +22,7 @@ const ProductTemplate = ({
     // occasion: [],
     // type: [],
   });
+  const navigate = useNavigate();
 
   const [showFilters, setShowFilters] = useState(false);
   const [sort, setSort] = useState("default");
@@ -32,6 +33,16 @@ const ProductTemplate = ({
     total: 0,
     perPage: 10
   });
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const pageId = queryParams.get("id");
+    if (pageId) {
+      setPagination((prev) => ({
+        ...prev,
+        currentPage: parseInt(pageId, 10) || 1,
+      }));
+    }
+  }, []);
 
   const calculateVariantPrice = (basePrice, priceModifier) => {
     return parseFloat(basePrice) + parseFloat(priceModifier || 0);
@@ -283,7 +294,7 @@ const allVariants = transformProductsToVariants(products);
                 {Array.from({ length: pagination.totalPages }, (_, i) => (
              <button
              key={i + 1}
-             onClick={() => setPagination(prev => ({ ...prev, currentPage: i + 1 }))}
+             onClick={() => window.location.href=`http://localhost:5174/products?id=${i + 1}`}
              disabled={pagination.currentPage === i + 1}
              className={`px-4 py-2 rounded-md transition-colors ${
                pagination.currentPage === i + 1
@@ -347,9 +358,7 @@ const VariantCard = ({ variant }) => {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           }
         );
-        toast({
-          description: "Item added to your wishlist",
-        });
+       
       }
       setIsWishlisted(!isWishlisted);
     } catch (error) {

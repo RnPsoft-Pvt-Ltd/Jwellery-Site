@@ -66,9 +66,9 @@ export default function Footer() {
               </div>
               <div className="mt-4 text-center lg:text-left">
                 <div className="text-lg lg:text-[23px] text-gray-300 font-albert">
-                “Timeless Elegance.                   </div>
+                Timeless Elegance.                   </div>
                 <div className="text-lg lg:text-[23px] text-gray-300 font-albert">
-                For the Confident You.”                 </div>
+                For the Confident You.                 </div>
               </div>
             </div>
 
@@ -150,6 +150,22 @@ export default function Footer() {
                       Refund Policy
                     </span>
                   </li>
+                  <li>
+                    <span
+                      onClick={() => navigate("/terms")}
+                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
+                    >
+                      Privacy Policy
+                    </span>
+                  </li>
+                  <li>
+                    <span
+                      onClick={() => navigate("/terms")}
+                      className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
+                    >
+                      Shipping Policy
+                    </span>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -176,7 +192,7 @@ export default function Footer() {
 
           {/* Social Media Icons */}
           <div className="flex justify-center sm:justify-start space-x-6 mt-12">
-            <a href="#" className="text-white hover:text-gray-300">
+            <a href="https://www.instagram.com/shop.evella/" className="text-white hover:text-gray-300">
               <svg
                 className="h-6 w-6 lg:h-7 lg:w-7"
                 fill="currentColor"
@@ -194,13 +210,13 @@ export default function Footer() {
                 <path d="M24 11.7c0 6.45-5.27 11.68-11.78 11.68-2.07 0-4-.53-5.7-1.45L0 24l2.13-6.27a11.57 11.57 0 0 1-1.7-6.04C.44 5.23 5.72 0 12.23 0 18.72 0 24 5.23 24 11.7M12.22 1.85c-5.46 0-9.9 4.41-9.9 9.83 0 2.15.7 4.14 1.88 5.76L2.96 21.1l3.8-1.2a9.9 9.9 0 0 0 5.46 1.62c5.46 0 9.9-4.4 9.9-9.83a9.88 9.88 0 0 0-9.9-9.83z" />
               </svg>
             </a>
-            <a href="#" className="text-white hover:text-gray-300">
+            <a href="https://www.facebook.com/share/169JZWWVxG/" className="text-white hover:text-gray-300">
               <svg
-                className="h-6 w-6 lg:h-7 lg:w-7"
-                fill="currentColor"
-                viewBox="0 0 24 24"
+              className="h-6 w-6 lg:h-7 lg:w-7"
+              fill="currentColor"
+              viewBox="0 0 24 24"
               >
-                <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z" />
+              <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.796.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116c.729 0 1.326-.597 1.326-1.326V1.326C24 .597 23.403 0 22.675 0z" />
               </svg>
             </a>
             <a href="#" className="text-white hover:text-gray-300">

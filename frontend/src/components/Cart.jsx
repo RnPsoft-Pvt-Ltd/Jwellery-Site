@@ -139,14 +139,13 @@ export default function Cart() {
   const navigate = useNavigate();
 
   // ✅ Initialize Cashfree SDK in sandbox mode
-  let insitialzeSDK = async function () {
-
-    cashfree = await load({
-      mode: "production",
-    })
-  }
-
-  insitialzeSDK()
+  useEffect(() => {
+    const initializeSDK = async () => {
+      const cf = await load({ mode: "production" }); // or "production" for live
+      setCashfreeInstance(cf);
+    };
+    initializeSDK();
+  }, []);
 
   // 🔑 Get Payment Session ID
   const getSessionId = async () => {

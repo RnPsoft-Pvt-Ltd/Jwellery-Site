@@ -6,6 +6,7 @@ import axios from "axios";
 //     export default WishlistPage;
 import React from 'react';
 import { Heart,Loader2 } from 'lucide-react';
+import set from "quick-structures/set";
 function WishlistPage({setwishlistcheck}) {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -170,6 +171,7 @@ export default function Cart() {
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -184,6 +186,7 @@ export default function Cart() {
     }
 
     const { user } = await response.json();
+    setUserInfo(user);
     console.log(user.addresses);
     if (user.addresses.length > 0) {
       console.log(true)

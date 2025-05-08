@@ -379,7 +379,7 @@ export default function Cart() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const total = subtotal + (subtotal>=4000?SHIPPING_COST:0) - discount;
+  const total = subtotal + (subtotal<=4000?SHIPPING_COST:0) - discount;
 
   const handleQuantityChange = (id, quantity) => {
     setItems(
@@ -471,7 +471,7 @@ export default function Cart() {
       </div>
       <div className="flex justify-between">
         <span>Shipping</span>
-        {total > 4000 ? (
+        {total < 4000 ? (
           <span>Rs.{SHIPPING_COST}</span>
         ) : (
           <span>Free</span>

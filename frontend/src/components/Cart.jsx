@@ -210,6 +210,7 @@ export default function Cart() {
 
   // 🔑 Get Payment Session ID
   const getSessionId = async () => {
+
     try {
       // Fetch user data (optional)
       await fetch("https://api.abiv.in/fetchdata", {
@@ -228,8 +229,7 @@ export default function Cart() {
         );
 
       const amount = total + 0.03 * total + 0.01 * total;
-      const totalAmount = amount;
-
+      const totalAmount = Math.ceil(amount);
       const res = await axios.post("https://api.abiv.in/payment", {
         amount: totalAmount,
         customeremail: userInfo.email,
@@ -380,7 +380,6 @@ export default function Cart() {
     0
   );
   const total = subtotal + (subtotal<=4000?SHIPPING_COST:0) - discount;
-
   const handleQuantityChange = (id, quantity) => {
     setItems(
       items.map((item) => (item.id === id ? { ...item, quantity } : item))
@@ -493,7 +492,7 @@ export default function Cart() {
       )}
       <div className="flex justify-between font-medium pt-2 border-t">
         <span>Total</span>
-        <span>Rs.{(total + 0.03 * total + 0.01 * total - discount).toFixed(2)}</span>
+        <span>Rs.{Math.ceil((total + 0.03 * total + 0.01 * total - discount).toFixed(2))}</span>
       </div>
     </div>
 

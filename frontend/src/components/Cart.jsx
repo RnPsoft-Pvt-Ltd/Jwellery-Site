@@ -6,7 +6,6 @@ import axios from "axios";
 //     export default WishlistPage;
 import React from 'react';
 import { Heart,Loader2 } from 'lucide-react';
-import set from "quick-structures/set";
 function WishlistPage({setwishlistcheck}) {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -6,10 +6,37 @@ import axios from "axios";
 //     export default WishlistPage;
 import React from 'react';
 import { Heart,Loader2 } from 'lucide-react';
-function WishlistPage() {
+function WishlistPage({setwishlistcheck}) {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userfunction=async (token) => {
+    const response = await fetch('https://api.shopevella.com/v1/users/me', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+
+    const { user } = await response.json();
+    setUserInfo(user);
+    console.log(user.addresses);
+    if (user.addresses.length > 0) {
+      console.log(true)
+      setAddress(user.addresses[0]);
+    }
+  }
+    if (!token) {
+      setError('Please log in to view your wishlist');
+      setLoading(false);
+      return;
+    }
+    userfunction(token);
+  }, []);
 
   const BASE_URL = 'https://api.shopevella.com/v1/wishlist';
   const CART_URL = 'https://api.shopevella.com/v1/cart';
@@ -22,6 +49,9 @@ function WishlistPage() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         setWishlistItems(response.data);
+        if(wishlistItems.length==0){
+          setwishlistcheck(false);
+        }
       } catch (error) {
         setError(error.message);
       } finally {
@@ -84,8 +114,8 @@ function WishlistPage() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Main Content */}
-      <div className="flex-1 p-6 bg-white">
-        <h2 className="text-xl font-semibold mb-6">Wishlist</h2>
+      <div className="flex-1 p-2 bg-white">
+        <h2 className="text-xl font-semibold mb-2">Wishlist</h2>
 
         {wishlistItems.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-64">
@@ -100,7 +130,6 @@ function WishlistPage() {
   alt={item.product.name}
   className="w-full h-full object-cover rounded-lg"
 />
-
                 </div>
                 <button
                   className="absolute top-2 right-2 p-2 rounded-full bg-white shadow-md"
@@ -120,24 +149,54 @@ function WishlistPage() {
                 </div>
               </div>
             ))}
+           
           </div>
         ) : (
-          <p className="text-gray-500">Your wishlist is empty.</p>
+          <><p className="text-center text-gray-500">
+            Your wishlist is empty. Start adding items to your wishlist!
+            </p></>
         )}
       </div>
     </div>
   );
 }
-const SHIPPING_COST = 99;
+const SHIPPING_COST = 79;
 
 export default function Cart() {
   const [cashfreeInstance, setCashfreeInstance] = useState(null);
   const [items, setItems] = useState([]);
+  const [wishlistcheck,setwishlistcheck]=useState(true);
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [address, setAddress] = useState(null);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userfunction=async (token) => {
+    const response = await fetch('https://api.shopevella.com/v1/users/me', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+
+    const { user } = await response.json();
+    console.log(user.addresses);
+    if (user.addresses.length > 0) {
+      console.log(true)
+      setAddress(user.addresses[0]);
+    }
+  }
+    if (!token) {
+      alert('Please log in to view your cart');
+      navigate('/login');
+      return;
+    }
+    userfunction(token);
+  }, []);
   // ✅ Initialize Cashfree SDK in sandbox mode
   useEffect(() => {
     const initializeSDK = async () => {
@@ -166,15 +225,14 @@ export default function Cart() {
           )
         );
 
-      const amount = total
-      const totalAmount = amount + Math.ceil(0.18 * amount);
+      const amount = total + 0.03 * total + 0.01 * total;
+      const totalAmount = amount;
 
       const res = await axios.post("https://api.abiv.in/payment", {
         amount: totalAmount,
-        customeremail: "tpriyanshu775@gmail.com",
-        customername: "Admin",
+        customeremail: userInfo.email,
+        customername: userInfo.name,
       });
-
       if (res.data && res.data.payment_session_id) {
         localStorage.setItem("orderId", res.data.order_id);
         return res.data.payment_session_id;
@@ -195,6 +253,45 @@ export default function Cart() {
         const payment = res.data[0];
         if (payment.payment_completion_time != null) {
           alert("Payment Successful");
+          const orderDetails = {
+            paymentMethod,
+
+            items: [
+              items.map((item) => ({
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price,
+              })),
+            ],
+            shippingAddress: {
+
+              address: address.address_line1,
+              city: address.city,
+              zip: address.zip_code,
+              country: address.country,
+              contact: address.phone,
+            },
+          };
+      
+          try {
+            const response = await fetch("https://api.shopevella.com/api/checkout", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(orderDetails),
+            });
+      
+            const data = await response.json();
+            if (response.ok) {
+              setShowSuccess(true);
+              setTimeout(() => navigate("/"), 2000); // Redirect after success
+            } else {
+              alert(data.error || "Order failed!");
+            }
+          } catch (error) {
+            alert("Something went wrong. Please try again.");
+          } finally {
+            setLoading(false);
+          }
         } else {
           alert("Payment Failed");
         }
@@ -208,6 +305,14 @@ export default function Cart() {
 
   // ✅ Handle Checkout
   const handleClick = async () => {
+    if(address == null){
+      alert("Please add an address to proceed with checkout.");
+      return
+    }
+    if (items.length === 0) {
+      alert("Your cart is empty");
+      return;
+    }
     if (!cashfreeInstance) {
       alert("Cashfree SDK is not ready");
       return;
@@ -272,7 +377,7 @@ export default function Cart() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const total = subtotal + SHIPPING_COST - discount;
+  const total = subtotal + (subtotal>=4000?SHIPPING_COST:0) - discount;
 
   const handleQuantityChange = (id, quantity) => {
     setItems(
@@ -325,6 +430,7 @@ export default function Cart() {
         >
           Continue Shopping
         </button>
+
         <WishlistPage/>
 
       </div>
@@ -332,72 +438,118 @@ export default function Cart() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 space-y-4">
-        <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
-        {items.map((item) => (
-          <CartItem
-            key={item.id}
-            image={item.image}
-            name={item.name}
-            price={item.price}
-            quantity={item.quantity}
-            onQuantityChange={(qty) => handleQuantityChange(item.id, qty)}
-            onRemove={() => handleRemove(item.id)}
-          />
-        ))}
+    <div className="max-w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+  {/* Cart + Wishlist */}
+  <div className="lg:col-span-2 space-y-4">
+    <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Your Cart</h1>
+
+    {items.map((item) => (
+      <CartItem
+        key={item.id}
+        image={item.image}
+        name={item.name}
+        price={item.price}
+        quantity={item.quantity}
+        onQuantityChange={(qty) => handleQuantityChange(item.id, qty)}
+        onRemove={() => handleRemove(item.id)}
+      />
+    ))}
+{wishlistcheck && 
+    <WishlistPage setwishlistcheck={setwishlistcheck}/>}
+  </div>
+
+  {/* Order Summary */}
+  <div className="bg-gray-50 p-4 sm:p-6 rounded-lg h-fit w-full">
+    <h2 className="text-lg font-medium mb-4">Order Summary</h2>
+
+    <div className="space-y-2 mb-4 text-sm sm:text-base">
+      <div className="flex justify-between">
+        <span>Subtotal</span>
+        <span>Rs.{subtotal}</span>
       </div>
-
-      <div className="bg-gray-50 p-6 rounded-lg h-fit">
-        <h2 className="text-lg font-medium mb-4">Order Summary</h2>
-        <div className="space-y-2 mb-4">
-          <div className="flex justify-between">
-            <span>Subtotal</span>
-            <span>Rs.{subtotal}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Shipping</span>
-            <span>Rs.{SHIPPING_COST}</span>
-          </div>
-          {discount > 0 && (
-            <div className="flex justify-between text-green-600">
-              <span>Promo applied</span>
-              <span>-Rs.{discount}</span>
-            </div>
-          )}
-          <div className="flex justify-between font-medium pt-2 border-t">
-            <span>Total</span>
-            <span>Rs.{total}</span>
-          </div>
-        </div>
-
-        <div className="flex gap-2 mb-4">
-          <input
-            type="text"
-            value={promoCode}
-            onChange={(e) => setPromoCode(e.target.value)}
-            placeholder="Promo Code"
-            className="border px-2 py-1 rounded"
-          />
-          <button
-            onClick={applyPromoCode}
-            className="bg-gray-700 text-white p-2 rounded"
-          >
-            Apply
-          </button>
-        </div>
-
-        <button
-          className="w-full bg-blue-500 text-white p-3 rounded"
-          onClick={handleClick}
-        >
-          Proceed to Checkout
-        </button>
-        
+      <div className="flex justify-between">
+        <span>Shipping</span>
+        {total > 4000 ? (
+          <span>Rs.{SHIPPING_COST}</span>
+        ) : (
+          <span>Free</span>
+        )}
       </div>
-      <WishlistPage/>
-
-
+      <div className="flex justify-between">
+        <span>GST</span>
+        <span>Rs.{(0.03 * total).toFixed(2)}</span>
+      </div>
+      <div className="flex justify-between">
+        <span>Payment Gateway Charges</span>
+        <span>Rs.{(0.01 * total).toFixed(2)}</span>
+      </div>
+      {discount > 0 && (
+        <div className="flex justify-between text-green-600">
+          <span>Promo applied</span>
+          <span>-Rs.{discount}</span>
+        </div>
+      )}
+      <div className="flex justify-between font-medium pt-2 border-t">
+        <span>Total</span>
+        <span>Rs.{(total + 0.03 * total + 0.01 * total - discount).toFixed(2)}</span>
+      </div>
     </div>
+
+    {/* Promo Code Input */}
+    <div className="flex flex-col sm:flex-row gap-2 mb-4">
+      <input
+        type="text"
+        value={promoCode}
+        onChange={(e) => setPromoCode(e.target.value)}
+        placeholder="Promo Code"
+        className="border px-2 py-2 rounded w-full"
+      />
+      <button
+        onClick={applyPromoCode}
+        className="bg-gray-700 text-white px-4 py-2 rounded w-full sm:w-auto"
+      >
+        Apply
+      </button>
+    </div>
+
+    <button
+      className="w-full bg-blue-500 text-white py-3 rounded"
+      onClick={handleClick}
+    >
+      Proceed to Checkout
+    </button>
+
+    {/* Address Display */}
+    {address == null ? (
+      <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-2xl border border-gray-200 bg-yellow-50 shadow-sm">
+        <p className="text-sm text-gray-700 mb-2 sm:mb-0">
+          Please add an address to proceed with checkout.
+        </p>
+        <button
+          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition-colors"
+          onClick={() => navigate("/account/address")}
+        >
+          Add
+        </button>
+      </div>
+    ) : (
+      <div className="mt-4 p-4 rounded-2xl shadow-md border border-gray-200 bg-white w-full">
+        <p className="text-sm text-gray-500 mb-1">Delivering to:</p>
+        <p className="text-base font-medium text-gray-800">{address.full_name}</p>
+        <p className="text-gray-700">{address.address_line1}</p>
+        <p className="text-gray-700">{address.city}, {address.state}</p>
+        <p className="text-gray-700">{address.country} - {address.zip_code}</p>
+        <p className="text-gray-700 mb-4">{address.phone}</p>
+        <button
+          onClick={() => navigate("/account/address")}
+          className="text-sm text-blue-600 hover:underline font-medium"
+        >
+          Edit Address
+        </button>
+      </div>
+    )}
+  </div>
+</div>
+
   );
 }

@@ -1,7 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Loader2, Save, User, Phone, MapPin, Building, Flag, Navigation } from 'lucide-react';
-
+import {
+  Loader2,
+  Save,
+  User,
+  Phone,
+  MapPin,
+  Building,
+  Flag,
+  Navigation,
+} from 'lucide-react';
+ const FormField = ({ name, label, icon: Icon,formData,handleChange }) => (
+    <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-4">
+        {label}
+      </label>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Icon className="h-5 w-5 text-gray-400" />
+        </div>
+        <input
+          id={name}
+          type="text"
+          name={name}
+          value={formData[name]}
+          onChange={handleChange}
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          placeholder={`Enter ${label.toLowerCase()}`}
+        />
+      </div>
+    </div>
+  );
 function EditAddressPage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -22,14 +51,14 @@ function EditAddressPage() {
     saving: false,
     message: '',
     error: '',
-    success: false
+    success: false,
   });
 
   useEffect(() => {
     if (id) {
       fetchAddress();
     } else {
-      setStatus(prev => ({ ...prev, loading: false }));
+      setStatus((prev) => ({ ...prev, loading: false }));
     }
   }, [id]);
 
@@ -37,10 +66,10 @@ function EditAddressPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        setStatus(prev => ({ 
-          ...prev, 
-          error: 'Please log in to view address details', 
-          loading: false 
+        setStatus((prev) => ({
+          ...prev,
+          error: 'Please log in to view address details',
+          loading: false,
         }));
         return;
       }
@@ -52,8 +81,7 @@ function EditAddressPage() {
       if (!response.ok) throw new Error('Failed to fetch user data');
 
       const userData = await response.json();
-      
-      // If user has an address, populate the form
+
       if (userData.addresses && userData.addresses.length > 0) {
         const address = userData.addresses[0];
         setFormData({
@@ -65,47 +93,53 @@ function EditAddressPage() {
           state: address.state || '',
           city: address.city || '',
           landmark: address.landmark || '',
-          isPrimary: address.is_primary || false,
+          isDefault: address.is_primary || false,
         });
       }
     } catch (error) {
-      setStatus(prev => ({ 
-        ...prev, 
-        error: error.message || 'Error loading address data'
+      setStatus((prev) => ({
+        ...prev,
+        error: error.message || 'Error loading address data',
       }));
     } finally {
-      setStatus(prev => ({ ...prev, loading: false }));
+      setStatus((prev) => ({ ...prev, loading: false }));
     }
   };
 
   const handleChange = (e) => {
+    e.preventDefault();
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? checked : value;
-    
-    setFormData(prev => ({
+
+    setFormData((prev) => ({
       ...prev,
       [name]: newValue,
     }));
-    
-    setStatus(prev => ({ ...prev, message: '', error: '', success: false }));
+
+    setStatus((prev) => ({ ...prev, message: '', error: '', success: false }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus(prev => ({ ...prev, saving: true, message: '', error: '', success: false }));
+    setStatus((prev) => ({
+      ...prev,
+      saving: true,
+      message: '',
+      error: '',
+      success: false,
+    }));
 
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        setStatus(prev => ({ 
-          ...prev, 
+        setStatus((prev) => ({
+          ...prev,
           error: 'Please log in to save address',
-          saving: false 
+          saving: false,
         }));
         return;
       }
 
-      // Prepare address data in the format expected by the backend
       const addressData = {
         address: {
           full_name: formData.fullName,
@@ -116,8 +150,8 @@ function EditAddressPage() {
           state: formData.state,
           city: formData.city,
           landmark: formData.landmark,
-          is_primary: formData.isPrimary,
-        }
+          is_primary: formData.isDefault,
+        },
       };
 
       const response = await fetch('https://api.shopevella.com/v1/users/me', {
@@ -134,45 +168,24 @@ function EditAddressPage() {
         throw new Error(errorData.message || 'Failed to save address');
       }
 
-      setStatus(prev => ({ 
-        ...prev, 
+      setStatus((prev) => ({
+        ...prev,
         success: true,
-        message: 'Address updated successfully!' 
+        message: 'Address updated successfully!',
       }));
-      
+
       navigate('/account/address');
     } catch (error) {
-      setStatus(prev => ({ 
-        ...prev, 
-        error: error.message || 'Error saving address. Please try again.' 
+      setStatus((prev) => ({
+        ...prev,
+        error: error.message || 'Error saving address. Please try again.',
       }));
     } finally {
-      setStatus(prev => ({ ...prev, saving: false }));
+      setStatus((prev) => ({ ...prev, saving: false }));
     }
   };
 
-  const FormField = ({ name, label, icon: Icon }) => (
-    <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-4">{label}</label>
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Icon className="h-5 w-5 text-gray-400" />
-        </div>
-        <input
-          id={name}
-          type="text"
-          name={name}
-          value={formData[name]}
-          onChange={handleChange}
-          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-          placeholder={`Enter ${label.toLowerCase()}`}
-          // autoComplete="off"
-        />
-
-        
-      </div>
-    </div>
-  );
+ 
 
   if (status.loading) {
     return (
@@ -194,25 +207,27 @@ function EditAddressPage() {
       </div>
 
       {(status.error || status.message) && (
-        <div className={`mb-6 p-4 rounded-lg ${
-          status.error 
-            ? 'bg-red-50 border border-red-200 text-red-600' 
-            : 'bg-green-50 border border-green-200 text-green-600'
-        }`}>
+        <div
+          className={`mb-6 p-4 rounded-lg ${
+            status.error
+              ? 'bg-red-50 border border-red-200 text-red-600'
+              : 'bg-green-50 border border-green-200 text-green-600'
+          }`}
+        >
           {status.error || status.message}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField name="fullName" label="Full Name" icon={User} />
-          <FormField name="mobile" label="Mobile Number" icon={Phone} />
-          <FormField name="addressLine1" label="Address Line 1" icon={MapPin} />
-          <FormField name="landmark" label="Landmark" icon={Navigation} />
-          <FormField name="city" label="City" icon={Building} />
-          <FormField name="state" label="State" icon={Flag} />
-          <FormField name="country" label="Country" icon={Flag} />
-          <FormField name="zipCode" label="ZIP Code" icon={MapPin} />
+          <FormField name="fullName" label="Full Name" icon={User} formData={formData} handleChange={handleChange}/>
+          <FormField name="phone" label="Mobile Number" icon={Phone} formData={formData} handleChange={handleChange}/>
+          <FormField name="addressLine1" label="Address Line 1" icon={MapPin} formData={formData} handleChange={handleChange}/>
+          <FormField name="landmark" label="Landmark" icon={Navigation} formData={formData} handleChange={handleChange}/>
+          <FormField name="city" label="City" icon={Building} formData={formData} handleChange={handleChange}/>
+          <FormField name="state" label="State" icon={Flag} formData={formData} handleChange={handleChange}/>
+          <FormField name="country" label="Country" icon={Flag} formData={formData} handleChange={handleChange}/>
+          <FormField name="zipCode" label="ZIP Code" icon={MapPin} formData={formData} handleChange={handleChange}/>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">

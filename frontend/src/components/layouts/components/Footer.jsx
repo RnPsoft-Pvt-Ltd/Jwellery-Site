@@ -152,7 +152,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <span
-                      onClick={() => navigate("/terms")}
+                      onClick={() => navigate("/privacy")}
                       className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
                     >
                       Privacy Policy
@@ -160,7 +160,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <span
-                      onClick={() => navigate("/terms")}
+                      onClick={() => navigate("/shipping")}
                       className="text-gray-300 hover:text-white font-albert text-lg lg:text-xl cursor-pointer"
                     >
                       Shipping Policy

@@ -30,7 +30,8 @@ import AuthLayout from './components/layouts/AuthLayout';
 import AdminLayout from './components/layouts/AdminLayout';
 import AccountLayout from './components/layouts/AccountLayout';
 import MainLayout from './components/layouts/MainLayout';
-
+import Shipping from "./pages/ShippingPage";
+import PrivacyPage from "./pages/PrivacyPage";
 
 
 
@@ -114,7 +115,8 @@ function App() {
         <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/arrangecallback" element={<ArrangeCallback />} />
-
+        <Route path="/shipping" element={<Shipping />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/products" element={<ProductGrid />} />
         <Route path="/categories/:categoryId" element={<CategoryGrid />} />
         <Route path="/collections/:collectionId" element={<CollectionGrid />} />

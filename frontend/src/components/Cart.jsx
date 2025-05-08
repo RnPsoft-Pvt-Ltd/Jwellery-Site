@@ -478,11 +478,11 @@ export default function Cart() {
         )}
       </div>
       <div className="flex justify-between">
-        <span>GST</span>
+        <span>GST@3%</span>
         <span>Rs.{(0.03 * total).toFixed(2)}</span>
       </div>
       <div className="flex justify-between">
-        <span>Payment Gateway Charges</span>
+        <span>Payment Gateway Charges@1%</span>
         <span>Rs.{(0.01 * total).toFixed(2)}</span>
       </div>
       {discount > 0 && (

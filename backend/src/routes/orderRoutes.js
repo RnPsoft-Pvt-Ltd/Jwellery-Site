@@ -11,5 +11,4 @@ router.get('/:id',authenticate, orderController.getOrderById);
 router.put('/:id/cancel', authenticate, orderController.cancelOrder);
 router.get('/admin/all',authenticate, isAdmin, orderController.getAllOrders);
 router.put('/admin/:id', authenticate, isAdmin, orderController.updateOrderStatus);
-
 export default router;

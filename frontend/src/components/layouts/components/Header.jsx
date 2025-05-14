@@ -16,6 +16,7 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
+  const [cart,setcart]=useState(0)
   const navigate = useNavigate();
 
   const {
@@ -32,6 +33,25 @@ const Header = () => {
 
     if (token && storedUser) {
       setUser(JSON.parse(storedUser));
+      const cartcount = async()=>{
+         const response = await fetch("https://api.shopevella.com/v1/cart", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        if (data.status === "success") {
+          setcart(
+            data.data.items.length
+          )
+        }
+      }
+      cartcount()
+
     }
 
     setLoading(false);
@@ -68,7 +88,7 @@ const Header = () => {
   return (
     <nav className="sticky top-0 z-50 w-full bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
                 <div
                 className="flex-shrink-0 cursor-pointer font-bold"
@@ -77,7 +97,7 @@ const Header = () => {
                 <img
                   src={logo}
                   alt="Logo"
-                  className="h-10"
+                  className="h-20"
                 />
                 </div>
 
@@ -186,12 +206,17 @@ const Header = () => {
               </div>
 
               {/* Action buttons */}
-              <button
-                onClick={() => handleNavigation(navigationLinks.cart)}
-                className="p-2 hover:bg-gray-800 rounded-full transition-colors"
-              >
-                <ShoppingCart className="text-white" size={20} />
-              </button>
+             <button
+      onClick={() => handleNavigation(navigationLinks.cart)}
+      className="relative p-2 hover:bg-gray-800 rounded-full transition-colors"
+    >
+      <ShoppingCart className="text-white" size={20} />
+      
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+          {cart}
+        </span>
+    </button>
+
 
               <button
                 onClick={() => handleNavigation(navigationLinks.profile)}

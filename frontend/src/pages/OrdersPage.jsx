@@ -89,7 +89,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import OrderTracking from "../components/OrderTracking"
 import CancelOrderForm from "../components/CancelOrderForm"
 import ReturnForm from "../components/ReturnForm"
@@ -100,37 +100,32 @@ function OrdersPage() {
   const [showCancelForm, setShowCancelForm] = useState(false)
   const [showReturnForm, setShowReturnForm] = useState(false)
   const [showReviewForm, setShowReviewForm] = useState(false)
+  const [orders,setOrders]=useState([]);
+useEffect(()=>{
+  const token=localStorage.getItem("token");
+  if(token){
+    const getorders=async()=>{
+      if(!localStorage.getItem("user"))alert("please login")
+        try{
+  const orders=await fetch(`https://api.shopevella.com/v1/orders/`,{
+    method:"GET",
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  }
+  
 
-  const orders = [
-    {
-      id: "001",
-      date: "2023-19-12",
-      amount: "Rs.9999",
-      status: "Pending",
-      canCancel: true,
-      items: [
-        { name: "Ring", quantity: 2, price: 20000 },
-        { name: "Necklace", quantity: 3, price: 10000 },
-      ],
-      trackingId: "123xyz123333",
-      shippingAddress: {
-        street: "Starcity, Near Bus Stand",
-        city: "Bhuneswar",
-        state: "Patia",
-        pincode: "12345",
-        contact: "9800000000",
-      },
-    },
-    {
-      id: "002",
-      date: "2023-19-12",
-      amount: "Rs.9999",
-      status: "Delivered",
-      canReview: true,
-      items: [{ name: "Gold Ring", quantity: 1, price: 9999 }],
-    },
-    // ... other orders
-  ]
+  )
+  const final=await orders.json();
+  console.log(final)
+  setOrders(final)
+  }catch(err){
+    console.log(err)
+  }
+}
+  getorders()
+
+  }
+},[])
+ 
 
   const handleTrackOrder = (order) => {
     setSelectedOrder(order)
@@ -181,8 +176,8 @@ function OrdersPage() {
             {showReviewForm && (
               <ProductReview
                 orderId={selectedOrder.id}
-                productId={selectedOrder.items[0].id}
-                productName={selectedOrder.items[0].name}
+                productId={selectedOrder.items[0]?.id}
+                productName={selectedOrder.items[0]?.name}
                 onSubmit={handleCloseAllForms}
               />
             )}
@@ -205,10 +200,10 @@ function OrdersPage() {
               <div className="flex justify-between items-center">
                 <div>
                   <div className="font-medium">Order #{order.id}</div>
-                  <div className="text-sm text-gray-600">{order.date}</div>
+                  <div className="text-sm text-gray-600">{order?.order_date}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-medium">{order.amount}</div>
+                  <div className="font-medium">{order.total_amount}</div>
                   <div className="text-sm text-gray-600">{order.status}</div>
                 </div>
               </div>

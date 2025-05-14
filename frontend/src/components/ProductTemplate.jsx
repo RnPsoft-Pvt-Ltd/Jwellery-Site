@@ -294,7 +294,7 @@ const allVariants = transformProductsToVariants(products);
                 {Array.from({ length: pagination.totalPages }, (_, i) => (
              <button
              key={i + 1}
-             onClick={() => window.location.href=`http://localhost:5174/products?id=${i + 1}`}
+             onClick={() => window.location.href=`https://shopevella.com/products?id=${i + 1}`}
              disabled={pagination.currentPage === i + 1}
              className={`px-4 py-2 rounded-md transition-colors ${
                pagination.currentPage === i + 1

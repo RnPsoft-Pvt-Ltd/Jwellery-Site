@@ -376,6 +376,11 @@ const VariantCard = ({ variant }) => {
     e.stopPropagation();
     setIsAddingToCart(true);
     try {
+            if(localStorage.getItem("cart")){
+        localStorage.setItem("cart",Number(localStorage.getItem("cart"))+1)
+      }else{
+        localStorage.setItem("cart",1)
+      }
       await axios.post(
         "https://api.shopevella.com/v1/cart",
         {
@@ -386,15 +391,10 @@ const VariantCard = ({ variant }) => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      toast({
-        description: "Added to cart successfully",
-      });
+     
     } catch (error) {
       console.error("Error adding to cart:", error);
-      toast({
-        variant: "destructive",
-        description: "Failed to add to cart. Please try again.",
-      });
+      
     } finally {
       setIsAddingToCart(false);
     }

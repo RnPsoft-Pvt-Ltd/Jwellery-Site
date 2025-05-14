@@ -139,6 +139,11 @@ function WishlistPage() {
 
   const handleAddToCart = async (productId) => {
     try {
+            if(localStorage.getItem("cart")){
+        localStorage.setItem("cart",Number(localStorage.getItem("cart"))+1)
+      }else{
+        localStorage.setItem("cart",1)
+      }
       await axios.post(CART_URL, { productId }, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

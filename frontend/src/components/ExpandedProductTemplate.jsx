@@ -89,6 +89,12 @@ const ProductDetail = () => {
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
     try {
+            if(localStorage.getItem("cart")){
+        localStorage.setItem("cart",Number(localStorage.getItem("cart"))+1)
+      }else{
+        localStorage.setItem("cart",1)
+      }
+      
       if (!selectedVariant) return;
 
       await axios.post(

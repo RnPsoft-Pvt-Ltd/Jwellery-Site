@@ -323,6 +323,11 @@ const VariantCard = ({ variant }) => {
     e.stopPropagation();
     setIsAddingToCart(true);
     try {
+      if(localStorage.getItem("cart")){
+        localStorage.setItem("cart",Number(localStorage.getItem("cart"))+1)
+      }else{
+        localStorage.setItem("cart",1)
+      }
       await axios.post(
         "https://api.shopevella.com/v1/cart",
         {
@@ -386,7 +391,7 @@ const VariantCard = ({ variant }) => {
       <div className="p-4">
         <div className="space-y-2">
           <h3 className="font-medium text-gray-900 line-clamp-2">
-            {variant.productName} - {variant.color} ({variant.size})
+            {variant.productName} - {variant.color} 
           </h3>
           <p className="text-lg font-semibold text-gray-900">
             {formattedPrice}

@@ -17,6 +17,8 @@ const Header = () => {
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
   const [cart,setcart]=useState(0)
+    const [cartCount, setCartCount] = useState(cart);
+
   const navigate = useNavigate();
 
   const {
@@ -26,7 +28,13 @@ const Header = () => {
     loading: searchLoading,
     error,
   } = useSearch("products");
-
+useEffect(() => {
+    const interval = setInterval(() => {
+      const stored = Number(localStorage.getItem("cart"));
+      if (!isNaN(stored) && stored !== cartCount) {
+        setCartCount(Math.max(cart, stored));
+      }
+    }, 1000);})
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
@@ -48,6 +56,7 @@ const Header = () => {
           setcart(
             data.data.items.length
           )
+          localStorage.setItem("cart",data.data.items.length)
         }
       }
       cartcount()
@@ -213,7 +222,7 @@ const Header = () => {
       <ShoppingCart className="text-white" size={20} />
       
         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-          {cart}
+          {cartCount}
         </span>
     </button>
 

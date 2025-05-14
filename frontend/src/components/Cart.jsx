@@ -53,7 +53,6 @@ function WishlistPage({setwishlistcheck}) {
           setwishlistcheck(false);
         }
       } catch (error) {
-        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -171,7 +170,7 @@ export default function Cart() {
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-
+  const [promocodeapplied,setpromocode] = useState(false)
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -228,7 +227,7 @@ export default function Cart() {
           )
         );
 
-      const amount = total + 0.03 * total + 0.01 * total;
+      const amount = total + 0.03 * total + 0.01 * total - Math.floor(discount*total);
       const totalAmount = Math.ceil(amount);
       const res = await axios.post("https://api.abiv.in/payment", {
         amount: totalAmount,
@@ -407,8 +406,9 @@ export default function Cart() {
   };
 
   const applyPromoCode = () => {
-    if (promoCode === "FLAT50") {
-      setDiscount(200);
+    if (promoCode === "FLAT10") {
+      setDiscount(0.1);
+      setpromocode(true)
     }
   };
 
@@ -487,15 +487,19 @@ export default function Cart() {
       {discount > 0 && (
         <div className="flex justify-between text-green-600">
           <span>Promo applied</span>
-          <span>-Rs.{discount}</span>
+          <span>-Rs.{Math.floor(discount*total)}</span>
         </div>
       )}
       <div className="flex justify-between font-medium pt-2 border-t">
         <span>Total</span>
-        <span>Rs.{Math.ceil((total + 0.03 * total + 0.01 * total - discount).toFixed(2))}</span>
+        <span>Rs.{Math.ceil((total + 0.03 * total + 0.01 * total - Math.floor(discount*total)).toFixed(2))}</span>
       </div>
     </div>
-
+{total >= 4000 ? (
+  <p className="text-green-600 text-sm mt-1"> Free delivery on orders above Rs. 4000!</p>
+) : (
+  <p className="text-gray-500 text-sm mt-1">Add items worth Rs. {4000 - total} more for free delivery.</p>
+)}
     {/* Promo Code Input */}
     <div className="flex flex-col sm:flex-row gap-2 mb-4">
       <input

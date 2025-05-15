@@ -495,6 +495,7 @@ export default function Cart() {
         <span>Rs.{Math.ceil((total + 0.03 * total + 0.01 * total - Math.floor(discount*total)).toFixed(2))}</span>
       </div>
     </div>
+
 {total >= 4000 ? (
   <p className="text-green-600 text-sm mt-1"> Free delivery on orders above Rs. 4000!</p>
 ) : (
@@ -516,7 +517,8 @@ export default function Cart() {
         Apply
       </button>
     </div>
-
+     <p className="text-gray-500 text-sm mt-1">Use FLAT10 to avail 10% Discount</p>
+<br></br>
     <button
       className="w-full bg-blue-500 text-white py-3 rounded"
       onClick={handleClick}

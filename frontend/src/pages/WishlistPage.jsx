@@ -139,6 +139,8 @@ function WishlistPage() {
 
   const handleAddToCart = async (productId) => {
     try {
+          if(!localStorage.getItem("user")||!localStorage.getItem("token"))window.location.href="/login"
+
             if(localStorage.getItem("cart")){
         localStorage.setItem("cart",Number(localStorage.getItem("cart"))+1)
       }else{

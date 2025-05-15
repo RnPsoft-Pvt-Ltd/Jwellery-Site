@@ -376,6 +376,8 @@ const VariantCard = ({ variant }) => {
     e.stopPropagation();
     setIsAddingToCart(true);
     try {
+          if(!localStorage.getItem("user")||!localStorage.getItem("token"))window.location.href="/login"
+
             if(localStorage.getItem("cart")){
         localStorage.setItem("cart",Number(localStorage.getItem("cart"))+1)
       }else{

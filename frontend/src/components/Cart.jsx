@@ -74,6 +74,7 @@ function WishlistPage({setwishlistcheck}) {
   };
 
   const handleAddToCart = async (productId) => {
+    if(!localStorage.getItem("user")||!localStorage.getItem("token"))window.location.href="/login"
     let product = null;
     const res=await axios.get(`${PRODUCT_URL}/${productId}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

@@ -89,6 +89,8 @@ const ProductDetail = () => {
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
     try {
+          if(!localStorage.getItem("user")||!localStorage.getItem("token"))window.location.href="/login"
+
             if(localStorage.getItem("cart")){
         localStorage.setItem("cart",Number(localStorage.getItem("cart"))+1)
       }else{
@@ -525,6 +527,8 @@ const SimilarProductCard = ({ product, onNavigate }) => {
     e.stopPropagation();
     setIsAddingToCart(true);
     try {
+          if(!localStorage.getItem("user")||!localStorage.getItem("token"))window.location.href="/login"
+
       await axios.post(
         "https://api.shopevella.com/v1/cart",
         {

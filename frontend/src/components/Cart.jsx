@@ -263,13 +263,12 @@ export default function Cart() {
             order_number:orderId,
             status:"PROCESSING",
             total_amount:total,
-            order_items: [
+            order_items: 
               items.map((item) => ({
                 product_variant_id: item.id,
                 quantity: item.quantity,
                 unit_price: item.price,
               })),
-            ],
           };
           console.log(orderDetails)
       

@@ -286,7 +286,7 @@ export default function Cart() {
               setShowSuccess(true);
               setTimeout(() => navigate("/"), 2000); // Redirect after success
             } else {
-              alert(data.error || "Order failed!");
+              alert(data.error);
             }
           } catch (error) {
             alert("Something went wrong. Please try again.");

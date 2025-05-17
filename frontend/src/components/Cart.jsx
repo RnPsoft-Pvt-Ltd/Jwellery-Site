@@ -265,9 +265,9 @@ export default function Cart() {
             total_amount:total,
             order_items: [
               items.map((item) => ({
-                name: item.name,
+                product_variant_id: item.id,
                 quantity: item.quantity,
-                price: item.price,
+                unit_price: item.price,
               })),
             ],
           };

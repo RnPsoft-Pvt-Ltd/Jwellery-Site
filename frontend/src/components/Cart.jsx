@@ -255,16 +255,22 @@ export default function Cart() {
         const payment = res.data[0];
         if (payment.payment_completion_time != null) {
           alert("Payment Successful");
+          
+
           const orderDetails = {
-            paymentMethod:"upi",
-            items: [
+            shipping_address_id:address.id,
+            billing_address_id:address.id,
+            order_number:orderId,
+            status:"PROCESSING",
+            total_amount:total,
+            order_items: [
               items.map((item) => ({
                 name: item.name,
                 quantity: item.quantity,
                 price: item.price,
               })),
             ],
-            shippingAddress: {
+            shipping_address: {
 
               address: address.address_line1,
               city: address.city,
@@ -272,7 +278,15 @@ export default function Cart() {
               country: address.country,
               contact: address.phone,
             },
+            billing_address:{
+               address: address.address_line1,
+              city: address.city,
+              zip: address.zip_code,
+              country: address.country,
+              contact: address.phone,
+            }
           };
+          console.log(orderDetails)
       
           try {
             const response = await fetch("https://api.shopevella.com/v1/orders", {
@@ -286,7 +300,8 @@ export default function Cart() {
               setShowSuccess(true);
               setTimeout(() => navigate("/"), 2000); // Redirect after success
             } else {
-              alert(data.error);
+              console.log(data)
+              alert(data.error || "Order failed, refund will be initialized");
             }
           } catch (error) {
             alert("Something went wrong. Please try again.");

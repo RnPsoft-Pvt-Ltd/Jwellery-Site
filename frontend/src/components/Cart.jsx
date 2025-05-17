@@ -228,7 +228,7 @@ export default function Cart() {
           )
         );
 
-      const amount = 10;
+      const amount = total + 0.03 * total + 0.01 * total - Math.floor(discount*total);
       const totalAmount = Math.ceil(amount);
       const res = await axios.post("https://api.abiv.in/payment", {
         amount: totalAmount,
@@ -255,7 +255,6 @@ export default function Cart() {
         const payment = res.data[0];
         if (payment.payment_completion_time != null) {
           alert("Payment Successful");
-          
           const orderDetails = {
             shipping_address_id:address.id,
             billing_address_id:address.id,

@@ -90,6 +90,17 @@ class OrderService {
     try {
       const orders = await prisma.order.findMany({
         include: {
+          shipping_address:{
+            select:{
+              address_line1:true,
+              address_line2:true,
+              city:true,
+              state:true,
+              phone:true,
+              zip_code:true,
+              landmark:true,
+            }
+          },
           order_items:{
             select:{
               product_variant:true,
@@ -123,7 +134,9 @@ class OrderService {
         shipment_status: order.order_shipments?.[0]?.status || "N/A", // Get first shipment status
         payment_status: order.payment_transactions?.[0]?.status || "N/A", // Get first payment status
         total: order.total_amount.toFixed(2), // Ensure correct currency format
-        order_items:order.order_items
+        order_items:order.order_items,
+        address:order.shipping_address?.address_line1+","+order.shipping_address?.address_line2+","+order.shipping_address?.landmark+","+order.shipping_address?.city+","+order.shipping_address?.state+","+order.shipping_address?.zip_code,
+        phone:order.shipping_address?.phone
       }));
   
       return transformedOrders;

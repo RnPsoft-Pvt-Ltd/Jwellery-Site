@@ -149,11 +149,17 @@ const Orders = () => {
                     <th  className="p-4 text-left text-sm font-medium text-gray-600">
                       Order Produts
                     </th>
-                    <th className="p-4 text-left text-sm font-medium text-gray-600">
+  <th  className="p-4 text-left text-sm font-medium text-gray-600">
+                      Delivery Address
+                    </th>
+                                        <th className="p-4 text-left text-sm font-medium text-gray-600">
                       DATE
                     </th>
                     <th className="p-4 text-left text-sm font-medium text-gray-600">
                       CUSTOMER EMAIL
+                    </th>
+                     <th className="p-4 text-left text-sm font-medium text-gray-600">
+                      CUSTOMER Phone
                     </th>
                     <th className="p-4 text-left text-sm font-medium text-gray-600">
                       SHIPMENT STATUS
@@ -190,6 +196,10 @@ const Orders = () => {
                             </text>
                           )})}
                         </td>
+                        <td className="p-4 text-sm text-gray-900">
+                          {order?.address?.replaceAll("null,","")?.replaceAll("undefined,","")}
+                          </td>
+
                         <td className="p-4 text-sm text-gray-600">
                           {order.created_at
                             ? new Date(order.created_at).toLocaleDateString()
@@ -197,6 +207,9 @@ const Orders = () => {
                         </td>
                         <td className="p-4 text-sm text-gray-600">
                           {order.customer_email || "N/A"}
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {order.phone || "N/A"}
                         </td>
                         <td className="p-4">
                           <span

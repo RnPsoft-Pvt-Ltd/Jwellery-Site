@@ -291,7 +291,7 @@ export default function Cart() {
           try {
             const response = await fetch("https://api.shopevella.com/v1/orders", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
               body: JSON.stringify(orderDetails),
             });
       

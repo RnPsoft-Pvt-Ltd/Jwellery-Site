@@ -256,7 +256,7 @@ export default function Cart() {
         if (payment.payment_completion_time != null) {
           alert("Payment Successful");
           const orderDetails = {
-            paymentMethod,
+            paymentMethod:"upi",
             items: [
               items.map((item) => ({
                 name: item.name,

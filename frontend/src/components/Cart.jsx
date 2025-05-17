@@ -257,7 +257,6 @@ export default function Cart() {
           alert("Payment Successful");
           const orderDetails = {
             paymentMethod,
-
             items: [
               items.map((item) => ({
                 name: item.name,
@@ -276,7 +275,7 @@ export default function Cart() {
           };
       
           try {
-            const response = await fetch("https://api.shopevella.com/v1/checkout", {
+            const response = await fetch("https://api.shopevella.com/v1/orders", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(orderDetails),

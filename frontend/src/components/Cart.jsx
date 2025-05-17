@@ -265,7 +265,7 @@ export default function Cart() {
             total_amount:total,
             order_items: 
               items.map((item) => ({
-                product_variant_id: item.id,
+                product_variant_id: item.variantID,
                 quantity: item.quantity,
                 unit_price: item.price,
               })),
@@ -360,6 +360,7 @@ export default function Cart() {
               price: Number(item.unit_price),
               quantity: item.quantity,
               image: item.product_variant.product.images[0]?.image_url || "",
+              variantID:item.product_variant.id,
             }))
           );
         }

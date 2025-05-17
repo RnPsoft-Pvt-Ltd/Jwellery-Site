@@ -270,21 +270,6 @@ export default function Cart() {
                 price: item.price,
               })),
             ],
-            shipping_address: {
-
-              address: address.address_line1,
-              city: address.city,
-              zip: address.zip_code,
-              country: address.country,
-              contact: address.phone,
-            },
-            billing_address:{
-               address: address.address_line1,
-              city: address.city,
-              zip: address.zip_code,
-              country: address.country,
-              contact: address.phone,
-            }
           };
           console.log(orderDetails)
       

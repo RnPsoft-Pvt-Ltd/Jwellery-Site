@@ -228,7 +228,7 @@ export default function Cart() {
           )
         );
 
-      const amount = total + 0.03 * total + 0.01 * total - Math.floor(discount*total);
+      const amount = 10;
       const totalAmount = Math.ceil(amount);
       const res = await axios.post("https://api.abiv.in/payment", {
         amount: totalAmount,

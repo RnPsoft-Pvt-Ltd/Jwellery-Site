@@ -34,7 +34,7 @@ const Login = () => {
         {/* Image Section */}
         <div className="md:w-1/2 bg-gray-50 flex items-center justify-center p-6">
           <img
-            src="https://media-hosting.imagekit.io/b00d2f5755b54766/EVELLA%20Black.png?Expires=1841846124&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=Qqs-ApOmyTodik2MScwQpm~uT5S-nJuqgMT1wbEEX74P~7jwqd5gOt7qbb2aq~91bI46BDeujUGkWroGQ5biAM6APEAN~LHqlvS00E4IzR3Vqnt7cZTpn9KgxTdOsrEQasG0IqSJaMwwx2pqQ5AdaICMBcMWZXWQOIyWdBjyA2S89pOaz~zk-3mwnCCAjACvrwvbJBk9RkzY-5r5qG7ZWjhGavlKGI2H-M9Ut2LiCPav4WMyAa93EzQbnZ-EV3V8NYSlMIugSFnOZgulWJgtWTVs~cRWfQqN2hH-jiEPM5DIXEtcAUMx4fFRyYbBcvldzsSyo-fC~4xER~Ykm8yC6w__"
+            src="https://i.ibb.co/SDp2h6Js/EVELLA-Black.png"
             alt="Decorative flower"
             className="max-w-full h-auto object-contain"
           />

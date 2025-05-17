@@ -29,6 +29,7 @@ const Orders = () => {
         if (Array.isArray(response.data)) {
           setOrders(response.data);
           setFilteredOrders(response.data);
+          console.log(response.data)
         } else {
           setError("Failed to fetch orders. Please try again later.");
         }
@@ -145,6 +146,9 @@ const Orders = () => {
                     <th className="p-4 text-left text-sm font-medium text-gray-600">
                       ORDER NUMBER
                     </th>
+                    <th  className="p-4 text-left text-sm font-medium text-gray-600">
+                      Order Produts
+                    </th>
                     <th className="p-4 text-left text-sm font-medium text-gray-600">
                       DATE
                     </th>
@@ -178,6 +182,14 @@ const Orders = () => {
                         <td className="p-4 text-sm text-gray-900">
                           {order.order_number || "N/A"}
                         </td>
+                        <td className="p-4 text-sm text-gray-900">
+                          {order.order_items.map(x=>{return(
+                            <text   className="p-2 text-blue-600 hover:underline cursor-pointer"
+ onClick={()=>{window.location.href=`https://shopevella.com/products/${x.product_variant.product_id}`}}>
+                            {x.product_variant.product_id}
+                            </text>
+                          )})}
+                        </td>
                         <td className="p-4 text-sm text-gray-600">
                           {order.created_at
                             ? new Date(order.created_at).toLocaleDateString()
@@ -196,23 +208,22 @@ const Orders = () => {
                                 : "bg-gray-100 text-gray-800"
                             }`}
                           >
-                            {order.shipment_status || "N/A"}
+                            {"Pending"}
                           </span>
                         </td>
                         <td className="p-4">
                           <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                              order.payment_status === "Paid"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
+                                 "bg-green-100 text-green-800"
+                                                             `}
                           >
-                            {order.payment_status || "N/A"}
+                            {"Paid"}
                           </span>
                         </td>
                         <td className="p-4 text-sm text-gray-900">
-                          Rs. {order.total_amount?.toFixed(2) || "0.00"}
+                          Rs. {order.total?order.total:total_amount?.toFixed(2) || "0.00"}
                         </td>
+
                       </tr>
                     ))
                   ) : (

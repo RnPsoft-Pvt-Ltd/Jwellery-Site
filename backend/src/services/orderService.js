@@ -90,6 +90,12 @@ class OrderService {
     try {
       const orders = await prisma.order.findMany({
         include: {
+          order_items:{
+            select:{
+              product_variant:true,
+              product_variant_id:true
+            }
+          },
           user: {
             select: {
               email: true, // Fetch customer email
@@ -117,6 +123,7 @@ class OrderService {
         shipment_status: order.order_shipments?.[0]?.status || "N/A", // Get first shipment status
         payment_status: order.payment_transactions?.[0]?.status || "N/A", // Get first payment status
         total: order.total_amount.toFixed(2), // Ensure correct currency format
+        order_items:order.order_items
       }));
   
       return transformedOrders;

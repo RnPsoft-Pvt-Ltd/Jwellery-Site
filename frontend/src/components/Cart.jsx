@@ -256,7 +256,6 @@ export default function Cart() {
         if (payment.payment_completion_time != null) {
           alert("Payment Successful");
           
-
           const orderDetails = {
             shipping_address_id:address.id,
             billing_address_id:address.id,
@@ -281,7 +280,6 @@ export default function Cart() {
       
             const data = await response.json();
             if (response.ok) {
-              setShowSuccess(true);
               setTimeout(() => navigate("/"), 2000); // Redirect after success
             } else {
               console.log(data)

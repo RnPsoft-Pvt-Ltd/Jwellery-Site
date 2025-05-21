@@ -20,6 +20,11 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import salesStatisticsRoutes from './routes/salestatisticsRoutes.js'
 import searchRoutes from './routes/searchRoutes.js';
 import dotenv from 'dotenv';
+import mongoose from "mongoose";
+mongoose.connect(
+  "mongodb+srv://Techie:Techie@cluster0.5asxa.mongodb.net/visits?retryWrites=true&w=majority",
+  { useNewUrlParser: true, useUnifiedTopology: true }
+);
 dotenv.config();
 import { connectDB } from './config/db.js';
 import fs from "fs/promises"; // Use Promises to avoid blocking
@@ -74,6 +79,37 @@ app.use(express.json());
 // https://api.shopevella.com
 // https://api.shopevella.com
 // Routes
+const CounterSchema = new mongoose.Schema({
+  _id: String,
+  count: Number,
+});
+
+const Counter = mongoose.model("Counter", CounterSchema);
+
+// Increment visitor count
+app.post("/api/visit", async (req, res) => {
+  try {
+    const result = await Counter.findByIdAndUpdate(
+      "visitorCount",
+      { $inc: { count: 1 } },
+      { new: true, upsert: true }
+    );
+    res.json({ count: result.count });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get visitor count
+app.get("/api/visit", async (req, res) => {
+  try {
+    const result = await Counter.findById("visitorCount");
+    res.json({ count: result?.count || 0 });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.use('/v1/products', productRoutes);
 app.use('/v1/reviews', reviewRoutes);
 app.use('/v1/coupons', couponRoutes);

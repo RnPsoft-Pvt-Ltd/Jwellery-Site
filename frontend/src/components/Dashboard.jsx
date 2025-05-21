@@ -89,6 +89,7 @@
 //     </div>
 //   );
 // }
+import {CounterAPI} from "counterapi";
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -98,6 +99,20 @@ export default function Dashboard() {
   const [lifetimeSales, setLifetimeSales] = useState(null);
   const [salesData, setSalesData] = useState([]);
   const [selectedPeriod, setSelectedPeriod] = useState("daily");
+  const [visitorcount,setVisitorCount] = useState(0);
+  const counter = new CounterAPI();
+
+
+   useEffect(() => {
+    fetch("https://api.shopevella.com/api/visit", {
+      method: "POST"
+    })
+      .then(res => res.json())
+      .then(data => setVisitorCount(data.count))
+      .catch(err => console.error("Error:", err));
+  }, []);
+
+
 
   // Fetch Lifetime Sales
   const fetchLifetimeSales = async () => {
@@ -211,6 +226,11 @@ export default function Dashboard() {
                       {lifetimeSales.completedPercentage}%
                     </text>
                   </svg>
+                </div>
+                <div className="flex items-center justify-center mt-4">
+                  <span className="text-sm text-gray-600">
+                    Visitor Count: <span className="font-semibold">{visitorcount}</span>
+                  </span>
                 </div>
               </>
             ) : (

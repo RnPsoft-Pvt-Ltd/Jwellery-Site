@@ -62,8 +62,6 @@ const Products = () => {
   };
 
   const filteredProducts = products.filter((product) => {
-    
-    
     const searchString = searchTerm?.toLowerCase();
     return (
       product?.name?.toLowerCase().includes(searchString) ||

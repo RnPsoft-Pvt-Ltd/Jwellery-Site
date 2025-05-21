@@ -18,7 +18,13 @@ const Header = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [cart,setcart]=useState(0)
     const [cartCount, setCartCount] = useState(cart);
-
+ useEffect(() => {
+    fetch("https://api.shopevella.com/api/visit", {
+      method: "POST"
+    })
+      .then(res => res.json())
+      .catch(err => console.error("Error:", err));
+  }, []);
   const navigate = useNavigate();
 
   const {

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from 'react-router-dom';
 import { Heart, Plus, Loader2, Sliders, X} from "lucide-react";
 import { useToast } from "../utils/toastContext";
+import { useSearchParams } from "react-router-dom";
 
 const ProductTemplate = ({ 
   title, 
@@ -16,6 +17,9 @@ const ProductTemplate = ({
   //const navigate = useNavigate();
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+const pageId = parseInt(searchParams.get("id") || "1", 10);
+const currentPage = isNaN(pageId) ? 1 : pageId;
   const [error, setError] = useState(null);
   const [activeFilters, setActiveFilters] = useState({
     color: [],
@@ -28,21 +32,20 @@ const ProductTemplate = ({
   const [sort, setSort] = useState("default");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 60000 });
   const [pagination, setPagination] = useState({
-    currentPage: 1,
     totalPages: 1,
     total: 0,
     perPage: 10
   });
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const pageId = queryParams.get("id");
+     const pageId = parseInt(searchParams.get("id"), 10);
+
     if (pageId) {
       setPagination((prev) => ({
         ...prev,
         currentPage: parseInt(pageId, 10) || 1,
       }));
     }
-  }, []);
+  }, [searchParams]);
 
   const calculateVariantPrice = (basePrice, priceModifier) => {
     return parseFloat(basePrice) + parseFloat(priceModifier || 0);
@@ -64,48 +67,35 @@ const ProductTemplate = ({
       })) || []
     ) || [];
   };
-  useEffect(() => {
-    const fetchAllProducts = async () => {
-      try {
-        setLoading(true);
-        const firstPage = await axios.get(`https://api.shopevella.com/v1/products?page=1&limit=${pagination.perPage}`);
-        
-        const { totalPages } = firstPage.data.pagination;
-        let allData = [...firstPage.data.data];
-  
-        const requests = [];
-        for (let i = 2; i <= totalPages; i++) {
-          requests.push(axios.get(`https://api.shopevella.com/v1/products?page=${i}&limit=${pagination.perPage}`));
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://api.shopevella.com/v1/products`, {
+        params: {
+          page: currentPage,
+          limit: pagination.perPage,
+          sort
         }
-        const responses = await Promise.all(requests);
-        responses.forEach(res => {
-          allData = [...allData, ...res.data.data];
-        });
-  allData=allData.sort((a, b) => {  
-    if(sort === "price-low-high") {
-      return parseFloat(a.base_price) - parseFloat(b.base_price);
-    } else if(sort === "price-high-low") {
-      return parseFloat(b.base_price) - parseFloat(a.base_price);
-    } else {
-      return 0;
+      });
+
+      const data = response.data;
+      setProducts({ data: data.data });
+      setPagination(prev => ({
+        ...prev,
+        total: data.pagination.total,
+        totalPages: data.pagination.totalPages
+      }));
+    } catch (err) {
+      console.error('Error fetching products:', err);
+      setError('Failed to load products. Please try again later.');
+    } finally {
+      setLoading(false);
     }
-  });
-        setProducts({ data: allData.slice((pagination.currentPage-1)*10,pagination.currentPage*10) });
-        setPagination(prev => ({
-          ...prev,
-          total: firstPage.data.pagination.total,
-          totalPages
-        }));
-      } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('Failed to load products. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchAllProducts();
-  }, [pagination.currentPage, pagination.perPage,sort]);
+  };
+
+  fetchProducts();
+}, [currentPage, pagination.perPage, sort]);
 
 
   const handleFilterChange = (category, value) => {
@@ -441,7 +431,7 @@ const VariantCard = ({ variant }) => {
       <div className="p-4">
         <div className="space-y-2">
           <h3 className="font-medium text-gray-900 line-clamp-2">
-            {variant.productName} - {variant.color} {variant.size}
+            {variant.productName} {variant.color} {variant.size}
           </h3>
           <p className="text-lg font-semibold text-gray-900">
             {formattedPrice}

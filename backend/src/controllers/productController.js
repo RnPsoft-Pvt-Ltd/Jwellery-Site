@@ -57,6 +57,7 @@ class ProductController {
   }
 
   async updateProduct(req, res) {
+    console.log("first stage")
     try {
       const { id } = req.params;
       const {
@@ -64,8 +65,10 @@ class ProductController {
         stock_quantity, weight, width, height, length,
         images, variants, collection, category, tax_category
       } = req.body;
+      console.log(category)
 
       if (!Array.isArray(variants)) {
+        console.log("variants")
         return res.status(400).json({ message: 'Variants must be an array.' });
       }
 
@@ -78,6 +81,7 @@ class ProductController {
           variant.inventory.quantity == null ||
           variant.inventory.low_stock_threshold == null
         ) {
+          console.log("missing")
           throw new Error('Each variant must have color, size, price_modifier, and inventory details.');
         }
 
@@ -99,11 +103,11 @@ class ProductController {
         collection, category, tax_category,
       };
 
-      const updatedProduct = await ProductService.updateProduct(id, updateData);
+      const updatedProduct = await productService.updateProduct(id, updateData);
       res.json(updatedProduct);
 
     } catch (error) {
-      console.error('Error updating product:', error.message);
+      console.log('Error updating product:', error.message);
       if (error.message.includes("Each variant")) {
         return res.status(400).json({ message: error.message });
       }

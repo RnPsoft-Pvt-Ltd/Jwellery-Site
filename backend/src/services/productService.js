@@ -55,7 +55,7 @@ class ProductService {
       select: { id: true },
       skip: (validPage - 1) * validLimit,
       take: validLimit,
-      orderBy: { name: "asc" },
+      orderBy: { SKU: "asc" },
     });
   
     const productIds = baseProducts.map((p) => p.id);
@@ -262,6 +262,7 @@ class ProductService {
 
   async updateProduct(id, updateData) {
     try {
+      console.log("i have been hit")
       return await prisma.$transaction(async (tx) => {
         const existingProduct = await tx.product.findUnique({ where: { id } });
         if (!existingProduct) {
@@ -288,29 +289,38 @@ class ProductService {
           },
         });
 
-        await tx.variant.deleteMany({ where: { product_id: id } });
-
+        await tx.productVariant.deleteMany({ where: { product_id: id } });
+console.log(updateData)
+console.log(updateData.variants)
         const variants = await Promise.all(updateData.variants.map((variant) =>
-          tx.variant.create({
+          tx.productVariant.create({
             data: {
               color: variant.color,
               size: variant.size,
+    weight: 0, // Ensure it's cast correctly
               price_modifier: variant.price_modifier,
               inventory: {
                 create: {
-                  quantity: variant.inventory.quantity,
-                  low_stock_threshold: variant.inventory.low_stock_threshold,
+                  total_quantity: variant.inventory.quantity,
+                  minimum_stock_alert: variant.inventory.low_stock_threshold,
+                  reserved_quantity:1
+                  
                 },
               },
               product: { connect: { id: updatedProduct.id } },
             },
+
           })
         ));
 
         return { ...updatedProduct, variants };
-      });
+      }, {
+    timeout: 10000, // 10 seconds
+    maxWait: 10000  // optional: wait longer for connection
+  });
     } catch (error) {
-      console.error('Error in ProductService.updateProduct:', error.message);
+      
+      console.log('Error in ProductService.updateProduct:', error.message);
       throw new Error(`Failed to update product: ${error.message}`);
     }
   }

@@ -475,7 +475,7 @@ export default function Cart() {
       </div>
       <div className="flex justify-between">
         <span>GST@3%</span>
-        <span>Rs.{(0.03 * total).toFixed(2)}</span>
+        <span>Rs.{(0.03 * subtotal).toFixed(2)}</span>
       </div>
       <div className="flex justify-between">
         <span>Payment Gateway Charges@1%</span>
@@ -484,19 +484,19 @@ export default function Cart() {
       {discount > 0 && (
         <div className="flex justify-between text-green-600">
           <span>Promo applied</span>
-          <span>-Rs.{Math.floor(discount*total)}</span>
+          <span>-Rs.{Math.floor(discount*subtotal)}</span>
         </div>
       )}
       <div className="flex justify-between font-medium pt-2 border-t">
         <span>Total</span>
-        <span>Rs.{Math.ceil((total + 0.03 * total + 0.01 * total - Math.floor(discount*total)).toFixed(2))}</span>
+        <span>Rs.{Math.ceil((total + 0.03 * subtotal + 0.01 * total - Math.floor(discount*subtotal)).toFixed(2))}</span>
       </div>
     </div>
 
 {total >= 4000 ? (
   <p className="text-green-600 text-sm mt-1"> Free delivery on orders above Rs. 4000!</p>
 ) : (
-  <p className="text-gray-500 text-sm mt-1">Add items worth Rs. {4000 - total} more for free delivery.</p>
+  <p className="text-gray-500 text-sm mt-1">Add items worth Rs. {4000 - subtotal} more for free delivery.</p>
 )}
     {/* Promo Code Input */}
     <div className="flex flex-col sm:flex-row gap-2 mb-4">

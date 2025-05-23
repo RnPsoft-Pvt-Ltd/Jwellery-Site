@@ -228,10 +228,10 @@ export default function Cart() {
           )
         );
 
-      const amount = total + 0.03 * total + 0.01 * total - Math.floor(discount*total);
+      const amount = Math.ceil((total + 0.03 * subtotal + 0.01 * total - Math.floor(discount*subtotal)).toFixed(2));
       const totalAmount = Math.ceil(amount);
       const res = await axios.post("https://api.abiv.in/payment", {
-        amount: totalAmount,
+        amount: amount,
         customeremail: userInfo.email,
         customername: userInfo.name,
       });
@@ -260,7 +260,7 @@ export default function Cart() {
             billing_address_id:address.id,
             order_number:orderId,
             status:"PROCESSING",
-            total_amount:total,
+            total_amount:Math.ceil((total + 0.03 * subtotal + 0.01 * total - Math.floor(discount*subtotal)).toFixed(2)),
             order_items: 
               items.map((item) => ({
                 product_variant_id: item.variantID,

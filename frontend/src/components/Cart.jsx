@@ -375,7 +375,7 @@ export default function Cart() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const total = subtotal + (subtotal<=4000?SHIPPING_COST:0) - discount;
+  const total = subtotal + (subtotal<=4000?SHIPPING_COST:0);
   const handleQuantityChange = (id, quantity) => {
     setItems(
       items.map((item) => (item.id === id ? { ...item, quantity } : item))
